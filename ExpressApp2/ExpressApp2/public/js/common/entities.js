@@ -177,6 +177,7 @@ $(document).on("click", "a[name=delEntityRow]", function(e){
             },
             data: {'delEntityDefine': delEntityDefine},
             success: function(data) {
+                console.log(data.status);
                 if(data.status == 200){
                     alert(language.SUCCESS);
                     searchEntities();

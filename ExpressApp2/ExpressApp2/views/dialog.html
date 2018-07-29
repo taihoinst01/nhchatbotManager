@@ -57,7 +57,8 @@
                                   <div class="modal-body search_op">
                                         <div class="form-group col-lg-2"  style=" padding-left:0px !important" >
                                             <input type="text" name="iptDialog" id="iptDialog" class="form-control" placeholder=" <%= __('Enter_Connection_utterance') %>">
-                                        </div>             
+                                        </div>   
+                                        <!--          
                                         <div class="form-group col-lg-2" >
                                             <select id="sourceType2" name="sourceType" class="form-control"> 
                                                 <%
@@ -78,10 +79,8 @@
                                                 
                                             </select>
                                         </div> 
+                                    -->
 
-
-
-                                        <!--
                                         <div class="form-group col-lg-2"  >
                                             <select id="searchGroupL" name="searchGroupL" class="form-control searchGroup"> 
                                                 <option value=""><%= __('Large_group') %></option>     
@@ -96,7 +95,7 @@
                                                 %>
                                             </select>
                                         </div>
-                                        -->                        
+                                                    
                                         <div class="form-group  col-lg-3" >
                                             <select id="searchGroupM" name="searchGroupM" class="form-control searchGroup"> 
                                                 <option value=""><%= __('Middle group') %></option>
@@ -119,7 +118,7 @@
                                                                
                                         <div class="form-group col-lg-2 fr"  style=" margin-top:20px;text-align:right; padding-right:0px;">
                                             <button type="button" id="searchDlgBtn" class="btn btn_01 "><%= __('SEARCH') %></button> 
-                                            <button type="button" id="dialog" class="btn btn-default"  data-toggle="modal" data-target="#myModal2" onclick="openModalBox('#create_dlg')"><%= __('CREATE') %></button>
+                                            <!--<button type="button" id="dialog" class="btn btn-default"  data-toggle="modal" data-target="#myModal2" onclick="openModalBox('#create_dlg')"><%= __('CREATE') %></button>-->
                                         </div>
                                      </div>                                         
                             
@@ -130,6 +129,7 @@
                                             <colgroup><col width="15%"/><col width="25%"/><col width="40%"/><col width="17%"/><col width="3%"/></colgroup>
                                             
                                                   <tr>
+                                                      <!--
                                                       <th>                                                        
                                                       <select name="sourceType" id="tblSourceType" class="form-control f01"> 
                                                         <%
@@ -149,6 +149,9 @@
                                                         %>
                                                        </select>
                                                       </th>
+                                                      -->
+                                                      <input type="hidden" name="sourceType" id="tblSourceType" value="D">
+                                                      <th>&nbsp;</th>
                                                       <th>
                                                         <div id="selectBoxArea" class="selectArea">
                                                             <div class="inputfield selectArea">
