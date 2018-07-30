@@ -669,8 +669,6 @@ router.post('/dialogs2', function (req, res) {
                     "WHERE PAGEIDX = @currentPage";
             }
 
-
-
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
             let result1 = await pool.request()
                 .input('currentPage', sql.Int, currentPage)

@@ -1642,12 +1642,13 @@ function selectDlgByFilter(group){
                                 '<td><a href="#" onclick="deleteDialog('+ data.list[i].DLG_ID +');return false;"><span class="fa fa-trash"></span></a></td>' +
                                 '</tr>';
                     }
-    
+    /*
                     if (searchGroupL !== '') {
                         if (!$('#selBoxBody').find('label[for=' + searchGroupL + ']').parent().hasClass('active')) {
                             $('#selBoxBody').find('label[for=' + searchGroupL + ']').next().trigger('click');
                         }
                     }
+                    */
                 }
                 else
                 {
