@@ -2020,14 +2020,16 @@ router.post('/learnUtterAjax', function (req, res) {
         }
     }
 
-
     var updateTblDlg = "UPDATE TBL_DLG SET GroupS = @entities WHERE DLG_ID = @dlgId; \n";
+    var insertAnalysisQuery = "INSERT INTO TBL_QUERY_ANALYSIS_RESULT(QUERY,LUIS_ID, LUIS_INTENT,LUIS_ENTITIES,LUIS_INTENT_SCORE, RESULT) "
+    + "VALUES( @query, 'nh_luis_01', @luisIntent, @entities, '0', 'H' ); \n";
 
     (async () => {
         try {
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
             let result1;
             let result2;
+            let result3;
             /*
             if(typeof dlgId == "string") {
                 result1 = await pool.request()
@@ -2089,6 +2091,13 @@ router.post('/learnUtterAjax', function (req, res) {
                     .query(updateTblDlg);
 
             }
+            utterArry = utterArry.replace(/(\s*)/g,"");
+            result3 = await pool.request()
+                    .input('query', sql.NVarChar, utterArry)
+                    .input('luisIntent', sql.NVarChar, luisIntent)
+                    .input('entities', sql.NVarChar, entities)
+                    .query(insertAnalysisQuery);
+            
 
             /*
            result2 = await pool.request()

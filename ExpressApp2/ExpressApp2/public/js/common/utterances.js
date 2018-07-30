@@ -459,7 +459,7 @@ $(document).ready(function(){
                         var utterQuery = $('');
                         var luisId = $('#dlgViewDiv').find($('input[name=luisId]'))[0].value;
                         var luisIntent = $('#dlgViewDiv').find($('input[name=luisIntent]'))[0].value;
-
+                        
                         $.ajax({
                             url: '/learning/learnUtterAjax',
                             dataType: 'json',
