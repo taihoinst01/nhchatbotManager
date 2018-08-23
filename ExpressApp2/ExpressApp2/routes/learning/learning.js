@@ -3454,4 +3454,59 @@ router.post('/createApiRelation', function (req, res) {
 });
 
 
+router.get('/scenario', function (req, res) {
+
+    req.session.selMenus = 'ms5';
+    res.render('scenario', {
+        selMenus: req.session.selMenus,
+    });
+});
+
+router.post('/scenario', function (req, res) {
+
+    var currentPage = req.body.currentPage;
+
+    (async () => {
+        try {
+
+            var entitiesQueryString = ""
+
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            let result1 = await pool.request().input('currentPage', sql.Int, currentPage).query(entitiesQueryString);
+
+            let rows = result1.recordset;
+
+            var result = [];
+            for (var i = 0; i < rows.length; i++) {
+                var item = {};
+
+                var entitiyValue = rows[i].entity_value;
+                var entity = rows[i].entity;
+                var apiGroup = rows[i].api_group;
+
+                item.ENTITY_VALUE = entitiyValue;
+                item.ENTITY = entity;
+                item.API_GROUP = apiGroup;
+
+                result.push(item);
+            }
+            if (rows.length > 0) {
+                res.send({ list: result, pageList: paging.pagination(currentPage, rows[0].TOTCNT) });
+            } else {
+                res.send({ list: result });
+            }
+        } catch (err) {
+            console.log(err)
+            // ... error checks
+        } finally {
+            sql.close();
+        }
+    })()
+
+    sql.on('error', err => {
+        // ... error handler
+    })
+});
+
+
 module.exports = router;

@@ -198,6 +198,7 @@
 	"UTTERANCE_SETTING": "발언설정",
 	"DIALOG_SETTING": "대화상자설정",
 	"ENTITY_SETTING": "단어설정",
+	"SCENARIO_SETTING": "시나리오설정",
 	"TRAIN": "학습진행",
 	"SIMULATION": "시물레이션",
 	"DASHBOARD": "대시보드",

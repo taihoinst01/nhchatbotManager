@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>
+        TIIS Manager
+    </title>
+
+	<!-- 
+        <link rel="stylesheet" href="./common/css/css_common.html" />
+        -->
+
+    <%include  ./common/commonLib.html%>
+    <link rel='stylesheet' href='/css/botchat.css' />
+    <script type="text/javascript" src="/js/common/scenario.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/scenario.css" />
+    <!-- 
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" type="text/css" href="/css/paging.css" />
+    <link rel='stylesheet' href='/css/botchat.css' /> -->
+    
+    <style type="text/css">
+        .dlgCardMordal a:link, .dlgCardMordal a:visited, .dlgCardMordal a:hover, .dlgCardMordal a:active, .dlgCardMordal a:focus { 
+            font-weight: bold !important;
+            color: #6d6161 !important;
+        } 
+
+        .dropdown-menu {
+            left: 0px !important; top: 60% !important;
+        }
+
+    </style>
+    
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"> test-->
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+
+<div class="wrapper">
+    <input type="hidden" name='currentPage' id="currentPage" value="1" />
+    <%include  ./header.html%>
+    <%include  ./leftSideBar.html%>
+
+    <div class="content-wrapper">
+        <section class="content-header"><h1><%= __('SCENARIO_SETTING') %></h1>  </section>
+
+        <!-- Main content -->
+        <section class="content">
+                <div class="box  color-palette-box">
+                        <div class="box-body">
+                            
+                            <div class="scenarioArea">
+                                <div class="optionArea">
+                                    <div class="mainMenu1">
+                                        <div class="subMenu1">DLG ID :</div>
+                                        <input type="text" class="dlgId" value="1" disabled>
+                                    </div>
+                                    <div class="mainMenu2">
+                                        <div class="subMenu2">DLG TYPE :</div>
+                                        <label class='cp'><input type="radio" class="dlgType" name="dlgType" value="2" checked> 텍스트타입</label>
+                                        <label class='cp'><input type="radio" class="dlgType" name="dlgType" value="3"> 카드타입</label>
+                                        <label class='cp'><input type="radio" class="dlgType" name="dlgType" value="4"> 미디어타입</label>
+                                    </div>
+                                    <div class="mainMenu3">
+                                        <div class="subMenu3">Title</div>
+                                        <input type="text" id="dlgTitle" class="dlgTitle" placeholder="Title을 입력하세요.">
+                                    </div>
+                                    <div class="mainMenu9">
+                                        <div class="subMenu9">SubTitle</div>
+                                        <input type="text" id="dlgSubTitle" class="dlgSubTitle" placeholder="subTitle을 입력하세요.">
+                                    </div>
+                                    <div class="mainMenu4">
+                                        <div class="subMenu4">Text</div>
+                                        <input type="text" id="dlgText" class="dlgText" placeholder="Text를 입력하세요.">
+                                    </div>
+                                    <div class="mainMenu5">
+                                        <div class="subMenu5">Button</div>
+                                        <span class="addBtn">버튼추가</span>
+                                        <div class="btnArea"></div>
+                                    </div>
+                                    <div class="mainMenu6 dpN">
+                                        <div class="subMenu6">멀티미디어(선택사항)</div>
+                                        <span class="addImg">이미지추가</span>
+                                        <span class="addMov">영상추가</span>
+                                        <div class="multiArea">
+                                            <!-- IMG 추가 -->
+                                            <div class="filebox preview-image imgArea dpN">
+                                                <div>이미지<span class='removeImg'>삭제</span></div>
+                                                <input class="upload-name" value="파일선택" disabled="disabled">
+                                                <label for="input-file">업로드</label> <input type="file" id="input-file" class="upload-hidden">
+                                            </div>
+                                            <!-- URL 추가 -->
+                                            <div class="filebox preview-image movArea dpN">
+                                                <div>영상<span class='removeMov'>삭제</span></div>
+                                                <input type="url" class="upload-name" id="dlgUrl" placeholder="URL을 입력하세요.">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mainMenu7">
+                                        <div class="subMenu7">다중/단일</div>
+                                        <label class='cp'><input type="radio" class="cardType" name="cardType" value="N" checked disabled> 단일</label>
+                                        <label class='cp'><input type="radio" class="cardType" name="cardType" value="Y" disabled> 다중(carousel)</label>
+                                    </div>
+                                    <div class="mainMenu8">
+                                        <div class="subMenu8">Parent DLG ID :</div>
+                                        <input type="text" class="pDlgId" value="0" disabled>
+                                    </div>
+                                    <div class="completeDlg btn">
+                                        <label class="createDlg">생성</label><label class="cancelDlg">취소</label>
+                                    </div>
+                                </div>
+                        
+                                <div class="viewArea">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                </div>
+        </section>
+        <!-- //Main content -->
+</div>
+<%include  ./footer.html%>
+
+</div>
+      
+
+
+</body>
+
+    
+    
+</html>
