@@ -282,7 +282,7 @@ $(function () {
             ).appendTo(".viewArea");
 
             //form 지우기
-            formReset()
+            //formReset()
             imgReset();
 
             //초기화후 dlgid랑 parentId search
@@ -291,6 +291,58 @@ $(function () {
             board_dlgId++;
             $('.dlgId').attr('value', board_dlgId);
             $('.dlgId').val(board_dlgId);
+
+            //      scenarioInsert
+            $.ajax({
+                url: '/learning/scenarioInsert',
+                dataType: 'json',
+                type: 'POST',
+                data : {'dlgType' : board_type, 'dlgTitle' : board_title, 'dlgText' : board_text, 'dlgSubTitle': board_subTitle, 
+                    'dlgBtn1type' : '', 'dlgBtn1title' : '', 'dlgBtn1type' : '',
+                    'dlgParentdlgid': board_parentId, dlgDivision : '', dlgUseyn : 'Y', dlgId : '' },
+                success: function(data) {
+                    alert(language.Added);
+
+                    
+                }
+            });
+
+            /*
+            var result = sql.connect(dbConfig, function (err) {
+                if (err) console.log(err);    
+                // create Request object    
+                var request = new sql.Request();   
+                
+                request.input('dlgType', board_type);
+                request.input('dlgTitle', board_title);
+                request.input('dlgText', board_text);
+                request.input('dlgSubTitle', board_subTitle);
+
+                request.input('dlgBtn1type', board_type);
+                request.input('dlgBtn1title', board_type);
+                request.input('dlgBtn1type', board_type);
+                
+                request.input('dlgParentdlgid', board_parentId);
+                request.input('dlgDivision', '');
+                request.input('dlgUseyn', 'Y');
+                request.input('dlgId', '');
+
+                // query to the database and execute procedure     
+                let query = "exec sp_scenario 1 ";    
+                //console.log(query)    
+                request.query(query, function (err, recordset) {    
+                    if (err) {    
+                        console.log(err);    
+                        sql.close();    
+                    }    
+                    sql.close();    
+                    res.send(recordset.recordsets[0]);    
+                });    
+            });
+            */
+
+            //
+
         }
     });
 

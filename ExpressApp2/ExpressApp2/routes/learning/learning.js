@@ -3509,4 +3509,34 @@ router.post('/scenario', function (req, res) {
 });
 
 
+router.post('/scenarioInsert', function (req, res) {
+    //console.log("- scenarioInsert");
+    var dlgType = req.body.dlgType; 
+    var dlgText = req.body.dlgText; 
+    console.log("- scenarioInsert() - dlgType : " + dlgType + " | dlgText : " + dlgText);
+
+    //  
+    (async () => {
+        try {
+
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            // call SP (sp_scenario)
+            console.log("- sp_scenario START");
+
+        } catch (err) {
+            console.log(err);
+            res.send({ status: 500, message: 'scenarioInsert Error' });
+        } finally {
+            sql.close();
+        }
+    })()
+
+    sql.on('error', err => {
+    })
+
+
+
+});
+
+
 module.exports = router;
