@@ -2,7 +2,7 @@
 var express = require('express');
 var Client = require('node-rest-client').Client;
 var sql = require('mssql');
-var dbConfig = require('../../config/dbConfig');
+var dbConfig = require('../../config/dbConfig').autowayDbConfig;
 var dbConnect = require('../../config/dbConnect');
 var paging = require('../../config/paging');
 var util = require('../../config/util');
@@ -78,6 +78,7 @@ router.post('/recommend', function (req, res) {
                 " ORDER BY NUM \n";
 
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            console.log(" - recommend : " + req.session.appName + ' | ' + req.session.dbValue);
             let result1 = await pool.request()
                 .input('currentPage', sql.Int, currentPage)
                 .query(entitiesQueryString)
@@ -3513,6 +3514,26 @@ router.post('/scenarioInsert', function (req, res) {
     //console.log("- scenarioInsert");
     var dlgType = req.body.dlgType; 
     var dlgText = req.body.dlgText; 
+    var dlgTitle = req.body.dlgTitle;
+    var dlgSubTitle = req.body.dlgSubTitle;
+	var dlgImgurl = req.body.dlgImgurl;
+	var dlgBtn1type = req.body.dlgBtn1type;
+	var dlgBtn1title = req.body.dlgBtn1title;
+	var dlgBtn1context = req.body.dlgBtn1context;
+	var dlgBtn2type = req.body.dlgBtn2type;
+	var dlgBtn2title = req.body.dlgBtn2title;
+	var dlgBtn2context = req.body.dlgBtn2context;
+	var dlgBtn3type = req.body.dlgBtn3type;
+	var dlgBtn3title = req.body.dlgBtn3title;
+	var dlgBtn3context = req.body.dlgBtn3context;
+	var dlgBtn4type = req.body.dlgBtn4type;
+	var dlgBtn4title = req.body.dlgBtn4title;
+	var dlgBtn4context = req.body.dlgBtn4context;
+	var dlgParentdlgid = req.body.dlgParentdlgid;
+	var dlgDivsion = req.body.dlgDivsion;
+	var dlgUseyn = req.body.dlgUseyn;
+	var dlgId = req.body.dlgId;
+
     console.log("- scenarioInsert() - dlgType : " + dlgType + " | dlgText : " + dlgText);
 
     //  
@@ -3521,7 +3542,39 @@ router.post('/scenarioInsert', function (req, res) {
 
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
             // call SP (sp_scenario)
-            console.log("- sp_scenario START");
+            console.log("- sp_scenario START" + req.session.appName + " | " + req.session.dbValue);
+
+            let result1 = await pool.request()
+                .input('dlgType', dlgType)
+                .input('dlgText', dlgText)
+                .input('dlgTitle', dlgTitle)
+                .input('dlgSubTitle', dlgSubTitle)
+                .input('dlgImgurl', dlgImgurl)
+                .input('dlgParentdlgid', dlgParentdlgid)
+                .input('dlgDivsion', dlgDivsion)
+                .input('dlgUseyn', dlgUseyn)
+                .input('dlgId', dlgId)
+
+                .input('dlgBtn1type', dlgBtn1type)
+                .input('dlgBtn1title', dlgBtn1title)
+                .input('dlgBtn1context', dlgBtn1context)
+                .input('dlgBtn2type', dlgBtn2type)
+                .input('dlgBtn2title', dlgBtn2title)
+                .input('dlgBtn2context', dlgBtn2context)
+                .input('dlgBtn3type', dlgBtn3type)
+                .input('dlgBtn3title', dlgBtn3title)
+                .input('dlgBtn3context', dlgBtn3context)
+                .input('dlgBtn4type', dlgBtn4type)
+                .input('dlgBtn4title', dlgBtn4title)
+                .input('dlgBtn4context', dlgBtn4context)
+
+                .execute('sp_scenario').then(function(err, recordsets, returnValue, affected) {
+                    console.log("- sp_scenario OK");
+                    console.dir(recordsets);
+                    console.dir(err);
+                }).catch(function(err) {
+                    console.log(err);
+                });
 
         } catch (err) {
             console.log(err);
@@ -3533,8 +3586,6 @@ router.post('/scenarioInsert', function (req, res) {
 
     sql.on('error', err => {
     })
-
-
 
 });
 
