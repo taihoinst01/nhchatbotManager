@@ -264,8 +264,7 @@
   "ASKTRAIN": "It takes 1 to 2 minutes depending on the LUIS condition. Do you want to proceed?",
   "ASKENTITYSAVE": "It takes 20 to 50 seconds depending on the LUIS condition. Do you want to proceed?",
   "============== scenario ==============": "",
-  "CENARIO_NAME": "ceanario name",
-  "CENARIO_SETTING": "ceanario setting",
-  "CENARIO_LIST": "ceanario list",
+  "SCENARIO_NAME": "sceanario name",
+  "SCENARIO_LIST": "sceanario list",
   "DLG_COUNT": "Dialog count"
 }

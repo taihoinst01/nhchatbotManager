@@ -1229,7 +1229,7 @@ function createDialog(){
     array[array.length] = JSON.stringify($("form[name=appInsertForm]").serializeObject());//JSON.stringify($("form[name=appInsertForm]"));
 
     $.ajax({
-        url: '/learning/addDialog',
+        url: '/learning/scenarioAddDialog',
         dataType: 'json',
         type: 'POST',
         data: {'data' : array/*, 'entities' : chkEntities*/},
