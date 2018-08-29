@@ -272,7 +272,6 @@ function writeDialog(e) {
 function writeBtnTitle(e, btnNum) {
     var btnCnt = $('.previewBtnArea > button').length;
     for (var i = 0; i < btnCnt; i++) {
-        console.log($('.previewBtnArea > button').eq(i).attr('alt'));
         if ($('.previewBtnArea > button').eq(i).attr('alt') == parseInt(btnNum)){
             $('.previewBtnArea > button').eq(i).text(e.value);
         }
