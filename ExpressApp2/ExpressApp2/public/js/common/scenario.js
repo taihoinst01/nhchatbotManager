@@ -259,7 +259,7 @@ function writeDialog(e) {
         if ($(e).parent().prev().find('input[name=dialogTitle]').val() == '') {
             $('.dialogView').children().eq(icx).find('.textMent .textTitle').text('');
         }
-        $('.dialogView').children().eq(icx).find('.textMent previewText').text(e.value);
+        $('.dialogView').children().eq(icx).find('.textMent .previewText').text(e.value);
     }
 }
 
