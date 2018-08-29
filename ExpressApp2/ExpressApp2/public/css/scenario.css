@@ -6,3 +6,14 @@
 td.clickUtter {
     cursor: pointer;
 }
+
+.scenario-form-group{
+    margin:10px 0
+}
+.scenario-btn_wrap{
+    width:50%;text-align:center;margin:10px 0 5px;display:inline-block
+}
+
+.dpN{display:none !important}
+
+.inputArea{border:1px solid black}

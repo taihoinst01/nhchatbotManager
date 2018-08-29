@@ -36,7 +36,7 @@
         <!-- Content Wrapper -->
         <div class="content-wrapper">
             <section class="content-header">
-                <h1><%= __('CENARIO_SETTING') %></h1>
+                <h1><%= __('SCENARIO_SETTING') %></h1>
                 <div class="btn_wrap02 fr" style="width:50%">
                     <!-- onclick="openApiMordal();" -->
 
@@ -54,10 +54,10 @@
                 <div class="row">
 
                     <!-- 문장입력 -->
-                    <div class="col-md-7">
+                    <div class="col-md-4">
                         <div class="box  color-palette-box" style="height:550px">
                             <div class="box-body02">
-                                <div class="box-header with-border"><h3 class="box-title"><%= __('CENARIO_LIST') %></h3></div>
+                                <div class="box-header with-border"><h3 class="box-title"><%= __('SCENARIO_LIST') %></h3></div>
                                 <!-- 검색창 -->
                                 <!--<div class="form-group">
                                     <input type="text" name="iptUtterance" class="form-control" placeholder="<%= __('Please_enter_a_sentence') %>" spellcheck="false" autocomplete='off'>
@@ -71,8 +71,9 @@
                                         <colgroup><col width="6%" /><col width="60%" /><col width="34%" /></colgroup>
                                         <thead>
                                             <tr>
-                                                <th><input type="checkbox" class="flat-red" name="tableAllChk"></th>
-                                                <th><%= __('CENARIO_NAME') %></th>
+                                                <!--<th><input type="checkbox" class="flat-red" name="tableAllChk"></th>-->
+                                                <th><%= __('SCENARIO_NUM') %></th>
+                                                <th><%= __('SCENARIO_NAME') %></th>
                                                 <th><%= __('DLG_COUNT') %></th>
                                             </tr>
                                         </thead>
@@ -89,7 +90,7 @@
                     </div>
                     <!-- //문장입력 -->
                     <!-- 대화상자 -->
-                    <div class="col-md-5">
+                    <div class="col-md-8">
                         <div class="box  color-palette-box" style="height:550px">
                             <div class="box-body02">
                                 <div class="box-header with-border">
@@ -275,39 +276,39 @@
                         <div class="col-md-6" style="padding:0">
                             <form name="appInsertForm" id="appInsertForm">
                                 <h5><span class="col01 fa fa-chevron-right"></span> <%= __('GROUP_INFORMATION') %></h5>
-                                    <div class="form-group col-md-12" style="padding:0">
-                                        <label><%= __('CENARIO_NAME') %><span class="nec_ico">*</span></label>
-                                        <input type="text" name="scenarioName" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
-                                    </div>
-                                    <!--<div class="form-group col-md-6" style="padding:0">
-                                        <label><%= __('Large_group') %><span class="nec_ico">*</span></label>
-                                        <select class="form-control" id="largeGroup" name="largeGroup">
-                                            <option value="">선택</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6" style="padding-right:0">
-                                        <label>
-                                            <%= __('Middle_group') %><span class="nec_ico">*</span>
-                                        </label>
-                                        <button type="button" class="btn btn-block btn-default btn-xs fr newMidBtn"><%= __('NEW') %></button>
-                                        <button type="button" class="btn btn-default btn-xs fr cancelMidBtn" style="display: none;"><%= __('CANCEL') %></button>
-                                        <select class="form-control" id="middleGroup" name="middleGroup">
-                                            <option value="">선택</option>
-                                        </select>
-                                        <input type="text" name="middleGroup" class="form-control" style="display: none;" disabled></input>
-                                    </div>-->
-                                    <!--<div class="clear-both"></div>
-                                    <div class="form-group">
-                                        <label><%= __('explanation') %></label>
-                                        <textarea class="form-control" name="description" id="description" rows="3" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'></textarea>
-                                    </div>-->
+                                <div class="scenario-form-group col-md-12" style="padding:0">
+                                    <label><%= __('SCENARIO_NAME') %><span class="nec_ico">*</span></label>
+                                    <input type="text" name="scenarioName" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
+                                </div>
+                                <div class="scenario-form-group col-md-6" style="padding:0">
+                                    <label><%= __('Large_group') %><span class="nec_ico">*</span></label>
+                                    <select class="form-control" id="largeGroup" name="largeGroup">
+                                        <option value="">선택</option>
+                                    </select>
+                                </div>
+                                <div class="scenario-form-group col-md-6" style="padding-right:0">
+                                    <label>
+                                        <%= __('Middle_group') %><span class="nec_ico">*</span>
+                                    </label>
+                                    <button type="button" class="btn btn-block btn-default btn-xs fr newMidBtn"><%= __('NEW') %></button>
+                                    <button type="button" class="btn btn-default btn-xs fr cancelMidBtn" style="display: none;"><%= __('CANCEL') %></button>
+                                    <select class="form-control" id="middleGroup" name="middleGroup">
+                                        <option value="">선택</option>
+                                    </select>
+                                    <input type="text" name="middleGroup" class="form-control" style="display: none;" disabled>
+                                </div>
+                                <div class="clear-both"></div>
+                                <div class="scenario-form-group">
+                                    <label><%= __('explanation') %></label>
+                                    <textarea class="form-control" name="description" id="description" rows="2" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'></textarea>
+                                </div>
                             </form>
                             <div id="commonLayout" class="dialog_s">
                                 <div class="insertForm">
-                                    <div class="form-group">
+                                    <div class="scenario-form-group">
                                         <form name="dialogLayout" id="dialogLayout">
 
-                                            <label><%= __('DIALOG_BOX_TYPE') %><span class="nec_ico">*</span></label>
+                                            <label><%= __('DIALOG_BOX_TYPE') %></label>
                                             <select class="form-control" name="dlgType">
                                                 <option value="2"><%= __('TEXT_TYPE') %></option>
                                                 <option value="3"><%= __('CARD_TYPE') %></option>
@@ -319,158 +320,26 @@
                                     </div>
                                 </div>
 
-                                <!-- 다이얼로그 삭제 버튼 -->
-                                <div class="btn_wrap deleteInsertFormDiv" style="clear:both; display:none;">
-                                    <button type="button" class="btn btn-default deleteInsertForm"><%= __('DELETE_DIALOG') %></button>
-                                </div>
-
-                                <!-- 텍스트 타입 -->
-                                <div class="textLayout" style="display: none;">
-                                    <div class="form-group">
-                                        <label><%= __('DIALOG_BOX_TITLE') %><span class="nec_ico">*</span></label>
-                                        <input type="text" name="dialogTitle" class="form-control" onkeyup="writeDialogTitle(this);" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
-                                    </div>
-                                    <div class="form-group">
-                                        <label><%= __('DIALOG_BOX_CONTENTS') %><span class="nec_ico">*</span></label>
-                                        <input type="text" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
-                                    </div>
-                                </div>
-                                <!--카드 타입 -->
-                                <div class="carouselLayout" style="display:none;">
-                                    <div class="form-group">
-                                        <label><%= __('IMAGE_URL') %></label>
-                                        <input type="text" name="imgUrl" class="form-control" onkeyup="writeCarouselImg(this);" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
-                                    </div>
-                                    <div class="modal_con btnInsertDiv">
+                                <div class="inputArea"></div>
 
 
-                                    </div>
-                                    <div class="clear-both"></div>
-                                    <div class="btn_wrap" style="clear:both">
-                                        <button type="button" class="btn btn-default deleteCard"><%= __('DELETE_CARD') %></button>
-                                    </div>
-                                    <div class="btn_wrap" style="clear:both">
-                                        <button type="button" class="btn btn-default carouseBtn"><%= __('INSERT_MORE_BUTTON') %></button>
-                                    </div>
-                                    <div class="btn_wrap" style="clear:both">
-                                        <button type="button" class="btn btn-default addCarouselBtn"><%= __('INSERT_MORE_CARDS') %></button>
-                                    </div>
-                                    <div class="clear-both"></div>
-                                </div>
+                                
 
-                                <div id="cardBtnCopyDiv" style="display:none;">
-                                    <div class="cardBtnCopyDiv">
-                                        <div>
-                                            <label><%= __("BUTTON") %></label>
-                                        </div>
 
-                                        <div class="form-group col-md-13" style="padding-left:0; margin-top: 0px;">
-                                            <table class="cardCopyTbl" style="width:100%">
-                                                <col width="21%">
-                                                <col width="1%">
-                                                <col width="35%">
-                                                <col width="1%">
-                                                <col width="35%">
-                                                <col width="1%">
-                                                <col width="6%">
-                                                <thead>
-                                                    <tr>
-                                                        <th><%= __("Type") %></th>
-                                                        <th></th>
-                                                        <th><%= __("NAME") %></th>
-                                                        <th></th>
-                                                        <th><%= __("CONTENTS") %></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <select class="form-control" name="btnType">
-                                                                <option value="imBack" selected>imBack</option>
-                                                                <option value="openURL">openURL</option>
-                                                            </select>
-                                                        </td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" name="cButtonName" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
-                                                        </td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" name="cButtonContent" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
-                                                        </td>
-                                                        <td></td>
-                                                        <td>
-                                                            <a href="#" class="btn_delete" style="margin:0px;"><span class="fa fa-trash"></span></a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div id="mediaBtnCopyDiv" style="display:none;">
-                                    <div class="mediaBtnCopyDiv">
-                                        <div>
-                                            <label><%= __("BUTTON") %></label>
-                                        </div>
 
-                                        <div class="form-group col-md-13" style="padding-left:0; margin-top: 0px;">
-                                            <table class="mediaCopyTbl" style="width:100%">
-                                                <col width="21%">
-                                                <col width="1%">
-                                                <col width="35%">
-                                                <col width="1%">
-                                                <col width="35%">
-                                                <col width="1%">
-                                                <col width="6%">
-                                                <thead>
-                                                    <tr>
-                                                        <th><%= __("Type") %></th>
-                                                        <th></th>
-                                                        <th><%= __("NAME") %></th>
-                                                        <th></th>
-                                                        <th><%= __("CONTENTS") %></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>
-                                                            <select class="form-control" name="btnType">
-                                                                <option value="imBack" selected>imBack</option>
-                                                                <option value="openURL">openURL</option>
-                                                            </select>
-                                                        </td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" name="mButtonName" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
-                                                        </td>
-                                                        <td></td>
-                                                        <td>
-                                                            <input type="text" name="mButtonContent" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
-                                                        </td>
-                                                        <td></td>
-                                                        <td>
-                                                            <a href="#" class="btn_delete" style="margin:0px;"><span class="fa fa-trash"></span></a>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
+
+
+
+                                
 
                                 <!-- 미디어 타입 -->
-                                <div class="mediaLayout" style="display:none;" id="dialog3">
-                                    <div class="form-group">
+                                <div class="mediaLayout dpN" id="dialog3">
+                                    <div class="scenario-form-group">
                                         <label><%= __('IMAGE_URL') %><span class="nec_ico">*</span></label>
                                         <input type="text" name="mediaImgUrl" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="scenario-form-group">
                                         <label><%= __('MEDIA_URL') %></label>
                                         <input type="text" name="mediaUrl" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
                                     </div>
@@ -483,7 +352,7 @@
                                 </div>
 
                                 <!-- carousal 일 경우 card 순서 input box 추가 layout -->
-                                <div id="cardLayout" style="display:none;">
+                                <div id="cardLayout" class="dpN">
                                     <p class="texcon03">Card Order <span>(required) </span></p>
                                     <p>
                                         <select name="cardOrderNo" class="inbox02" id="cardOrderNo" style="width:100%">
@@ -499,7 +368,7 @@
                                 </div>
 
                                 <!-- media , carousal 일 경우 input box 추가 layout -->
-                                <div id="mediaCarouselLayout" style="display:none;">
+                                <div id="mediaCarouselLayout" class="dpN">
                                     <div class="layout-float-left">
                                         <p class="texcon03">Button Name <span>(optional) </span></p>
                                         <p>
@@ -531,11 +400,11 @@
                             </div>
                             <!-- source type이 API일 경우 -->
                             <div id="apiLayout" style="display:none;">
-                                <div class="form-group">
+                                <div class="scenario-form-group">
                                     <label>API Name<span class="nec_ico">*</span></label>
                                     <input type="text" name="apiName" class="form-control">
                                 </div>
-                                <div class="form-group">
+                                <div class="scenario-form-group">
                                     <label>API Url<span class="nec_ico">*</span></label>
                                     <input type="text" name="apiUrl" class="form-control">
                                 </div>
@@ -553,8 +422,11 @@
                                             <div>
                                                 <div class="format-markdown textTypeView">
                                                     <div class="textMent">
-                                                        <h1 class="textTitle"><%= __('Please_enter_a_title') %></h1>
-                                                        <p>
+                                                        <h1 class="previewTitle"><%= __('Please_enter_a_title') %></h1>
+                                                        <p class="previewSubTitle">
+                                                            <%= __('Please_enter_your_content') %>
+                                                        </p>
+                                                        <p class="previewText">
                                                             <%= __('Please_enter_your_content') %>
                                                         </p>
                                                     </div>

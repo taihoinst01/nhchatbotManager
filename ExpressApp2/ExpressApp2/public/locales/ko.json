@@ -236,6 +236,7 @@
   "CARD_TYPE": "카드 타입",
   "MEDIA_TYPE": "미디어 타입",
   "DIALOG_BOX_TITLE": "대화상자 제목",
+  "DIALOG_BOX_SUBTITLE": "대화상자 부제목",
   "DIALOG_BOX_CONTENTS": "대화상자 내용",
   "IMAGE_URL": "이미지 URL",
   "BUTTON": "버튼",
@@ -267,8 +268,9 @@
   "ASKTRAIN": "루이스 상태에 따라 1~2분 소요됩니다. 진행하시겠습니까?",
   "ASKENTITYSAVE": "루이스 상태에 따라 20~50초 소요됩니다. 진행하시겠습니까?",
   "============== scenario ==============": "",
-  "CENARIO_NAME": "시나리오명",
-  "CENARIO_SETTING": "시나리오 설정",
-  "CENARIO_LIST": "시나리오 목록",
-  "DLG_COUNT": "대화상자 수"
+  "SCENARIO_NAME": "시나리오명",
+  "SCENARIO_LIST": "시나리오 목록",
+  "DLG_COUNT": "대화상자 수",
+  "SCENARIO_NUM": "No",
+  "SCENARIO_BTN_CNT_VALIDATION": "버튼은 4개까지 생성할 수 있습니다."
 }

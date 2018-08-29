@@ -235,6 +235,7 @@
   "CARD_TYPE": "CARD TYPE",
   "MEDIA_TYPE": "MEDIA TYPE",
   "DIALOG_BOX_TITLE": "DIALOG BOX TITLE",
+  "DIALOG_BOX_SUBTITLE": "DIALOG BOX SUBTITLE",
   "DIALOG_BOX_CONTENTS": "DIALOG BOX CONTENTS",
   "IMAGE_URL": "IMAGE URL",
   "BUTTON": "BUTTON",
@@ -264,8 +265,9 @@
   "ASKTRAIN": "It takes 1 to 2 minutes depending on the LUIS condition. Do you want to proceed?",
   "ASKENTITYSAVE": "It takes 20 to 50 seconds depending on the LUIS condition. Do you want to proceed?",
   "============== scenario ==============": "",
-  "CENARIO_NAME": "ceanario name",
-  "CENARIO_SETTING": "ceanario setting",
-  "CENARIO_LIST": "ceanario list",
-  "DLG_COUNT": "Dialog count"
+  "SCENARIO_NAME": "sceanario name",
+  "SCENARIO_LIST": "sceanario list",
+  "DLG_COUNT": "Dialog count",
+  "SCENARIO_NUM": "No",
+  "SCENARIO_BTN_CNT_VALIDATION": "You can create up to four buttons."
 }
