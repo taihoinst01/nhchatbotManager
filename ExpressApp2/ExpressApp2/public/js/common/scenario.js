@@ -179,7 +179,7 @@ $(document).on('click', '.carouseBtn', function (e) {
             "			</td>" +
             "			<td></td>" +
             "			<td>" +
-            "			    <input type='text' name='cButtonName' class='form-control' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off' alt='" + btnCnt + "'>" +
+            "			    <input type='text' name='cButtonName' class='form-control' placeholder='" + language.Please_enter + "' onkeyup='writeBtnTitle(this," + btnCnt + ");' spellcheck='false' autocomplete='off' alt='" + btnCnt + "'>" +
             "			</td>" +
             "			<td></td>" +
             "			<td>" +
@@ -199,6 +199,12 @@ $(document).on('click', '.carouseBtn', function (e) {
 
         $('.previewBtnArea > div').add("<button type='button' class='btn btn-default w100'alt='" + btnCnt + "'>button1</button>").appendTo(".previewBtnArea");
 
+        btnNum_temp = btnCnt.toString();
+        if (divCnt == 0) {
+            btnNum_list = btnNum_temp;
+        } else {
+            btnNum_list = btnNum_list + ',' + btnNum_temp;
+        }
         btnCnt++;
     } else {
         alert(language.SCENARIO_BTN_CNT_VALIDATION);
@@ -210,9 +216,6 @@ $(document).on('click', '.btn_delete', function (e) {
     $('button[alt=' + $(this).attr('alt') + ']').remove();
     $(this).parent().parent().parent().parent().parent().parent().parent().remove();
 });
-
-
-
 
 // 대화상자 미리보기 타이틀 입력
 function writeDialogTitle(e) {
@@ -244,7 +247,7 @@ function writeDialogSubTitle(e) {
     }
 }
 
-// 대화상자 미리보기 타이틀 입력
+// 대화상자 미리보기 내용 입력
 function writeDialog(e) {
     var idx = $('#commonLayout .insertForm').index($(e).parents('.insertForm'));
     var icx = $('#commonLayout').find('.insertForm').index($(e).parents('.insertForm'));
@@ -262,6 +265,17 @@ function writeDialog(e) {
             $('.dialogView').children().eq(icx).find('.textMent .textTitle').text('');
         }
         $('.dialogView').children().eq(icx).find('.textMent .previewText').text(e.value);
+    }
+}
+
+// 대화상자 미리보기 버튼 타이틀 입력
+function writeBtnTitle(e, btnNum) {
+    var btnCnt = $('.previewBtnArea > button').length;
+    for (var i = 0; i < btnCnt; i++) {
+        console.log($('.previewBtnArea > button').eq(i).attr('alt'));
+        if ($('.previewBtnArea > button').eq(i).attr('alt') == parseInt(btnNum)){
+            $('.previewBtnArea > button').eq(i).text(e.value);
+        }
     }
 }
 
