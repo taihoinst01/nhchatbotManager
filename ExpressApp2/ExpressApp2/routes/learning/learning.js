@@ -3782,4 +3782,32 @@ router.post('/scenarioAddDialog', function (req, res) {
 
 });
 
+
+router.post('/selectScenarioList', function (req, res) {
+    //var selectId = req.body.selectId;
+   
+    (async () => {
+        try {
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            var queryText = "";
+
+            queryText = "SELECT SCENARIO_NM, COUNT(SCENARIO_SEQ) AS SCENARIO_COUNT FROM TBL_SCENARIO_DLG "
+            queryText += "WHERE SCENARIO_NM is not null GROUP BY SCENARIO_NM";
+
+            let result = await pool.request().query(queryText);
+            var rows = result.recordset;
+
+            res.send({ rows: rows });
+        } catch (err) {
+            console.log(err);
+        } finally {
+            sql.close();
+        }
+    })()
+
+    sql.on('error', err => {
+        console.log(err);
+    })
+});
+
 module.exports = router;

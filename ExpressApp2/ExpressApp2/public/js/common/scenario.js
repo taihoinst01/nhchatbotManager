@@ -1,221 +1,981 @@
-// JavaScript source code
 var language;
-$(function () {
+(function($) {
+    console.log("scenario test");
     $.ajax({
         url: '/jsLang',
         dataType: 'json',
         type: 'POST',
-        success: function (data) {
-            language = data.lang;
+        success: function(data) {
+            language= data.lang;
         }
     });
-});
+})(jQuery);
 
-function openModalBox(target) {
-
-    $(".inputArea > div").add(
-        "<div class='textLayout'>" +
-            // ÀÔ·ÂÃ¢
-            "<div class='scenario-form-group dlg_input_title'>" +
-                "<label>" + language.DIALOG_BOX_TITLE + "<span class='nec_ico'>*</span></label>" +
-                "<input type='text' name='dialogTitle' class='form-control' onkeyup='writeDialogTitle(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
-            "</div>" +
-            "<div class='scenario-form-group dlg_input_sub_title'>" +
-                "<label>" + language.DIALOG_BOX_SUBTITLE + "<span class='nec_ico'>*</span></label>" +
-                "<input type='text' name='dialogSubTitle' class='form-control' onkeyup='writeDialogSubTitle(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
-            "</div>" +
-            "<div class='scenario-form-group dlg_input_text'>" +
-                "<label>" + language.DIALOG_BOX_CONTENTS + "<span class='nec_ico'>*</span></label>" +
-                "<input type='text' name='dialogText' class='form-control' onkeyup='writeDialog(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
-            "</div>" +
-            "<div class='scenario-form-group dlg_input_img dpN'>" +
-                "<label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label>" +
-                "<input type='text' name='imgUrl' class='form-control' onkeyup='writeCarouselImg(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
-            "</div>" +
-            // ¹öÆ° Å¬¸¯Ã¢
-            "<div class='clear- both'></div>" +
-            "<div class='btn-group btn-group-justified insertBtnArea' role='group'> " + 
-                "<div class='btn-group dlg_btn_insert' role='group'>" +
-                    "<button type='button' class='btn btn-default carouseBtn'>" + language.INSERT_MORE_BUTTON + "</button>" +
-                "</div>" +
-                "<div class='btn-group dlg_btn_insert_card' role='group'>" +
-                    "<button type='button' class='btn btn-default addCarouselBtn'>" + language.INSERT_MORE_CARDS + "</button>" +
-                "</div>" +
-            "</div > " +
-            "<div class='btn-group btn-group-justified deleteBtnArea'role='group'> " + 
-                "<div class='btn-group deleteInsertFormDiv dlg_btn_delete dpN'role='group'>" +
-                    "<button type='button' class='btn btn-default deleteInsertForm'>" + language.DELETE_DIALOG + "</button>" +
-                "</div>" +
-                "<div class='btn-group dlg_btn_delete_card dpN'role='group'>" +
-                    "<button type='button' class='btn btn-default deleteCard'>" + language.DELETE_CARD + "</button>" +
-                "</div>" +
-            "</div>" +
-            // ¹öÆ° »ı¼º
-            "<div class='inputBtnArea'></div>" +
-        "</div>"
-    ).appendTo(".inputArea");
-}
-
-//´ëÈ­»óÀÚ Å¸ÀÔ º¯°æ
-$(document).on('change', 'select[name=dlgType]', function (e) {
-    var cardType = $(this).val();
-
-    if (cardType == '2') {
-
-    } else if (cardType == '3') {
-
-    } else if (cardType == '4') {
-
+$(document).ready(function(){
+    // recommendì—ì„œ ë„˜ì–´ì˜¨ ë¬¸ì¥ insert
+    var recommendParam = $('#utterence').val();
+    if(recommendParam){
+        utterInput(recommendParam);
     }
+    
+    //ìƒˆë¡œìš´ ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ëª¨ë‹¬ì°½ì— í•„ìš”í•œ luisId ê°€ì ¸ì˜¤ê¸°
+    //getLuisInfo('luisId');
 
-});
+    //ìƒˆë¡œìš´ ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ëª¨ë‹¬ì°½ì— í•„ìš”í•œ ê·¸ë£¹ ê°€ì ¸ì˜¤ê¸°
+    getGroupSeelectBox();
 
+    //ì—”í‹°í‹° ì¶”ê°€ ëª¨ë‹¬ ì´ˆê¸° ì„¤ì •
+    entityValidation();
+    //ì—”í‹°í‹°ì¶”ê°€ ëª¨ë‹¬ selectbox ì„¤ì •
+    selectApiGroup();
+    
+    $('.addDialogCancel').click(function(){
+        $('#appInsertForm')[0].reset();
+        var inputEntityStr = "<div style='margin-top:4px;'><input name='entityValue' tabindex='1' id='entityValue' type='text' class='form-control' style=' float: left; width:80%;' placeholder='" + language.Please_enter + "' onkeyup='entityValidation();' spellcheck='false' autocomplete='off'>";
+        inputEntityStr += '<a href="#" name="delEntityBtn" class="entity_delete" style="display:inline-block; margin:7px 0 0 7px; "><span class="fa fa-trash" style="font-size: 25px;"></span></a></div>';
+        $('.entityValDiv').html(inputEntityStr);
+        entityValidation();
+    });
+    
+    $('#entities').click(function() {
+        setTimeout(function (){
+            $('#addEntityModal').find("input:visible:first").focus();
+            //$('#entityDefine').focus();
+        }, 500);
+    });
 
-//´ÙÀÌ¾ó·Î±×»ı¼º¸ğ´Ş - ´ÙÀÌ¾ó·Î±×»èÁ¦
-$(document).on('click', '.deleteInsertForm', function (e) {
-
-    insertFormLength = $('.insertForm').length;
-    if (insertFormLength == 1) {
-        alert(language.You_must_have_one_dialog_by_default);
-    } else {
-        var idx = $(".deleteInsertForm").index(this);
-        if (idx == 0) {
-
-            $(this).parents('.insertForm').next().remove();
+    $(document).on("click", "a[name=delEntityBtn]", function(e){
+        if ($('.entityValDiv  input[name=entityValue]').length < 2) {
+            alert('1ê°œ ì´ìƒ ì…ë ¥í•´ì•¼ í•©ë‹ˆë‹¤.');
+            $('.entityValDiv  input[name=entityValue]').eq($('.entityValDiv  input[name=entityValue]').length-1).focus();
+        } else {
+            $(this).parent().remove();
+            $('.entityValDiv  input[name=entityValue]').eq($('.entityValDiv  input[name=entityValue]').length-1).focus();
+            entityValidation();
         }
-        $(".dialogView").eq(idx).remove();
-        $(this).parents('.insertForm').prev().remove();
-        $(this).parents('.insertForm').remove();
-    }
-    $(this).parents('.insertForm');
+    });
+
+    
 });
 
-//´ÙÀÌ¾ó·Î±×»ı¼º¸ğ´Ş - ¹öÆ°Ãß°¡
-var btnCnt = 1;
-var btnNum_temp = "";
-var btnNum_list = "";   //¹öÆ°ÀÇ ¹øÈ£ ¸ñ·Ï
-$(document).on('click', '.carouseBtn', function (e) {
-    var divCnt = $(".inputBtnArea > div").length;
-    if (divCnt < 4) {
-        $(".inputBtnArea > div").add(
-            "<div class='btnOptionDiv' alt='" + btnCnt + "'>" +
-            "   <div class='cardBtnCopyDiv'><div>" +
-            "	    <label>" + language.BUTTON + "</label>" +
-            "	</div>" +
-            "	<div class='scenario-form-group col-md-13' style='padding-left:0; margin-top: 0px;'>" +
-            "	    <table class='cardCopyTbl' style='width:100%'>" +
-            "		<col width='21%'>" +
-            "		<col width='1%'>" +
-            "		<col width='35%'>" +
-            "		<col width='1%'>" +
-            "		<col width='35%'>" +
-            "		<col width='1%'>" +
-            "		<col width='6%'>" +
-            "		<thead>" +
-            "		    <tr>" +
-            "			<th>" + language.Type + "</th>" +
-            "			<th></th>" +
-            "			<th>" + language.NAME + "</th>" +
-            "			<th></th>" +
-            "			<th>" + language.CONTENTS + "</th>" +
-            "			<th></th>" +
-            "			<th></th>" +
-            "		    </tr>" +
-            "		</thead>" +
-            "		<tbody>" +
-            "		    <tr>" +
-            "			<td>" +
-            "			    <select class='form-control' name='btnType'>" +
-            "				<option value='imBack' selected>imBack</option>" +
-            "				<option value='openURL'>openURL</option>" +
-            "			    </select>" +
-            "			</td>" +
-            "			<td></td>" +
-            "			<td>" +
-            "			    <input type='text' name='cButtonName' class='form-control' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off' alt='" + btnCnt + "'>" +
-            "			</td>" +
-            "			<td></td>" +
-            "			<td>" +
-            "			    <input type='text' name='cButtonContent' class='form-control' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off' alt='" + btnCnt + "'>" +
-            "			</td>" +
-            "			<td></td>" +
-            "			<td>" +
-            "			    <a href='#' class='btn_delete' style='margin:0px;' alt='" + btnCnt + "'><span class='fa fa-trash'></span></a>" +
-            "			</td>" +
-            "		    </tr>" +
-            "		</tbody>" +
-            "	    </table>" +
-            "	</div>" +
-            "    </div>" +
-            "</div>"
-        ).appendTo(".inputBtnArea");
 
-        btnCnt++;
+$(document).on("click", "#addEntityValBtn", function(e){
+    var entityLength = $('.entityValDiv  input[name=entityValue]').length+1;
+    inputEntityStr = "<div style='margin-top:4px;'><input name='entityValue' id='entityValue' tabindex='" + entityLength + "' type='text' class='form-control' style=' float: left; width:80%;' placeholder='" + language.Please_enter + "' onkeyup='entityValidation();'  spellcheck='false' autocomplete='off'>";
+    inputEntityStr += '<a href="#" name="delEntityBtn" class="entity_delete" style="display:inline-block; margin:7px 0 0 7px; "><span class="fa fa-trash" style="font-size: 25px;"></span></a></div>';
+    $('.entityValDiv').append(inputEntityStr);
+    $('.entityValDiv  input[name=entityValue]').eq($('.entityValDiv  input[name=entityValue]').length-1).focus();
+    entityValidation();
+});
 
+$(document).on("keypress", "input[name=entityValue]", function(e){
+    if (e.keyCode === 13) {	//	Enter Key
+        //var inputIndex = $('.entityValDiv  input[name=entityValue]').index($(this));
+        $('#addEntityValBtn').trigger('click');
+        $('.entityValDiv  input[name=entityValue]').eq($('.entityValDiv  input[name=entityValue]').length-1).focus();
+    }
+});
+
+// Utterance ì‚­ì œ
+$(document).on('click', '.utterDelete', function() {
+
+    $(this).parents('tr').next().remove();
+    $(this).parents('tr').remove();
+
+    /*
+    if ($('#entityUtteranceTextTable tbody').find('.off-screen').length > 0) {
+        //$('#entityUtteranceTextTable tbody').find('.off-screen').eq(0).animate({opacity: 1}, 300);
+        $('#entityUtteranceTextTable tbody').find('.off-screen').eq(0).removeClass('off-screen');
+        //$('#entityUtteranceTextTable tbody').find('.off-screen').eq(0).animate({opacity: 1}, 300);
+        $('#entityUtteranceTextTable tbody').find('.off-screen').eq(0).removeClass('off-screen');
+    }
+    */
+    var $tr = $('.recommendTbl tbody').children('tr');
+    $tr.css('opacity', '0.0')
+            .addClass('off-screen')
+            .slice(0, 6)
+            .removeClass('off-screen')
+            .animate({opacity: 1}, 300);
+
+    $('#dlgViewDiv').html("");
+    $('input[name=tableAllChk]').parent().iCheck('uncheck');
+
+    pagingFnc();
+
+    /*
+    $('.checkUtter').each(function(){
+        if($(this).attr('checked') == 'checked') {
+            //$('#entityUtteranceTextTable tbody').html('');
+            var delVal = $(this).parent().next().find('input[name=entity]').val();
+            var sameUtterCnt = 0;
+            $('.clickUtter').each(function(){
+                var utterVal = $(this).find('input[name=entity]').val();
+                if (delVal === utterVal) {
+                    sameUtterCnt++;
+                }
+            });
+            if (sameUtterCnt < 2) {
+                delete dlgMap[delVal];
+            }
+
+            $(this).parent().parent().next().remove();
+            $(this).parent().parent().remove();
+        }
+    });
+    */
+
+   
+});
+
+function pagingFnc() {
+    var rowPerPage = $('[name="dlgRowPerPage"]').val() * 1;// 1 ì„  ê³±í•˜ì—¬ ë¬¸ìì—´ì„ ìˆ«ìí˜•ë¡œ ë³€í™˜
+
+//		console.log(typeof rowPerPage);
+
+    var zeroWarning = 'Sorry, but we cat\'t display "0" rows page. + \nPlease try again.'
+    if (!rowPerPage) {
+        alert(zeroWarning);
+        return;
+    }
+    $('.pagination').html('');
+    var $products = $('.recommendTbl');
+
+    //$products.after('<div id="nav" style="text-align:center">');
+
+
+    var $tr = $($products).children('tbody').children('tr');
+    var rowTotals = $tr.length;
+//	console.log(rowTotals);
+
+    var pageTotal = Math.ceil(rowTotals/ rowPerPage);
+    var i = 0;
+
+    for (; i < pageTotal; i++) {
+        if(i == 0) {
+
+            $('<li class="li_paging active" value="' + i + '"><a href="#" onclick="return false;">'+ (i + 1) +'</a></li>')
+                    .appendTo('.pagination');
+        } else {
+
+            $('<li class="li_paging" value="' + i + '"><a href="#" onclick="return false;">'+ (i + 1) +'</a></li>')
+            .appendTo('.pagination');
+        }
+    }
+
+    $tr.addClass('off-screen')
+            .slice(0, rowPerPage)
+            .removeClass('off-screen');
+
+
+    var $pagingLink = $('.li_paging');
+    $pagingLink.on('click', function (evt) {
+        evt.preventDefault();
+        var $this = $(this);
+        if ($this.hasClass('active')) {
+            return;
+        }
+        $pagingLink.removeClass('active');
+        $this.addClass('active');
+        // 0 => 0(0*4), 4(0*4+4)
+        // 1 => 4(1*4), 8(1*4+4)
+        // 2 => 8(2*4), 12(2*4+4)
+        // ì‹œì‘ í–‰ = í˜ì´ì§€ ë²ˆí˜¸ * í˜ì´ì§€ë‹¹ í–‰ìˆ˜
+        // ë í–‰ = ì‹œì‘ í–‰ + í˜ì´ì§€ë‹¹ í–‰ìˆ˜
+
+        var currPage = $this.val();
+        var startItem = currPage * rowPerPage;
+        var endItem = startItem + rowPerPage;
+
+        $tr.css('opacity', '0.0')
+                .addClass('off-screen')
+                .slice(startItem, endItem)
+                .removeClass('off-screen')
+                .animate({opacity: 1}, 300);
+        //pagingSkip();
+
+    });
+    $pagingLink.filter(':first').addClass('active');
+    //pagingSkip();
+       
+}
+
+function pagingSkip() {
+
+    $('#preBtn').remove();
+    $('#nextBtn').remove();
+    $('#firstBtn').remove();
+    $('#lastBtn').remove();
+    $('.pagination').children('a').show();
+
+    var activeIndex = $('.pagination').children('a').index($('.active'));
+    if (activeIndex-4 > 0) {
+        $('.pagination').children('a')
+                .slice(0, activeIndex-4)
+                .hide();
+
+        $('<a href="#"></a>')
+                .attr('id', "firstBtn")
+                .html("[1]")
+                .prependTo('.pagination');
+
+
+                
+        /*
+        $('<a href="#"></a>')
+                .attr('id', "preBtn")
+                .html("[<]")
+                .prependTo('#nav');
+        */
+        
+    }
+    var activeRightIndex;
+    if ($('#firstBtn').length>0) {
+        activeRightIndex = activeIndex +6;
     } else {
-        alert(language.SCENARIO_BTN_CNT_VALIDATION);
+        activeRightIndex = activeIndex +5;
+    }
+    if (activeRightIndex < $('.pagination').children('a').length) {
+        var rightLen = $('.pagination').children('a').length;
+        if ( $('#preBtn').length > 0) { 
+            activeRightIndex += 2;
+        }
+        $('.pagination').children('a')
+                .slice(activeRightIndex, rightLen)
+                .hide();
+        $('<a href="#"></a>')
+                .attr('id', "lastBtn")
+                .html('[' + $('.pagination').children('a').eq($('.pagination').children('a').length-1).html() + ']')
+                .appendTo('.pagination');
+        /*
+        $('<a href="#"></a>')
+                .attr('id', "nextBtn")
+                .html("[>]")
+                .appendTo('#nav');
+        */
+    }
+}
+/*
+$(document).on('click', '#preBtn', function() {
+    $('.active').prev().trigger('click');
+    return false;
+});
+*/
+/*
+$(document).on('click', '#nextBtn', function() {
+    $('.active').next().trigger('click');
+    return false;
+});
+*/
+$(document).on('click', '#firstBtn', function() {
+    $('.pagination').children('a').eq(2).trigger('click');
+    return false;
+});
+$(document).on('click', '#lastBtn', function() {
+    $('.pagination').children('a').eq($('.pagination').children('a').length-3).trigger('click');
+    return false;
+});
+$(document).ready(function(){
+
+    //add eneity mordal save btn check
+    $('input[name=entityDefine], input[name=entityValue]').on('input',function(e){
+        if( $('input[name=entityDefine]').val() !== "" &&  $('input[name=entityValue]').val() !== "") {
+            $('#btnAddEntity').removeClass('disable');
+            $('#btnAddEntity').prop("disabled", false);
+        } else {
+            $('#btnAddEntity').addClass('disable');
+            $('#btnAddEntity').prop("disabled", true);
+        }   
+    });
+
+    // Utterance ì…ë ¥
+    $('input[name=iptUtterance]').keypress(function(e) {
+
+        if (e.keyCode == 13){	//	Enter Key
+
+            //$("#entityUtteranceTextTable tbody").html("");
+            $('#dlgViewDiv').html('');
+
+            $('input[name=iptUtterance]').attr('readonly',true);
+            var queryText = $(this).val();
+            if(queryText.trim() == "" || queryText.trim() == null) {
+                $('input[name=iptUtterance]').attr('readonly',false);
+                return false;
+            }
+            utterInput(queryText);
+
+            $("input[name=iptUtterance]").attr("readonly",false);
+        }
+    });
+
+    // Utterance Learn
+    $('#utterLearn').click(function(){
+
+        
+
+        /*
+        var chkBoxFlag1 = false;
+        var chkBoxFlag2 = false;
+
+        $('input[name=tableCheckBox]').each(function(){
+            if($(this).parent().hasClass('checked') == true) {
+                chkBoxFlag1 = true;
+                return false;
+            }
+        });
+
+        if($('input[name=dlgBoxChk]').parent().hasClass('checked') == true) {
+            chkBoxFlag2 = true;
+        }
+        */
+        ///////////////////////////////////////////////////////////
+
+
+        /*
+        checkFlag ì²´í¬ëœ ì¶”ì²œë¬¸ì¥ì´ ìˆëŠ”ì§€ ì—†ëŠ”ì§€
+        0 : ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ê°€ëŠ¥
+        1 : ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ë¶ˆê°€ëŠ¥(ì²´í¬ëœ ì¶”ì²œë¬¸ì¥ì¤‘ í•™ìŠµì´ ì•ˆëœ ì—”í‹°í‹°ê°€ ì¡´ì¬í•¨)
+        2 : ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ë¶ˆê°€ëŠ¥(ì²´í¬ëœ ì¶”ì²œë¬¸ì¥ì´ ì—†ìŒ)   
+        3 : ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ë¶ˆê°€ëŠ¥(ëŒ€í™”ìƒìì°½ì— ë‹¤ì´ì–¼ë¡œê·¸ê°€ ì—†ìŒ)
+        */
+       /*
+        var checkFlag = 2;  
+        chkEntities = [];
+        $('input[name=tableCheckBox]').each(function() {
+            if($(this).parent().hasClass('checked') == true) {
+                
+                var $entityValue = $(this).parent().parent().next().find('input[name=entity]').val();
+
+                if($entityValue == "") {
+                    checkFlag = 1;                   
+                    return false;
+                }
+
+                checkFlag = 0;
+                chkEntities.push($entityValue);
+            }
+        })
+
+      
+        
+        if(checkFlag == 1) {
+
+            alert("ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ë¶ˆê°€ëŠ¥(ì„ íƒëœ ì¶”ì²œë¬¸ì¥ì¤‘ í•™ìŠµì´ ì•ˆëœ ì—”í‹°í‹°ê°€ ì¡´ì¬í•©ë‹ˆë‹¤. í•™ìŠµì„ ì‹œì¼œì£¼ì„¸ìš”.)");
+        } else if(checkFlag == 2) {
+
+            alert("ì„ íƒí•œ í•™ìŠµ ì¶”ì²œ ë¬¸ì¥ì´ ì—†ìŠµë‹ˆë‹¤. í•™ìŠµ ì¶”ì²œì„ ì„ íƒí•´ì£¼ì„¸ìš”.");
+        } else if(checkFlag == 3) {
+  
+            alert("ì„ íƒí•œ í•™ìŠµ ì¶”ì²œ ë¬¸ì¥ì´ ì—†ìŠµë‹ˆë‹¤. í•™ìŠµ ì¶”ì²œì„ ì„ íƒí•´ì£¼ì„¸ìš”.");
+        } else {
+
+            var inputEntity = $('input[name=entity]');
+            entities = new Array();
+            inputEntity.each(function(n) { 
+                entities.push(inputEntity[n].value);
+                return entities;
+            });
+            
+
+            var inputDlgId = $('input[name=dlgId]');
+            var dlgId = new Array();
+            inputDlgId.each(function(n) { 
+                dlgId.push(inputDlgId[n].value);
+                return dlgId;
+            });
+            var inputUtterArray = new Array();
+            $('#utterTableBody tr').each(function() {
+                if ( $(this).find('div').hasClass('checked') ) {
+                    inputUtterArray.push($(this).find('input[name=hiddenUtter]').val());
+                }
+                chkEntities.push($entityValue);
+            }
+        })
+        if(exit) return;
+
+        /*
+        var inputEntity = $('input[name=entity]');
+        
+        var entities = new Array();
+        inputEntity.each(function(n) { 
+            entities.push(inputEntity[n].value);
+            return entities;
+        });
+        */
+        /*
+        checkFlag ì²´í¬ëœ ì¶”ì²œë¬¸ì¥ì´ ìˆëŠ”ì§€ ì—†ëŠ”ì§€
+        0 : ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ê°€ëŠ¥
+        1 : ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ë¶ˆê°€ëŠ¥(ì²´í¬ëœ ì¶”ì²œë¬¸ì¥ì¤‘ í•™ìŠµì´ ì•ˆëœ ì—”í‹°í‹°ê°€ ì¡´ì¬í•¨)
+        2 : ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ë¶ˆê°€ëŠ¥(ì²´í¬ëœ ì¶”ì²œë¬¸ì¥ì´ ì—†ìŒ)   
+        3 : ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ë¶ˆê°€ëŠ¥(ëŒ€í™”ìƒìì°½ì— ë‹¤ì´ì–¼ë¡œê·¸ê°€ ì—†ìŒ)
+        */
+       
+
+        var entitiyCheckFlag = true;  
+        var entitiyCheckCount = 0;
+        $('input[name=tableCheckBox]').each(function() {
+            if($(this).parent().hasClass('checked') == true) {               
+                entitiyCheckCount++; 
+                if($(this).parents('tr').find('input[name=entity]').val() == "") {
+                    entitiyCheckFlag = false;
+                } 
+            }
+        })
+        
+        if(entitiyCheckCount == 0) {
+            alert("ì„ íƒëœ ë¬¸ì¥ì´ ì—†ìŠµë‹ˆë‹¤ ë¬¸ì¥ì„ ì„ íƒí•´ì£¼ì„¸ìš”.");
+        } else if(entitiyCheckCount > 1) {
+            alert("í•™ìŠµëœ ì—”í‹°í‹°ê°€ í¬í•¨ëœ ë¬¸ì¥ì„ í•œê°œë§Œ ì„ íƒí•´ì£¼ì„¸ìš”.");
+        } else if(entitiyCheckCount == 1) {
+
+            if(entitiyCheckFlag == false) {
+                alert("ì„ íƒëœ ë¬¸ì¥ì— í•™ìŠµëœ ì—”í‹°í‹°ê°€ í¬í•¨ë˜ì–´ ìˆì§€ ì•ŠìŠµë‹ˆë‹¤. ì‹ ê·œ ë‹¨ì–´ ì¶”ê°€ë¥¼ í•´ì£¼ì„¸ìš”.")
+            } else {
+                
+                if($('input[name=dlgBoxChk]').parent().hasClass('checked') == true) {
+                    if($('#dlgViewDiv').children().length == 0){
+                        alert("ì„ íƒëœ ëŒ€í™”ìƒìì°½ì— ëŒ€í™”ìƒìê°€ ì—†ìŠµë‹ˆë‹¤. ëŒ€í™”ìƒìë¥¼ ê²€ìƒ‰í•´ì„œ ì¶”ê°€ í•˜ì‹œê±°ë‚˜ ìƒì„±í•´ì£¼ì„¸ìš”.");
+                    } else {
+                        var entities = $('input[name=entity]').val();
+
+                        var inputDlgId = $('input[name=dlgId]');
+                        var dlgId = new Array();
+                        inputDlgId.each(function(n) { 
+                            dlgId.push(inputDlgId[n].value);
+                            return dlgId;
+                        });
+
+                        var inputUtterArray = new Array();
+                        $('#utterTableBody tr').each(function() {
+                            if ( $(this).find('div').hasClass('checked') ) {
+                                inputUtterArray.push($(this).find('input[name=hiddenUtter]').val());
+                            }
+                        });
+
+                        var utterQuery = $('');
+                        var luisId = $('#dlgViewDiv').find($('input[name=luisId]'))[0].value;
+                        var luisIntent = $('#dlgViewDiv').find($('input[name=luisIntent]'))[0].value;
+                        
+                        $.ajax({
+                            url: '/learning/learnUtterAjax',
+                            dataType: 'json',
+                            type: 'POST',
+                            data: {'entities':entities, 'dlgId':dlgId, 'luisId': luisId, 'luisIntent': luisIntent, 'utters' : inputUtterArray},
+                            success: function(result) {
+                                if(result['result'] == true) {
+                                    alert(language.Added);
+                                    
+                                    $('input[name=tableAllChk]').parent().iCheck('uncheck');
+
+                                    $('.recommendTbl tbody').html('');
+                                    $('#dlgViewDiv').html('');
+
+                                    $('input[name=dlgBoxChk]').parent().iCheck('uncheck');
+                                    $('.pagination').html('');
+                                }else{
+                                    alert(language.It_failed);
+                                }
+                            }
+                        });
+                    }
+                } else {
+                    alert("ëŒ€í™”ìƒìë¥¼ ì„ íƒí•´ì£¼ì„¸ìš”.");
+                } 
+            }
+        }
+    });
+
+    
+
+    //ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ëª¨ë‹¬ ë‹«ëŠ” ì´ë²¤íŠ¸(ì´ˆê¸°í™”)
+    $(".js-modal-close").click(function() {
+        $('html').css({'overflow': 'auto', 'height': '100%'}); //scroll hidden í•´ì œ
+        $('#layoutBackground').hide();
+
+        //$('#element').off('scroll touchmove mousewheel'); // í„°ì¹˜ë¬´ë¸Œ ë° ë§ˆìš°ìŠ¤íœ  ìŠ¤í¬ë¡¤ ê°€ëŠ¥
+
+        //$('#appInsertDes').val('');
+        //$("#intentList option:eq(0)").attr("selected", "selected");
+        //$('#intentList').find('option:first').attr('selected', 'selected');
+        //initMordal('intentList', 'Select Intent');
+        //initMordal('entityList', 'Select Entity');
+        //$('#dlgLang').find('option:first').attr('selected', 'selected');
+        //$('#dlgOrder').find('option:first').attr('selected', 'selected');
+    });
+
+    //add entity mordal close event
+    $('.addEntityModalClose').click(function(){
+        $('form[name=entityInsertForm]')[0].reset();
+    });
+    
+    //utter ì²´í¬ë°•ìŠ¤ ì „ì²´ì„ íƒ 
+    /*
+    $('#allCheck').parent().click(function() {
+        var checkedVal = false;
+        if (typeof $('#allCheck').parent().attr('checked') != 'undefined') {
+            $("input[name=ch1]").each(function() {
+                if ( typeof $(this).parent().attr("checked") == 'undefined' ) {
+                    $(this).parent().click();
+                } 
+                checkedVal = true;
+            });
+        } else {
+            $("input[name=ch1]").each(function() {
+                if ( typeof $(this).parent().attr("checked") != 'undefined' ) {
+                    $(this).parent().click();
+                }
+                checkedVal = false;
+            });
+        }
+        //changeBtnAble('delete', checkedVal);
+    });
+    */
+
+	$('.createDlgModalClose').click(function(){
+        $('#mediaCarouselLayout').css('display','none');
+        $('#cardLayout').css('display','none');
+        $('#appInsertForm')[0].reset();
+        $('.insertForm').remove();
+        $('#commonLayout hr').remove();
+        $('.btnInsertDiv').each(function() {
+          $(this).html("");  
+        })
+
+        
+        $('#apiLayout').css('display', 'none');
+        $('#commonLayout').css('display', 'block');
+        $('#commonLayout').prepend(insertForm);
+        
+        var dialogView = '';
+        dialogView += '<div class="dialogView" >';
+        dialogView += '<div class="wc-message wc-message-from-bot" style="width:80%;">';
+        dialogView += '<div class="wc-message-content">';
+        dialogView += '<svg class="wc-message-callout"></svg>';
+        dialogView += '<div>';
+        dialogView += '<div class="format-markdown">';
+        dialogView += '<div class="textMent">';
+        dialogView += '<h1 class="textTitle">' + language.Please_enter_a_title + '</h1>';
+        dialogView += '<p>' + language.Please_enter + '</p>';
+        dialogView += '</div>';
+        dialogView += '</div>';
+        dialogView += '</div>';
+        dialogView += '</div>';
+        dialogView += '</div>';
+        dialogView += '</div>';
+        $('#dialogViewWrap').html(dialogView);
+    });
+
+    /*
+    //dlg ì²´í¬ë°•ìŠ¤ ì „ì²´ì„ íƒ 
+    $('#checkAllDlg').parent().click(function() {
+        //var checkedVal = false;
+        
+        if (typeof $('#checkAllDlg').parent().attr('checked') != 'undefined') {
+            $("input[name=dlgChk]").each(function() {
+                if ( typeof $(this).parent().attr("checked") == 'undefined' ) {
+                    $(this).parent().click();
+                } 
+                //checkedVal = true;
+            });
+        } else {
+            $("input[name=dlgChk]").each(function() {
+                if ( typeof $(this).parent().attr("checked") != 'undefined' ) {
+                    $(this).parent().click();
+                }
+               //checkedVal = false;
+            });
+        }
+    });
+    */
+
+    // ì†ŒìŠ¤ íƒ€ì… ë³€ê²½
+    $('#sourceType').change(function(e){
+        if($(e.target).val() == "API") {
+            $('.dialogView').html('');
+            $('#commonLayout').css('display','none');
+            $('#apiLayout').css('display','block');
+        } else {
+
+            $('.insertForm').remove();
+            var insertForm = '';
+            insertForm += '<div class="insertForm">';
+            insertForm += '<div class="form-group" >';
+            insertForm += '<form name="dialogLayout" id="dialogLayout">';
+            insertForm += '<label>' + language.DIALOG_BOX_TYPE + '<span class="nec_ico">*</span> </label>';
+            insertForm += '<select class="form-control" name="dlgType">';
+            insertForm += '<option value="2">' + language.TEXT_TYPE + '</option>';
+            insertForm += '<option value="3">' + language.CARD_TYPE + '</option>';
+            insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
+            insertForm += '</select>';
+            insertForm += '<div class="clear-both"></div>';
+            insertForm += '</form>';
+            insertForm += '</div>';
+            insertForm += '</div>';
+            
+            $('#commonLayout').css('display','block');
+            $('#commonLayout').prepend(insertForm);
+            var dialogView = '';
+            dialogView += '<div class="dialogView" >';
+            dialogView += '<div class="wc-message wc-message-from-bot" style="width:80%;">';
+            dialogView += '<div class="wc-message-content">';
+            dialogView += '<svg class="wc-message-callout"></svg>';
+            dialogView += '<div>';
+            dialogView += '<div class="format-markdown">';
+            dialogView += '<div class="textMent">';
+            dialogView += '<p>' + language.Please_enter + '</p>';
+            dialogView += '</div>';
+            dialogView += '</div>';
+            dialogView += '</div>';
+            dialogView += '</div>';
+            dialogView += '</div>';
+            dialogView += '</div>';
+            $('#dialogViewWrap').html(dialogView);
+            
+            $('#apiLayout').css('display','none');
+            $(".insertForm form").append($(".textLayout").clone(true));
+            $('.insertForm .textLayout').css('display','block');
+        }
+    });
+    
+// íƒ€ì… ë³€ê²½ì‹œ ë²„íŠ¼, ì´ë¯¸ì§€ ê´€ë ¨ input ìƒì„± ë° ì‚­ì œ
+/*
+    $('#dlgType').change(function(e){
+        var idx = $('#dlgType').index(this);
+
+
+        if($(e.target).val() == "2"){
+            $('#mediaCarouselLayout').css('display','none');
+            $('#cardLayout').css('display','none');
+        }else if($(e.target).val() == "4"){
+            $('#mediaCarouselLayout').css('display','block');
+            $('#cardLayout').css('display','none');
+        }else{
+            $('#mediaCarouselLayout').css('display','block');
+            $('#cardLayout').css('display','block');
+        }
+        
+        openModalBox('#create_dlg');
+    });
+*/
+
+    
+    //ë‹¤ì´ì–¼ë¡œê·¸ Add From
+    $('#addDialogBtn').click(function(e){
+        //$(".insertForm:eq(0)").clone(true).appendTo(".copyForm");
+        //$(".copyForm textarea[name=dialogText]:last").val('');
+
+        var insertForm = '';
+            insertForm += '<hr>';
+            insertForm += '<div class="insertForm">';
+            insertForm += '<div class="form-group" >';
+            insertForm += '<form name="dialogLayout" id="dialogLayout">';
+
+            insertForm += '<label>' + language.DIALOG_BOX_TYPE + '<span class="nec_ico">*</span></label>';
+            insertForm += '<select class="form-control" name="dlgType">';
+            insertForm += '<option value="2">' + language.TEXT_TYPE + '</option>';
+            insertForm += '<option value="3">' + language.CARD_TYPE + '</option>';
+            insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
+            insertForm += '</select>';
+            insertForm += '<div class="clear-both"></div>';
+
+            insertForm += '<div class="textLayout" style="display: block;">';
+            insertForm += '<div class="btn_wrap" style="clear:both">';
+            insertForm += '</div>'
+            insertForm += '<div class="form-group">';
+            insertForm += '<label>' + language.DIALOG_BOX_TITLE + '</label>';
+            insertForm += '<input type="text" name="dialogTitle" class="form-control" onkeyup="writeDialogTitle(this);" placeholder=" ' + language.Please_enter + '" spellcheck="false" autocomplete="off">';
+            insertForm += '</div>';
+            insertForm += '<div class="form-group">';
+            insertForm += '<label>' + language.DIALOG_BOX_CONTENTS + '<span class="nec_ico">*</span></label>';
+            insertForm += '<input type="text" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder=" ' + language.Please_enter + '" spellcheck="false" autocomplete="off">';
+            insertForm += '</div>';
+            insertForm += '</div>';
+            insertForm += '<div class="btn_wrap deleteInsertFormDiv" style="clear:both;" >';
+            insertForm += '<button type="button" class="btn btn-default deleteInsertForm">' + language.DELETE_DIALOG + '</button>';
+            insertForm += '</div>'; 
+            insertForm += '</form>';
+            insertForm += '</div>';
+            insertForm += '</div>';
+
+        $(".insertForm:last").after(insertForm);
+        //$(".insertFormWrap").append(insertForm);
+        var dialogView = '';
+            dialogView += '<div class="dialogView" >';
+            dialogView += '<div class="wc-message wc-message-from-bot" style="width:80%;">';
+            dialogView += '<div class="wc-message-content">';
+            dialogView += '<svg class="wc-message-callout"></svg>';
+            dialogView += '<div>';
+            dialogView += '<div class="format-markdown">';
+            dialogView += '<div class="textMent">';
+            dialogView += '<h1 class="textTitle">' + language. Please_enter_a_title + '</h1>';
+            dialogView += '<p>' + language. Please_enter_your_content + '</p>';
+            dialogView += '</div>';
+            dialogView += '</div>';
+            dialogView += '</div>';
+            dialogView += '</div>';
+            
+        $('#dialogViewWrap').append(dialogView);
+        e.stopPropagation();
+        e.preventDefault();
+        
+    });
+
+
+
+
+    $("#searchLargeGroup").change(function(){
+        var str = "";
+        $( "#searchLargeGroup option:selected" ).each(function() {
+          str = $( this ).text() + " ";
+        });
+        selectGroup("searchMediumGroup",str);
+    });
+
+    $("#searchMediumGroup").change(function(){
+        var str1 = "";
+        $( "#searchLargeGroup option:selected" ).each(function() {
+          str1 = $( this ).text() + " ";
+        });
+
+        var str2 = "";
+        $( "#searchMediumGroup option:selected" ).each(function() {
+          str2 = $( this ).text() + " ";
+        });
+
+        selectGroup("searchSmallGroup",str1,str2);
+    });
+
+    $("#searchDialogBtn").on('click',function(){
+
+        if($('input[name=serachDlg]').val() == '' && $('#searchLargeGroup').val() == '') {
+            alert(language.Select_search_word_or_group);
+        } else {
+            $("#searchDlgResultDiv").html("");
+            searchDialog();
+        }
+
+        
+    });
+
+    $(".searchDialogClose").on('click',function(){
+        $('input[name=serachDlg]').val('');
+        $('#searchDlgResultDiv').html('');
+        $('.dialog_result strong').html(' 0 ');
+    });
+
+});
+
+
+
+//utter td í´ë¦­
+$(document).on('click','.clickUtter',function(event){
+    var utter = $(this).find('input[name=entity]').val();
+    $('#dlgViewDiv').html(dlgMap[utter]);
+});
+
+//intent selbox ì„ íƒ
+$(document).on('change','#intentNameList',function(event){
+    selectDlgListAjax($("#intentNameList option:selected").val());
+});
+
+// ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ëª¨ë‹¬ (ë‹¤ì´ì–¼ë¡œê·¸ íƒ€ì…ë³€ê²½)
+$(document).on('change','select[name=dlgType]',function(e){
+    var idx = $("select[name=dlgType]").index(this);
+    var insertHtml = "";
+
+    $('.insertForm:eq(' + idx + ') .carouselLayout').remove();
+    $('.insertForm:eq(' + idx + ') .carouselLayout').after().remove();
+    $('.insertForm:eq(' + idx + ') .mediaLayout').remove();
+    $('.insertForm:eq(' + idx + ') .mediaLayout').after().remove();
+    $('.insertForm:eq(' + idx + ')').find('.clear-both').each(function( index) {
+    $('.insertForm:eq(' + idx + ') form').find('.addCarouselBtnDiv').remove();
+        if ( index != 0 ) {
+            $(this).next().remove();
+            $(this).remove();
+        } 
+    });
+
+    if($(e.target).val() == "2") {
+
+    } else if($(e.target).val() == "3") {
+        //var $clone = $('.carouselLayout').clone();  <div id="carouselLayout" style="display: block;">[object Object]</div>
+        //var caraousHtml = '<div class="carouselLayout" style="display: block;">' +  + '</div>'
+        $('.insertForm:eq(' + idx + ') form .deleteInsertFormDiv').before(addCarouselForm);
+        $('.insertForm:eq(' + idx + ') form').find('.addCarouselBtnDiv').before(carouselForm);
+        $('.insertForm:eq(' + idx + ') .carouselLayout').css('display', 'block');
+        $('.insertForm:eq(' + idx + ') .carouselLayout').find('.addCarouselBtn:last').closest('div').css('display', 'inline-block');
+    } else if($(e.target).val() == "4") {
+        //var mediaForm = '<div id="mediaLayout" style="display: block;">' + $mediaForm.html() + '</div>'
+        $('.insertForm:eq(' + idx + ') form .deleteInsertFormDiv').before('<div class="mediaLayout" style="display:none;">' + mediaForm + '</div>');
+        //$('.insertForm:eq(' + idx + ') form').append('<div class="mediaLayout" style="display:none;">' + mediaForm + '</div>') ;
+        $('.insertForm:eq(' + idx + ') .mediaLayout').css('display', 'block');
+        $('.insertForm:eq(' + idx + ') .mediaLayout').find('.addMediaBtn:last').closest('div').css('display', 'inline-block');
+    }
+
+    if($(e.target).val() == "2") {
+        $(".dialogView").eq(idx).html('');
+        insertHtml += '<div class="wc-message wc-message-from-bot" style="width:80%;">';
+        insertHtml += '<div class="wc-message-content">';
+        insertHtml += '<svg class="wc-message-callout"></svg>';
+        insertHtml += '<div><div class="format-markdown"><div class="textMent">';
+        insertHtml += '<h1 class="textTitle">' + language.Please_enter_a_title + '</h1>';
+        insertHtml += '<p>';
+        insertHtml += language.Please_enter_your_content;
+        insertHtml += '</p>';
+        insertHtml += '</div></div></div></div></div>';
+
+        $(".dialogView").eq(idx).html(insertHtml);
+    } else if($(e.target).val() == "3") {
+        $(".dialogView").eq(idx).html('');
+        insertHtml += '<div class="wc-message wc-message-from-bot" style="width:90%">';
+        insertHtml += '<div class="wc-message-content" style="width:90%;">';
+        insertHtml += '<svg class="wc-message-callout"></svg>';
+        insertHtml += '<div class="wc-carousel slideBanner" style="width: 312px;">';
+        insertHtml += '<div>';
+        insertHtml += '<button class="scroll previous" id="prevBtn' + (idx) + '" style="display: none; height: 30px;" onclick="prevBtn(' + idx + ', this)">';
+        insertHtml += '<img src="https://bot.hyundai.com/assets/images/02_contents_carousel_btn_left_401x.png">';
+        insertHtml += '</button>';
+        insertHtml += '<div class="wc-hscroll-outer" >';
+        insertHtml += '<div class="wc-hscroll slideDiv" style="margin-bottom: 0px;" class="content" id="slideDiv' + (idx) + '">';
+        insertHtml += '<ul style="padding-left: 0px;">';
+        insertHtml += '<li class="wc-carousel-item">';
+        insertHtml += '<div class="wc-card hero">';
+        insertHtml += '<div class="wc-container imgContainer">';
+        insertHtml += '<img src="https://bot.hyundai.com/assets/images/movieImg/teasure/02_teaser.jpg">';
+        insertHtml += '</div>';
+        insertHtml += '<h1>' + language.Please_enter_a_title + '</h1>';
+        insertHtml += '<p class="carousel">' + language.Please_enter_your_content + '</p>';
+        insertHtml += '<ul class="wc-card-buttons" style="padding-left: 0px;"><li><button>BTN_1_TITLE</button></li></ul>';
+        insertHtml += '</div>';
+        insertHtml += '</li>';
+        /*
+        insertHtml += '<li class="wc-carousel-item">';
+        insertHtml += '<div class="wc-card hero">';
+        insertHtml += '<div class="wc-container imgContainer">';
+        insertHtml += '<img src="https://bot.hyundai.com/assets/images/movieImg/teasure/02_teaser.jpg">';
+        insertHtml += '</div>';
+        insertHtml += '<h1>CARD_TITLE</h1>';
+        insertHtml += '<p class="carousel">CARD_TEXT</p>';
+        insertHtml += '<ul class="wc-card-buttons"><li><button>BTN_1_TITLE</button></li></ul>';
+        insertHtml += '</div>';
+        insertHtml += '</li>';
+        */
+        insertHtml += '</ul>';
+        insertHtml += '</div>';
+        insertHtml += '</div>';
+        insertHtml += '<button class="scroll next" style="display: none; height: 30px;" id="nextBtn' + (idx) + '" onclick="nextBtn(' + idx + ', this)"><img src="https://bot.hyundai.com/assets/images/02_contents_carousel_btn_right_401x.png"></button>';
+        insertHtml += '</div></div></div></div>';
+        $(".dialogView").eq(idx).html(insertHtml);
+    } else if($(e.target).val() == "4") {
+        $(".dialogView").eq(idx).html('');
+        insertHtml += '<div class="wc-message wc-message-from-bot">';
+        insertHtml += '<div class="wc-message-content">';
+        insertHtml += '<svg class="wc-message-callout"></svg>';
+        insertHtml += '<div>';
+        insertHtml += '<div class="wc-carousel">';
+        insertHtml += '<div>';
+        insertHtml += '<button class="scroll previous" disabled=""><img src="https://bot.hyundai.com/assets/images/02_contents_carousel_btn_left_401x.png"></button>';
+        insertHtml += '<div class="wc-hscroll-outer">';
+        insertHtml += '<div class="wc-hscroll" style="margin-bottom: 0px;">';
+        insertHtml += '<ul style="padding-left: 0px;">';
+        insertHtml += '<li class="wc-carousel-item wc-carousel-play">';
+        insertHtml += '<div class="wc-card hero">';
+        insertHtml += '<div class="wc-card-div imgContainer">';
+        insertHtml += '<input type="hidden" name="dlgId" value="dlg_id"/>';
+        insertHtml += '<img src="https://bot.hyundai.com/assets/images/convenience/USP_convenience_09.jpg">';
+        insertHtml += '<div class="playImg"></div>';
+        insertHtml += '<div class="hidden" alt="card_title"></div>';
+        insertHtml += '<div class="hidden" alt="card_value"></div>';
+        insertHtml += '</div>';
+        insertHtml += '<h1>' + language.Please_enter_a_title + '</h1>';
+        insertHtml += '<p class="dlgMediaText">' + language.Please_enter_your_content + '</p>';
+        insertHtml += '<ul class="wc-card-buttons" style="padding-left: 0px;">';
+        insertHtml += '<li><button>BTN_1_TITLE</button></li></ul>';
+        insertHtml += '</div>';
+        insertHtml += '</li></ul></div></div>';
+        insertHtml += '<button class="scroll next" disabled=""><img src="https://bot.hyundai.com/assets/images/02_contents_carousel_btn_right_401x.png"></button>';
+        insertHtml += '</div></div></div></div></div>';
+
+        $(".dialogView").eq(idx).html(insertHtml);
     }
 });
 
-//´ÙÀÌ¾ó·Î±×»ı¼º¸ğ´Ş - ¹öÆ°»èÁ¦
-$(document).on('click', '.btn_delete', function (e) {
-    $(this).parent().parent().parent().parent().parent().parent().parent().remove();
-});
+//ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ìœ íš¨ì„± ê²€ì‚¬
+function dialogValidation(type){
+    if(type == 'dialogInsert'){
+        var dialogText = $('input[name=dialogText]').val();
+        
+        if(dialogText != "") {
+            $('#btnAddDlg').removeClass("disable");
+            $('#btnAddDlg').attr("disabled", false);
+        } else {
+            $('#btnAddDlg').attr("disabled", "disabled");
+            $('#btnAddDlg').addClass("disable");
+        }
+    }
+}
 
-
-
-
-// ´ÙÀÌ¾ó·Î±×»ı¼º¸ğ´Ş (´ÙÀÌ¾ó·Î±× Å¸ÀÌÆ² ÀÔ·Â)
+// ë‹¤ì´ì–¼ë¡œê·¸ìƒì„±ëª¨ë‹¬ (ë‹¤ì´ì–¼ë¡œê·¸ íƒ€ì´í‹€ ì…ë ¥)
 function writeDialogTitle(e) {
+
+    //var idx = $('input[name=dialogTitle]').index(e);
     var idx = $('#commonLayout .insertForm').index($(e).parents('.insertForm'));
     var icx = $('#commonLayout').find('.insertForm').index($(e).parents('.insertForm'));
     var jcx = $(e).parents('.insertForm').find('input[name=dialogTitle]').index(e);
 
-    if ($(e).parents('.insertForm').find('select[name=dlgType]').val() == 3) {
+    if($(e).parents('.insertForm').find('select[name=dlgType]').val() == 3) {
+        //$('.dialogView:eq(' + idx + ') .carousel').html(e.value);
         $('.dialogView').children().eq(icx).find('ul:eq(0)').children().eq(jcx).find('h1').text(e.value);
-    } else if ($(e).parents('.insertForm').find('select[name=dlgType]').val() == 4) {
+    } else if($(e).parents('.insertForm').find('select[name=dlgType]').val() == 4) {
         $('.dialogView').children().eq(icx).find('h1').html(e.value);
+        //$('.dialogView h1').eq(idx).html(e.value);
     } else {
-        $('.dialogView').children().eq(icx).find('.textMent .previewTitle').html(e.value);
+        $('.dialogView').children().eq(icx).find('.textMent .textTitle').html(e.value);
     }
 }
 
-// ´ÙÀÌ¾ó·Î±×»ı¼º¸ğ´Ş (´ÙÀÌ¾ó·Î±× ºÎÁ¦¸ñ ÀÔ·Â)
-function writeDialogSubTitle(e) {
-    var idx = $('#commonLayout .insertForm').index($(e).parents('.insertForm'));
+$(document).on('change','.insertForm .mediaLayout input[name=imgUrl]',function(e){
+    var idx = $(".insertForm .mediaLayout input[name=imgUrl]").index(this);
+    $('.dialogView .wc-card-div img:eq(' + idx + ')').attr("src",$(e.target).val());
+});
+
+
+function writeCarouselImg(e) {
     var icx = $('#commonLayout').find('.insertForm').index($(e).parents('.insertForm'));
-    var jcx = $(e).parents('.insertForm').find('input[name=dialogTitle]').index(e);
+    var jcx = $(e).parents('.insertForm').find('input[name=imgUrl]').index(e);
 
-    if ($(e).parents('.insertForm').find('select[name=dlgType]').val() == 3) {
-        $('.dialogView').children().eq(icx).find('ul:eq(0)').children().eq(jcx).find('h1').text(e.value);
-    } else if ($(e).parents('.insertForm').find('select[name=dlgType]').val() == 4) {
-        $('.dialogView').children().eq(icx).find('h1').html(e.value);
-    } else {
-        $('.dialogView').children().eq(icx).find('.textMent .previewSubTitle').html(e.value);
-    }
+    $('.dialogView').children().eq(icx).find('ul:eq(0)').children().eq(jcx).find('.imgContainer img').attr("src",e.value);
 }
 
-// ´ÙÀÌ¾ó·Î±× »ı¼º ¸ğ´Ş (´ÙÀÌ¾ó·Î±× ³»¿ë ÀÔ·Â)
+// ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ëª¨ë‹¬ (ë‹¤ì´ì–¼ë¡œê·¸ ë‚´ìš© ì…ë ¥)
 function writeDialog(e) {
+    //var idx = $('textarea[name=dialogText]').index(e);
+    
     var idx = $('#commonLayout .insertForm').index($(e).parents('.insertForm'));
     var icx = $('#commonLayout').find('.insertForm').index($(e).parents('.insertForm'));
-
-    if ($(e).parents('.insertForm').find('select[name=dlgType]').val() == 3) {
+    //var jcx = $(e).parents('.insertForm').find('input[name=dialogTitle]').index(e);
+    
+    if($(e).parents('.insertForm').find('select[name=dlgType]').val() == 3) {
+        //$('.dialogView:eq(' + idx + ') .carousel').html(e.value);
+        //var icx = $('#commonLayout').find('.insertForm').index($(e).parents('.insertForm'));
         var jcx = $(e).parents('.insertForm').find('input[name=dialogText]').index(e);
-        if ($(e).parent().prev().find('input[name=dialogTitle]').val() == '') {
+        if($(e).parent().prev().find('input[name=dialogTitle]').val() == '') {
             $('.dialogView').children().eq(icx).find('ul:eq(0)').children().eq(jcx).find('h1').text('');
         }
         $('.dialogView').children().eq(icx).find('ul:eq(0)').children().eq(jcx).find('p').text(e.value);
-    } else if ($(e).parents('.insertForm').find('select[name=dlgType]').val() == 4) {
+
+
+    } else if($(e).parents('.insertForm').find('select[name=dlgType]').val() == 4) {
         $('.dialogView').children().eq(icx).find('.dlgMediaText').text(e.value);
     } else {
-        if ($(e).parent().prev().find('input[name=dialogTitle]').val() == '') {
+        //$('.dialogView .textMent p:eq(' + idx + ')').html(e.value);
+        //$('.dialogView').children().eq(icx).find('.textMent p:eq(' + idx + ')').html(e.value);
+        if($(e).parent().prev().find('input[name=dialogTitle]').val() == '') {
             $('.dialogView').children().eq(icx).find('.textMent .textTitle').text('');
         }
         $('.dialogView').children().eq(icx).find('.textMent p').text(e.value);
     }
 
-    //Ä³·¯Á° ¿ë
+    //ìºëŸ¬ì¡€ ìš©
     /*
     if ( $(e).parents('.insertForm').find('select[name=dlgType]').val() == 3 ) {
         var icx = $('#commonLayout').find('.insertForm').index($(e).parents('.insertForm'));
@@ -228,7 +988,7 @@ function writeDialog(e) {
     
 }
 
-//´ÙÀÌ¾ó·Î±× »ı¼º
+//ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„±
 /*
 function insertDialog(){
 
@@ -250,7 +1010,7 @@ function insertDialog(){
     });
 }
 */
-//¸ğ´ŞÃ¢ ÀÔ·Â°ª¿¡ µû¸¥ save ¹öÆ° È°¼ºÈ­ Ã³¸®
+//ëª¨ë‹¬ì°½ ì…ë ¥ê°’ì— ë”°ë¥¸ save ë²„íŠ¼ í™œì„±í™” ì²˜ë¦¬
 function entityValidation(){
     
     var defineText = $('#entityDefine').val().trim();
@@ -273,7 +1033,7 @@ function entityValidation(){
        
 }
 
-//¿£Æ¼Æ¼ Ãß°¡ group selbox ¼³Á¤
+//ì—”í‹°í‹° ì¶”ê°€ group selbox ì„¤ì •
 var globalApiGroupStr;
 function selectApiGroup() {
     $.ajax({
@@ -383,7 +1143,7 @@ function createDialog(){
         var object  = {};
         var carouselArr = [];
         var objectCarousel = {};
-        if (tmp[0].value === "3") {
+        if (tmp[0].value === "3") { //  CARD
             var btnTypeCount = 1;
             var cButtonContentCount = 1;
             var cButtonNameCount = 1;
@@ -423,7 +1183,8 @@ function createDialog(){
                     objectCarousel = {};
                     break;
                 }
-                object[tmp[0].name] = tmp[0].value;
+                //object[tmp[0].name] = tmp[0].value;
+                object[tmp[j].name] = tmp[j].value;
                 objectCarousel[tmp[j].name] = tmp[j].value;
             }
             //carouselArr.push(objectCarousel);
@@ -464,7 +1225,7 @@ function createDialog(){
     array[array.length] = JSON.stringify($("form[name=appInsertForm]").serializeObject());//JSON.stringify($("form[name=appInsertForm]"));
 
     $.ajax({
-        url: '/learning/addDialog',
+        url: '/learning/scenarioAddDialog',
         dataType: 'json',
         type: 'POST',
         data: {'data' : array/*, 'entities' : chkEntities*/},
@@ -477,7 +1238,7 @@ function createDialog(){
             }
             var largeGroup = $('#appInsertForm').find('#largeGroup')[0].value
             var middleGroup;
-             $('#appInsertForm').find('[name=middleGroup]').each(function() {
+            $('#appInsertForm').find('[name=middleGroup]').each(function() {
                 if($(this).attr('disabled') == undefined) {
                     middleGroup = $(this).val();
                     return false;
@@ -499,16 +1260,16 @@ function createDialog(){
 }
 
 var botChatNum = 1; 
-//dlg ÀúÀå
+//dlg ì €ì¥
 var dlgMap = new Object();
 function selectDlgListAjax(entity) {
     $.ajax({
-        url: '/learning/selectDlgListAjax',                //ÁÖ¼Ò
-        dataType: 'json',                  //µ¥ÀÌÅÍ Çü½Ä
-        type: 'POST',                      //Àü¼Û Å¸ÀÔ
-        data: {'entity':entity},      //µ¥ÀÌÅÍ¸¦ json Çü½Ä, °´Ã¼Çü½ÄÀ¸·Î Àü¼Û
+        url: '/learning/selectDlgListAjax',                //ì£¼ì†Œ
+        dataType: 'json',                  //ë°ì´í„° í˜•ì‹
+        type: 'POST',                      //ì „ì†¡ íƒ€ì…
+        data: {'entity':entity},      //ë°ì´í„°ë¥¼ json í˜•ì‹, ê°ì²´í˜•ì‹ìœ¼ë¡œ ì „ì†¡
 
-        success: function(result) {          //¼º°øÇßÀ» ¶§ ÇÔ¼ö ÀÎÀÚ °ªÀ¸·Î °á°ú °ª ³ª¿È
+        success: function(result) {          //ì„±ê³µí–ˆì„ ë•Œ í•¨ìˆ˜ ì¸ì ê°’ìœ¼ë¡œ ê²°ê³¼ ê°’ ë‚˜ì˜´
             var inputUttrHtml = '';
             for (var i=0; i<result['list'].length; i++) {
                 var tmp = result['list'][i];
@@ -559,7 +1320,7 @@ function selectDlgListAjax(entity) {
                         inputUttrHtml += '</div>';
                         inputUttrHtml += '</li>';
                         
-                        //´ÙÀÌ¾ó·Î±×°¡ ÇÑ°³ÀÏ¶§¿¡´Â ¿À¸¥ÂÊ ¹öÆ° x
+                        //ë‹¤ì´ì–¼ë¡œê·¸ê°€ í•œê°œì¼ë•Œì—ëŠ” ì˜¤ë¥¸ìª½ ë²„íŠ¼ x
                         if((tmp.dlg.length == 2 && j == 1) || (tmp.dlg.length == 1 && j == 0)) {
                             inputUttrHtml += '</ul>';
                             inputUttrHtml += '</div>';
@@ -590,7 +1351,7 @@ function selectDlgListAjax(entity) {
                         inputUttrHtml += '<input type="hidden" name="dlgId" value="' + tmp.dlg[j].DLG_ID + '"/>';
                         inputUttrHtml += '<input type="hidden" name="luisId" value="' + tmp.LUIS_ID + '"/>';
                         inputUttrHtml += '<input type="hidden" name="luisIntent" value="' + tmp.LUIS_INTENT + '"/>';
-                        inputUttrHtml += '<img src="' + /* ÀÌ¹ÌÁö url */ tmp.dlg[j].MEDIA_URL + '">';
+                        inputUttrHtml += '<img src="' + /* ì´ë¯¸ì§€ url */ tmp.dlg[j].MEDIA_URL + '">';
                         inputUttrHtml += '<div class="playImg"></div>';
                         inputUttrHtml += '<div class="hidden" alt="' + tmp.dlg[j].CARD_TITLE + '"></div>';
                         inputUttrHtml += '<div class="hidden" alt="' + /* media url */ tmp.dlg[j].CARD_VALUE + '"></div>';
@@ -601,7 +1362,7 @@ function selectDlgListAjax(entity) {
                         inputUttrHtml += '</div>';
                         inputUttrHtml += '</li>';
 
-                        //´ÙÀÌ¾ó·Î±×°¡ ÇÑ°³ÀÏ¶§¿¡´Â ¿À¸¥ÂÊ ¹öÆ° x
+                        //ë‹¤ì´ì–¼ë¡œê·¸ê°€ í•œê°œì¼ë•Œì—ëŠ” ì˜¤ë¥¸ìª½ ë²„íŠ¼ x
                         if((tmp.dlg.length == 2 && j == 1) || (tmp.dlg.length == 1 && j == 0)) {
                             inputUttrHtml += '</ul>';
                             inputUttrHtml += '</div>';
@@ -627,7 +1388,7 @@ function selectDlgListAjax(entity) {
 
             $('#dlgViewDiv').prepend(inputUttrHtml);
 
-            //dlg ±â¾ï.
+            //dlg ê¸°ì–µ.
             var utter ="";
             for (var i=0; i<entity.length; i++) {
                 utter += entity[i] + ",";
@@ -638,14 +1399,14 @@ function selectDlgListAjax(entity) {
             botChatNum++;
         } 
 
-    }); // ------      ajax ³¡-----------------
+    }); // ------      ajax ë-----------------
 }
 
 
 
 
 
-//¿À¸¥ÂÊ ¹öÆ° Å¬¸¯½Ã ½½¶óÀÌµå
+//ì˜¤ë¥¸ìª½ ë²„íŠ¼ í´ë¦­ì‹œ ìŠ¬ë¼ì´ë“œ
 function nextBtn(botChatNum, e) {
 
     var width = parseInt($(e).parent().parent().css('width'));
@@ -661,7 +1422,7 @@ function nextBtn(botChatNum, e) {
     $("#prevBtn" + botChatNum).show();
 }
 
-//¿ŞÂÊ ¹öÆ° Å¬¸¯½Ã ½½¶óÀÌµå
+//ì™¼ìª½ ë²„íŠ¼ í´ë¦­ì‹œ ìŠ¬ë¼ì´ë“œ
 function prevBtn(botChatNum, e) {
 
     var width = parseInt($(e).parent().parent().css('width'));
@@ -676,7 +1437,7 @@ function prevBtn(botChatNum, e) {
 }
 
 
-//checkbox ¼±ÅÃ½Ã ÀÌº¥Æ® $(this).attr("checked")
+//checkbox ì„ íƒì‹œ ì´ë²¤íŠ¸ $(this).attr("checked")
 /*
 $(document).on('ifChecked', '.icheckbox_flat-green',function(event){
     
@@ -723,12 +1484,12 @@ function utterInput(queryText) {
 
 
     $.ajax({
-        url: '/learning/utterInputAjax',                //ÁÖ¼Ò
-        dataType: 'json',                  //µ¥ÀÌÅÍ Çü½Ä
-        type: 'POST',                      //Àü¼Û Å¸ÀÔ
-        data: {'iptUtterance': queryTextArr},      //µ¥ÀÌÅÍ¸¦ json Çü½Ä, °´Ã¼Çü½ÄÀ¸·Î Àü¼Û
+        url: '/learning/utterInputAjax',                //ì£¼ì†Œ
+        dataType: 'json',                  //ë°ì´í„° í˜•ì‹
+        type: 'POST',                      //ì „ì†¡ íƒ€ì…
+        data: {'iptUtterance': queryTextArr},      //ë°ì´í„°ë¥¼ json í˜•ì‹, ê°ì²´í˜•ì‹ìœ¼ë¡œ ì „ì†¡
 
-        success: function(result) {          //¼º°øÇßÀ» ¶§ ÇÔ¼ö ÀÎÀÚ °ªÀ¸·Î °á°ú °ª ³ª¿È
+        success: function(result) {          //ì„±ê³µí–ˆì„ ë•Œ í•¨ìˆ˜ ì¸ì ê°’ìœ¼ë¡œ ê²°ê³¼ ê°’ ë‚˜ì˜´
             var entities = result['entities'];
             for (var k=0; k< queryTextArr.length; k++) {
 
@@ -748,7 +1509,7 @@ function utterInput(queryText) {
                     inputUttrHtml += '<tr><input type="hidden" name="hiddenUtter" value="' + queryText + '"/>';
                     inputUttrHtml += '<td> <input type="checkbox" name="tableCheckBox" class="flat-red"></td>';
                     inputUttrHtml += '<td class="txt_left clickUtter"><input type=hidden name="entity" value="' + result['entities'][k] + '"/>' + utter + '</td>';
-                    inputUttrHtml += '<td><a href="#"><span class="fa  fa-trash utterDelete"><span class="hc">»èÁ¦</span></span></a></td></tr>';
+                    inputUttrHtml += '<td><a href="#"><span class="fa  fa-trash utterDelete"><span class="hc">ì‚­ì œ</span></span></a></td></tr>';
                     inputUttrHtml += '<tr><td></td><td class="txt_left">';
                     
                     if(result.commonEntities[k]){
@@ -801,9 +1562,9 @@ function utterInput(queryText) {
 
                 }
             }
-        } //function³¡
+        } //functionë
 
-    }); // ------      ajax ³¡-----------------
+    }); // ------      ajax ë-----------------
 
     
 }
@@ -831,8 +1592,8 @@ function utterHighlight(entities, utter) {
 
 function selectGroup(selectId,str1,str2) {
     $.ajax({
-        url: '/learning/selectGroup',                //ÁÖ¼Ò
-        dataType: 'json',                  //µ¥ÀÌÅÍ Çü½Ä
+        url: '/learning/selectGroup',                //ì£¼ì†Œ
+        dataType: 'json',                  //ë°ì´í„° í˜•ì‹
         type: 'POST',
         data: {'selectId':selectId,'selectValue1':str1,'selectValue2':str2},
         success: function(result) {
@@ -858,7 +1619,7 @@ function selectGroup(selectId,str1,str2) {
     });
 }
 
-//---------------µÎ¿¬ Ãß°¡
+//---------------ë‘ì—° ì¶”ê°€
 var insertForm;
 var dlgForm;
 var carouselForm;
@@ -868,7 +1629,7 @@ var addCarouselForm;
 var deleteInsertForm;
 function openModalBox(target){
 
-    //carousel clone ÃÊ±â°ª ÀúÀå
+    //carousel clone ì´ˆê¸°ê°’ ì €ì¥
     //$insertForm = $('#commonLayout .insertForm').eq(0).clone();
     insertForm = '<div class="insertForm">';  
     insertForm += '<div class="form-group">';                                 
@@ -943,10 +1704,10 @@ function openModalBox(target){
     
         /* 
         
-            checkFlag Ã¼Å©µÈ ÃßÃµ¹®ÀåÀÌ ÀÖ´ÂÁö ¾ø´ÂÁö
-            0 : ´ÙÀÌ¾ó·Î±× »ı¼º °¡´É
-            1 : ´ÙÀÌ¾ó·Î±× »ı¼º ºÒ°¡´É(Ã¼Å©µÈ ÃßÃµ¹®ÀåÁß ÇĞ½ÀÀÌ ¾ÈµÈ ¿£Æ¼Æ¼°¡ Á¸ÀçÇÔ)
-            2 : ´ÙÀÌ¾ó·Î±× »ı¼º ºÒ°¡´É(Ã¼Å©µÈ ÃßÃµ¹®ÀåÀÌ ¾øÀ½)   
+            checkFlag ì²´í¬ëœ ì¶”ì²œë¬¸ì¥ì´ ìˆëŠ”ì§€ ì—†ëŠ”ì§€
+            0 : ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ê°€ëŠ¥
+            1 : ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ë¶ˆê°€ëŠ¥(ì²´í¬ëœ ì¶”ì²œë¬¸ì¥ì¤‘ í•™ìŠµì´ ì•ˆëœ ì—”í‹°í‹°ê°€ ì¡´ì¬í•¨)
+            2 : ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ë¶ˆê°€ëŠ¥(ì²´í¬ëœ ì¶”ì²œë¬¸ì¥ì´ ì—†ìŒ)   
         
         var checkFlag = 2;  
         chkEntities = [];
@@ -967,11 +1728,11 @@ function openModalBox(target){
 
         if(checkFlag == 1) {
             $('#create_dlg').removeAttr('data-target');
-            alert("´ÙÀÌ¾ó·Î±× »ı¼º ºÒ°¡´É(¼±ÅÃµÈ ÃßÃµ¹®ÀåÁß ÇĞ½ÀÀÌ ¾ÈµÈ ¿£Æ¼Æ¼°¡ Á¸ÀçÇÕ´Ï´Ù. ÇĞ½ÀÀ» ½ÃÄÑÁÖ¼¼¿ä.)");
+            alert("ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ë¶ˆê°€ëŠ¥(ì„ íƒëœ ì¶”ì²œë¬¸ì¥ì¤‘ í•™ìŠµì´ ì•ˆëœ ì—”í‹°í‹°ê°€ ì¡´ì¬í•©ë‹ˆë‹¤. í•™ìŠµì„ ì‹œì¼œì£¼ì„¸ìš”.)");
         } else if(checkFlag == 2) {
 
             $('#create_dlg').removeAttr('data-target');
-            alert("¼±ÅÃÇÑ ÇĞ½À ÃßÃµ ¹®ÀåÀÌ ¾ø½À´Ï´Ù. ÇĞ½À ÃßÃµÀ» ¼±ÅÃÇØÁÖ¼¼¿ä.");
+            alert("ì„ íƒí•œ í•™ìŠµ ì¶”ì²œ ë¬¸ì¥ì´ ì—†ìŠµë‹ˆë‹¤. í•™ìŠµ ì¶”ì²œì„ ì„ íƒí•´ì£¼ì„¸ìš”.");
         } else {
             $('#create_dlg').attr('data-target', "#myModal2");
             $(".insertForm form").append($(".textLayout").clone(true));
@@ -992,18 +1753,18 @@ function openModalBox(target){
 
 
 function selectInent(intent) {
-    //intentÇÏÀ§ entity Á¸ÀçÇÏ¸é entity select box disableÁ¦°ÅµÇ°Ô ±¸ÇöÇØ¾ßÇÔ
+    //intentí•˜ìœ„ entity ì¡´ì¬í•˜ë©´ entity select box disableì œê±°ë˜ê²Œ êµ¬í˜„í•´ì•¼í•¨
     $('#entityList').removeAttr("disabled");
 }
 
 function selectEntity(entity) {
-    //intentÇÏÀ§ entity Á¸ÀçÇÏ¸é entity select box disableÁ¦°ÅµÇ°Ô ±¸ÇöÇØ¾ßÇÔ
+    //intentí•˜ìœ„ entity ì¡´ì¬í•˜ë©´ entity select box disableì œê±°ë˜ê²Œ êµ¬í˜„í•´ì•¼í•¨
     $('#btnAddDlg').removeAttr("disabled");
     $('#btnAddDlg').removeClass("disable");
 }
 
 function initMordal(objId, objName) {
-    //<option selected="selected" disabled="disabled">Select Intent<!-- ¼­ºñ½º ¼±ÅÃ --></option>
+    //<option selected="selected" disabled="disabled">Select Intent<!-- ì„œë¹„ìŠ¤ ì„ íƒ --></option>
     if (objId == 'entityList') {
         $('#'+ objId).attr("disabled", "disabled");
     }
@@ -1108,7 +1869,7 @@ function searchDialog() {
                             inputUttrHtml += '</div>';
                             inputUttrHtml += '</li>';
                             
-                            //´ÙÀÌ¾ó·Î±×°¡ ÇÑ°³ÀÏ¶§¿¡´Â ¿À¸¥ÂÊ ¹öÆ° x
+                            //ë‹¤ì´ì–¼ë¡œê·¸ê°€ í•œê°œì¼ë•Œì—ëŠ” ì˜¤ë¥¸ìª½ ë²„íŠ¼ x
                             if((tmp.dlg.length == 2 && j == 1) || (tmp.dlg.length == 1 && j == 0)) {
                                 inputUttrHtml += '</ul>';
                                 inputUttrHtml += '</div>';
@@ -1138,7 +1899,7 @@ function searchDialog() {
                             inputUttrHtml += '<input type="hidden" name="dlgId" value="' + tmp.dlg[j].DLG_ID + '"/>';
                             inputUttrHtml += '<input type="hidden" name="luisId" value="' + tmp.GroupL + '"/>';
                             inputUttrHtml += '<input type="hidden" name="luisIntent" value="' + tmp.GroupM + '"/>';
-                            inputUttrHtml += '<img src="' + /* ÀÌ¹ÌÁö url */ tmp.dlg[j].MEDIA_URL + '">';
+                            inputUttrHtml += '<img src="' + /* ì´ë¯¸ì§€ url */ tmp.dlg[j].MEDIA_URL + '">';
                             inputUttrHtml += '<div class="playImg"></div>';
                             inputUttrHtml += '<div class="hidden" alt="' + tmp.dlg[j].CARD_TITLE + '"></div>';
                             inputUttrHtml += '<div class="hidden" alt="' + /* media url */ tmp.dlg[j].CARD_VALUE + '"></div>';
@@ -1149,7 +1910,7 @@ function searchDialog() {
                             inputUttrHtml += '</div>';
                             inputUttrHtml += '</li>';
                             
-                            //´ÙÀÌ¾ó·Î±×°¡ ÇÑ°³ÀÏ¶§¿¡´Â ¿À¸¥ÂÊ ¹öÆ° x
+                            //ë‹¤ì´ì–¼ë¡œê·¸ê°€ í•œê°œì¼ë•Œì—ëŠ” ì˜¤ë¥¸ìª½ ë²„íŠ¼ x
                             if((tmp.dlg.length == 2 && j == 1) || (tmp.dlg.length == 1 && j == 0)) {
                                 inputUttrHtml += '</ul>';
                                 inputUttrHtml += '</div>';
@@ -1187,8 +1948,8 @@ function searchDialog() {
     });
 }
 
-// Search Dialogue ÆË¾÷Ã¢ 
-// ´ÙÀÌ¾ó·Î±× Ã¼Å©¹Ú½º ´ÜÀÏ Ã¼Å©
+// Search Dialogue íŒì—…ì°½ 
+// ë‹¤ì´ì–¼ë¡œê·¸ ì²´í¬ë°•ìŠ¤ ë‹¨ì¼ ì²´í¬
 $(document).on('ifChecked', 'input[name=searchDlgChk]', function(event) {
     
     $('input[name=searchDlgChk]').not($(this)).each(function(){
@@ -1247,7 +2008,7 @@ function searchSaveDialog() {
         type: 'POST',
         data: {'entity':entity, 'dlgId':dlgId},
         success: function(result) {
-            alert('Ãß°¡ µÇ¾ú½À´Ï´Ù.');
+            alert('ì¶”ê°€ ë˜ì—ˆìŠµë‹ˆë‹¤.');
             $("#searchDialogCancel").click();
         }
     });
@@ -1272,7 +2033,7 @@ $(document).on('click', '.carouseBtn',function(e){
 });
 */
 
-//´ÙÀÌ¾ó·Î±×»ı¼º¸ğ´Ş - ¹öÆ°Ãß°¡
+//ë‹¤ì´ì–¼ë¡œê·¸ìƒì„±ëª¨ë‹¬ - ë²„íŠ¼ì¶”ê°€
 $(document).on('click', '.carouseBtn',function(e){
 
     var inputHtml = '<div><label>' + language.BUTTON + '</label></div>' +
@@ -1320,7 +2081,7 @@ $(document).on('click', '.carouseBtn',function(e){
 
 });
 
-//´ÙÀÌ¾ó·Î±×»ı¼º¸ğ´Ş - ´ÙÀÌ¾ó·Î±×»èÁ¦
+//ë‹¤ì´ì–¼ë¡œê·¸ìƒì„±ëª¨ë‹¬ - ë‹¤ì´ì–¼ë¡œê·¸ì‚­ì œ
 $(document).on('click', '.deleteInsertForm',function(e){
 
     insertFormLength = $('.insertForm').length;
@@ -1339,7 +2100,7 @@ $(document).on('click', '.deleteInsertForm',function(e){
     $(this).parents('.insertForm'); 
 });
 
-//´ÙÀÌ¾ó·Î±×»ı¼º¸ğ´Ş - Ä«µå»èÁ¦ 
+//ë‹¤ì´ì–¼ë¡œê·¸ìƒì„±ëª¨ë‹¬ - ì¹´ë“œì‚­ì œ 
 $(document).on('click', '.deleteCard',function(e){
 
     var insertFormIdx;
@@ -1391,7 +2152,7 @@ $(document).on('click', '.deleteCard',function(e){
 
 });
 
-//´ÙÀÌ¾ó·Î±×»ı¼º¸ğ´Ş - ¹öÆ°»èÁ¦
+//ë‹¤ì´ì–¼ë¡œê·¸ìƒì„±ëª¨ë‹¬ - ë²„íŠ¼ì‚­ì œ
 $(document).on('click', '.btn_delete',function(e){
 
     var trLength = $(this).parents('tbody').children().length;
@@ -1404,7 +2165,7 @@ $(document).on('click', '.btn_delete',function(e){
 
 
 
-//´ÙÀÌ¾ó·Î±×»ı¼º¸ğ´Ş - ¹Ìµğ¾î¹öÆ°Ãß°¡
+//ë‹¤ì´ì–¼ë¡œê·¸ìƒì„±ëª¨ë‹¬ - ë¯¸ë””ì–´ë²„íŠ¼ì¶”ê°€
 $(document).on('click', '.addMediaBtn',function(e){
     
     var inputHtml = '<label>' + language.BUTTON + '</label></div>' +
@@ -1453,7 +2214,7 @@ $(document).on('click', '.addMediaBtn',function(e){
 
 });
 
-//´ÙÀÌ¾ó·Î±×»ı¼º - Ä«µåÃß°¡
+//ë‹¤ì´ì–¼ë¡œê·¸ìƒì„± - ì¹´ë“œì¶”ê°€
 $(document).on('click', '.addCarouselBtn', function(e){
     //var $newInsertForm = $insertForm.clone();
     //var $newDlgForm = $dlgForm.clone();
@@ -1501,7 +2262,7 @@ $(document).on('click', '.addCarouselBtn', function(e){
     }
 });
 
-//¿£Æ¼Æ¼ Ãß°¡
+//ì—”í‹°í‹° ì¶”ê°€
 function insertEntity(){
 
     if ($('#entityDefine').val().trim() === "") {
@@ -1566,7 +2327,7 @@ function insertEntity(){
     
 }
 
-//´ÙÀÌ¾ó·Î±× »ı¼º ¸ğ´ŞÃ¢ - Áß±×·ì ½Å±Ô¹öÆ°
+//ë‹¤ì´ì–¼ë¡œê·¸ ìƒì„± ëª¨ë‹¬ì°½ - ì¤‘ê·¸ë£¹ ì‹ ê·œë²„íŠ¼
 $(document).on('click', '.newMidBtn, .cancelMidBtn', function() {
 
     var $iptLuisIntent = $('input[name=middleGroup]');
@@ -1694,43 +2455,27 @@ function createApiRelation() {
 
 
 
-
-/*
-//TBL_DLG_RELATION_LUIS Å×ÀÌºí¿¡¼­ LUIS_INTENT °¡Á®¿À±â
-function getLuisInfo(searchInfo, luisId) {
-
+function selectScenarioList() {     //  ì‹œë‚˜ë¦¬ì˜¤ ëª©ë¡
     $.ajax({
-        url: '/learning/getLuisInfo',
-        dataType: 'json',
-        data: {'searchInfo': searchInfo, 'luisId': luisId},
+        url: '/learning/selectScenarioList',                //ì£¼ì†Œ
+        dataType: 'json',                  //ë°ì´í„° í˜•ì‹
         type: 'POST',
-        success: function(data) {
-
-            if(searchInfo == 'luisIntent') {
-
-                if(data.luisIntentList.length > 0 ) {
-
-                    for(var i = 0; i < data.luisIntentList.length; i++) {
-        
-                        $('select[name=luisIntent]').append('<option>' + data.luisIntentList[i].luisIntent + '</option>');
-                    }
-                } else {
-                    $('select[name=luisIntent] :first-child').nextAll().remove();
+        //data: {'selectId':selectId,'selectValue1':str1,'selectValue2':str2},
+        success: function(result) {
+            if(data.rows){
+                var scenarioList = data.rows;
+                var strScenarioList = "";
+                for(var i=0; i<scenarioList.length; i++){
+                    strScenarioList += '<TR><TD>'+i+'</TD><TD>'+scenarioList[i].SCENARIO_NM+'</TD><TD>'+scenarioList[i].SCENARIO_COUNT+'</TD></TR>'
                 }
-            } else if(searchInfo == 'luisId') {
-
-                for(var i = 0; i < data.luisIdList.length; i++) {
-                    $('select[name=luisId]').append('<option>' + data.luisIdList[i].luisId + '</option>');
-                }
+                $('#utterTableBody').append(strScenarioList);
             }
-
         }
     });
 }
-*/
 
 
-//** ¸ğ´ŞÃ¢ ³¡ */
+//** ëª¨ë‹¬ì°½ ë */
 
 
 //insertHtml += '<button class="scroll previous" id="prevBtn" style="display: none;" onclick="prevBtn(botChatNum)">';
