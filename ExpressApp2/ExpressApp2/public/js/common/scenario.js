@@ -29,6 +29,8 @@ $(document).ready(function(){
     //엔티티추가 모달 selectbox 설정
     selectApiGroup();
     
+    selectScenarioList();
+    
     $('.addDialogCancel').click(function(){
         $('#appInsertForm')[0].reset();
         var inputEntityStr = "<div style='margin-top:4px;'><input name='entityValue' tabindex='1' id='entityValue' type='text' class='form-control' style=' float: left; width:80%;' placeholder='" + language.Please_enter + "' onkeyup='entityValidation();' spellcheck='false' autocomplete='off'>";
@@ -2456,24 +2458,25 @@ function createApiRelation() {
 
 
 function selectScenarioList() {     //  시나리오 목록
+    alert('selectScenarioList()');
     $.ajax({
         url: '/learning/selectScenarioList',                //주소
         dataType: 'json',                  //데이터 형식
         type: 'POST',
         //data: {'selectId':selectId,'selectValue1':str1,'selectValue2':str2},
         success: function(result) {
-            if(data.rows){
-                var scenarioList = data.rows;
+            if(result.res){
+                var scenarioList = result.res;
                 var strScenarioList = "";
                 for(var i=0; i<scenarioList.length; i++){
-                    strScenarioList += '<TR><TD>'+i+'</TD><TD>'+scenarioList[i].SCENARIO_NM+'</TD><TD>'+scenarioList[i].SCENARIO_COUNT+'</TD></TR>'
+                    strScenarioList += '<TR><TD>'+i+'</TD><TD>'+scenarioList[i].SCENARIO_NM+'</TD><TD>'+scenarioList[i].SCENARIO_COUNT+'</TD></TR>';
+                    alert('SCENARIO_NM : '+scenarioList[i].SCENARIO_NM);
                 }
                 $('#utterTableBody').append(strScenarioList);
             }
         }
     });
 }
-
 
 //** 모달창 끝 */
 

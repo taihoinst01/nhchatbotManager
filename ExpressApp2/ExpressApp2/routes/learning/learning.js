@@ -3782,7 +3782,17 @@ router.post('/scenarioAddDialog', function (req, res) {
 
 });
 
+/*
+let selectGroupL = await pool.request()
+.query(selectGroupLQuery);
+let groupL = selectGroupL.recordset;
 
+let selectGroupM = await pool.request()
+    .query(selectGroupMQuery);
+let groupM = selectGroupM.recordset;
+
+res.send({ "groupL": groupL, "groupM": groupM });
+*/
 router.post('/selectScenarioList', function (req, res) {
     //var selectId = req.body.selectId;
    
@@ -3795,9 +3805,9 @@ router.post('/selectScenarioList', function (req, res) {
             queryText += "WHERE SCENARIO_NM is not null GROUP BY SCENARIO_NM";
 
             let result = await pool.request().query(queryText);
-            var rows = result.recordset;
+            let rows = result.recordset;
 
-            res.send({ rows: rows });
+            res.send({ "rows": rows });
         } catch (err) {
             console.log(err);
         } finally {
