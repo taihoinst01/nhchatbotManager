@@ -1,6 +1,6 @@
 // JavaScript source code
 var language;
-;(function($) {
+$(function () {
     console.log("utterance test");
     $.ajax({
         url: '/jsLang',
