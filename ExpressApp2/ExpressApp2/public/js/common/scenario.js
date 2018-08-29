@@ -1614,8 +1614,10 @@ function selectScenarioList() {     //  시나리오 목록
                 //alert('data.rows');
                 var scenarioList = data.rows;
                 var strScenarioList = "";
+                var j = 1;
                 for(var i=0; i<scenarioList.length; i++){
-                    strScenarioList += '<TR><TD>'+i+'</TD><TD>'+scenarioList[i].SCENARIO_NM+'</TD><TD>'+scenarioList[i].SCENARIO_COUNT+'</TD></TR>';
+                    j = i + 1;
+                    strScenarioList += '<TR><TD>'+j+'</TD><TD>'+scenarioList[i].SCENARIO_NM+'</TD><TD>'+scenarioList[i].SCENARIO_COUNT+'</TD></TR>';
                     //alert('SCENARIO_NM : '+scenarioList[i].SCENARIO_NM);
                 }
                 $('#utterTableBody').html(strScenarioList);
