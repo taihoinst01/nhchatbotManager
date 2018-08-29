@@ -9,7 +9,7 @@ $(function () {
             language= data.lang;
         }
     });
-})(jQuery);
+});
 
 $(document).ready(function(){
     // recommend에서 넘어온 문장 insert
@@ -62,7 +62,7 @@ function openModalBox(target) {
     $(".inputArea > div").remove();
     $(".inputArea > div").add(
         "<div class='textLayout'>" +
-            // �Է�â
+            // 텍스트
             "<div class='scenario-form-group dlg_input_title'>" +
                 "<label>" + language.DIALOG_BOX_TITLE + "<span class='nec_ico'>*</span></label>" +
                 "<input type='text' name='dialogTitle' class='form-control' onkeyup='writeDialogTitle(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
@@ -79,7 +79,7 @@ function openModalBox(target) {
                 "<label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label>" +
                 "<input type='text' name='imgUrl' class='form-control' onkeyup='writeCarouselImg(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
             "</div>" +
-            // ��ư Ŭ��â
+            // 버튼선택
             "<div class='clear- both'></div>" +
             "<div class='btn-group btn-group-justified insertBtnArea' role='group'> " + 
                 "<div class='btn-group dlg_btn_insert' role='group'>" +
@@ -97,13 +97,13 @@ function openModalBox(target) {
                     "<button type='button' class='btn btn-default deleteCard'>" + language.DELETE_CARD + "</button>" +
                 "</div>" +
             "</div>" +
-            // ��ư ����
+            // 추가될버튼 영역
             "<div class='inputBtnArea'></div>" +
         "</div>"
     ).appendTo(".inputArea");
 }
 
-//��ȭ���� Ÿ�� ����
+// 카드타입 변경
 $(document).on('change', 'select[name=dlgType]', function (e) {
     var cardType = $(this).val();
 
@@ -117,8 +117,7 @@ $(document).on('change', 'select[name=dlgType]', function (e) {
 
 });
 
-
-//���̾�α׻������ - ���̾�α׻���
+// 다이얼로그 삭제 버튼
 $(document).on('click', '.deleteInsertForm', function (e) {
 
     insertFormLength = $('.insertForm').length;
@@ -137,10 +136,10 @@ $(document).on('click', '.deleteInsertForm', function (e) {
     $(this).parents('.insertForm');
 });
 
-//���̾�α׻������ - ��ư�߰�
+// 버튼영역에 버튼 생성
 var btnCnt = 1;
 var btnNum_temp = "";
-var btnNum_list = "";   //��ư�� ��ȣ ���
+var btnNum_list = "";   //버튼의 번호 목록
 $(document).on('click', '.carouseBtn', function (e) {
     var divCnt = $(".inputBtnArea > div").length;
     if (divCnt < 4) {
@@ -197,22 +196,24 @@ $(document).on('click', '.carouseBtn', function (e) {
             "</div>"
         ).appendTo(".inputBtnArea");
 
-        btnCnt++;
+        $('.previewBtnArea > div').add("<button type='button' class='btn btn-default w100'alt='" + btnCnt + "'>button1</button>").appendTo(".previewBtnArea");
 
+        btnCnt++;
     } else {
         alert(language.SCENARIO_BTN_CNT_VALIDATION);
     }
 });
 
-//���̾�α׻������ - ��ư����
+// 버튼영역 버튼 삭제
 $(document).on('click', '.btn_delete', function (e) {
+    $('button[alt=' + $(this).attr('alt') + ']').remove();
     $(this).parent().parent().parent().parent().parent().parent().parent().remove();
 });
 
 
 
 
-// ���̾�α׻������ (���̾�α� Ÿ��Ʋ �Է�)
+// 대화상자 미리보기 타이틀 입력
 function writeDialogTitle(e) {
     var idx = $('#commonLayout .insertForm').index($(e).parents('.insertForm'));
     var icx = $('#commonLayout').find('.insertForm').index($(e).parents('.insertForm'));
@@ -227,7 +228,7 @@ function writeDialogTitle(e) {
     }
 }
 
-// ���̾�α׻������ (���̾�α� ������ �Է�)
+// 대화상자 미리보기 서브타이틀 입력
 function writeDialogSubTitle(e) {
     var idx = $('#commonLayout .insertForm').index($(e).parents('.insertForm'));
     var icx = $('#commonLayout').find('.insertForm').index($(e).parents('.insertForm'));
@@ -242,7 +243,7 @@ function writeDialogSubTitle(e) {
     }
 }
 
-// ���̾�α� ���� ��� (���̾�α� ���� �Է�)
+// 대화상자 미리보기 타이틀 입력
 function writeDialog(e) {
     var idx = $('#commonLayout .insertForm').index($(e).parents('.insertForm'));
     var icx = $('#commonLayout').find('.insertForm').index($(e).parents('.insertForm'));
@@ -1620,7 +1621,7 @@ function selectScenarioList() {     //  시나리오 목록
         }
     });
 }
-*/
+/**/
 
 //** 모달창 끝 */
 
