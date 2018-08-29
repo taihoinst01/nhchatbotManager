@@ -82,7 +82,7 @@ function openModalBox(target) {
             "</div>" +
             // 버튼선택
             "<div class='clear- both'></div>" +
-            "<div class='btn-group btn-group-justified insertBtnArea' role='group'> " + 
+            "<div class='btn-group btn-group-justified insertBtnArea dpN' role='group'> " + 
                 "<div class='btn-group dlg_btn_insert' role='group'>" +
                     "<button type='button' class='btn btn-default carouseBtn'>" + language.INSERT_MORE_BUTTON + "</button>" +
                 "</div>" +
@@ -109,11 +109,11 @@ $(document).on('change', 'select[name=dlgType]', function (e) {
     var cardType = $(this).val();
 
     if (cardType == '2') {
-
+        $('.insertBtnArea').addClass('dpN');
     } else if (cardType == '3') {
-
+        $('.insertBtnArea').removeClass('dpN');
     } else if (cardType == '4') {
-
+        $('.insertBtnArea').removeClass('dpN');
     }
 
 });
@@ -277,6 +277,19 @@ function writeBtnTitle(e, btnNum) {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //���̾�α� ����
 /*
