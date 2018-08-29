@@ -12,7 +12,7 @@ $(function () {
 });
 
 function openModalBox(target) {
-
+    $(".inputArea > div").remove();
     $(".inputArea > div").add(
         "<div class='textLayout'>" +
             // 입력창
@@ -212,20 +212,8 @@ function writeDialog(e) {
         if ($(e).parent().prev().find('input[name=dialogTitle]').val() == '') {
             $('.dialogView').children().eq(icx).find('.textMent .textTitle').text('');
         }
-        $('.dialogView').children().eq(icx).find('.textMent p').text(e.value);
+        $('.dialogView').children().eq(icx).find('.textMent previewText').text(e.value);
     }
-
-    //캐러졀 용
-    /*
-    if ( $(e).parents('.insertForm').find('select[name=dlgType]').val() == 3 ) {
-        var icx = $('#commonLayout').find('.insertForm').index($(e).parents('.insertForm'));
-        var jcx = $(e).parents('.insertForm').find('textarea[name=dialogText]').index(e);
-
-        $('.dialogView').children().eq((1)).find('ul:eq(0)').children().eq(1).find('p').text(e.value);
-    }
-    */
-    
-    
 }
 
 //다이얼로그 생성
@@ -858,137 +846,7 @@ function selectGroup(selectId,str1,str2) {
     });
 }
 
-//---------------두연 추가
-var insertForm;
-var dlgForm;
-var carouselForm;
-var mediaForm;
-var chkEntities;
-var addCarouselForm;
-var deleteInsertForm;
-function openModalBox(target){
 
-    //carousel clone 초기값 저장
-    //$insertForm = $('#commonLayout .insertForm').eq(0).clone();
-    insertForm = '<div class="insertForm">';  
-    insertForm += '<div class="form-group">';                                 
-    insertForm += '<form name="dialogLayout" id="dialogLayout">';                            
-    //insertForm += '<label>' + language.DIALOG_BOX_TYPE + '<span class="nec_ico">*</span> </label>';
-    insertForm += '<select class="form-control" name="dlgType">'; 
-    insertForm += '<option value="2">' + language.TEXT_TYPE + '</option>';
-    insertForm += '<option value="3">' + language.CARD_TYPE + '</option>';
-    insertForm += '<option value="4">' + language.MEDIA_TYPE + '</option>';
-    insertForm += '</select>'; 
-    insertForm += '<div class="btn_wrap" style="clear:both" >';
-    insertForm += '</div>';  
-    insertForm += '<div class="clear-both"></div>';                                                                               
-    insertForm += '</form>';                  
-    insertForm += '</div>';  
-    insertForm += '</div>';
-
-    carouselForm =  '<div class="carouselLayout">' +                                                               
-                    '<div class="form-group">' +  
-                    '<label>' + language.IMAGE_URL + '</label>' +  
-                    '<input type="text" name="imgUrl" class="form-control" onkeyup="writeCarouselImg(this);" placeholder="' + language.Please_enter + '"  spellcheck="false" autocomplete="off">' +  
-                    '</div>' +  
-                    '<div class="modal_con btnInsertDiv">' +  
-                    '</div>' +  
-                    '<div class="clear-both"></div>' +  
-                    '<div class="btn_wrap" style="clear:both" >' +  
-                    '<button type="button" class="btn btn-default deleteCard">' + language.DELETE_CARD + '</button>' +   
-                    '</div>' +   
-                    '<div class="btn_wrap" style="clear:both" >' +  
-                    '<button type="button" class="btn btn-default carouseBtn">' + language.INSERT_MORE_BUTTON + '</button>' +   
-                    '</div>' +                     
-                    '<div class="clear-both"></div>' +                                                                 
-                    '</div>';
- 
-    addCarouselForm  = '<div class="btn_wrap addCarouselBtnDiv" style="clear:both" >' +  
-                    '<button type="button" class="btn btn-default addCarouselBtn">' + language.INSERT_MORE_CARDS + '</button>' +  
-                    '</div>' 
-
-    mediaForm = '<div class="form-group">' +
-                '<label>' + language.IMAGE_URL + '<span class="nec_ico">*</span></label>' +
-                '<input type="text" name="mediaImgUrl" class="form-control" placeholder="' + language.Please_enter + '"  spellcheck="false" autocomplete="off">' +
-                '</div>' +
-                '<div class="form-group">' +
-                '<label>' + language.MEDIA_URL + '</label>' +
-                '<input type="text" name="mediaUrl"class="form-control" placeholder="' + language.Please_enter + '" spellcheck="false" autocomplete="off">' +
-                '</div>' +    
-                '<div class="modal_con btnInsertDiv">' +
-                '</div>' +
-                '<div class="btn_wrap" style="clear:both" >' +
-                '<button type="button" class="btn btn-default addMediaBtn" >' + language.INSERT_MORE_BUTTON + '</button>' +
-                '</div>';
-
-    dlgForm = '<div class="textLayout">' +                                                         
-              '<div class="form-group">' + 
-              '<label>' + language.DIALOG_BOX_TITLE + '</label>' + 
-              '<input type="text" name="dialogTitle" class="form-control" onkeyup="writeDialogTitle(this);" placeholder="' + language.Please_enter + '" spellcheck="false" autocomplete="off">' + 
-              '</div>' +                                                                                         
-              '<div class="form-group">' + 
-              '<label>' + language.DIALOG_BOX_CONTENTS + '<span class="nec_ico">*</span></label>' + 
-              '<input type="text" name="dialogText" class="form-control" onkeyup="writeDialog(this);" placeholder="' + language.Please_enter + '" spellcheck="false" autocomplete="off">' + 
-              '</div>' +  
-              '</div>';
-
-    deleteInsertForm = '<div class="btn_wrap deleteInsertFormDiv" style="clear:both;" >' +
-                       '<button type="button" class="btn btn-default deleteInsertForm">' + language.DELETE_DIALOG + '</button>' +
-                       '</div>'
-    //$dlgForm = $('#commonLayout .textLayout').eq(0).clone();
-    //$carouselForm = $('#commonLayout .carouselLayout').eq(0).clone();
-    //$mediaForm = $('#commonLayout .mediaLayout').eq(0).clone();
-
-    if(target == "#create_dlg") {     
-    
-        /* 
-        
-            checkFlag 체크된 추천문장이 있는지 없는지
-            0 : 다이얼로그 생성 가능
-            1 : 다이얼로그 생성 불가능(체크된 추천문장중 학습이 안된 엔티티가 존재함)
-            2 : 다이얼로그 생성 불가능(체크된 추천문장이 없음)   
-        
-        var checkFlag = 2;  
-        chkEntities = [];
-        $('input[name=tableCheckBox]').each(function() {
-            if($(this).parent().hasClass('checked') == true) {
-                
-                var $entityValue = $(this).parent().parent().next().find('input[name=entity]').val();
-
-                if($entityValue == "") {
-                    checkFlag = 1;                   
-                    return false;
-                }
-
-                checkFlag = 0;
-                chkEntities.push($entityValue);
-            }
-        })
-
-        if(checkFlag == 1) {
-            $('#create_dlg').removeAttr('data-target');
-            alert("다이얼로그 생성 불가능(선택된 추천문장중 학습이 안된 엔티티가 존재합니다. 학습을 시켜주세요.)");
-        } else if(checkFlag == 2) {
-
-            $('#create_dlg').removeAttr('data-target');
-            alert("선택한 학습 추천 문장이 없습니다. 학습 추천을 선택해주세요.");
-        } else {
-            $('#create_dlg').attr('data-target', "#myModal2");
-            $(".insertForm form").append($(".textLayout").clone(true));
-            $(".insertForm form").append(deleteInsertForm);
-            $(".insertForm .textLayout").css("display","block");
-        }
-        */
-        $(".insertForm form").append($(".textLayout").clone(true));
-        $(".insertForm form").append(deleteInsertForm);
-        $(".insertForm .textLayout").css("display","block");
-    }
-
-    if(target == "#search_dlg") {
-        selectGroup('searchLargeGroup');
-    }
-
-}
 
 
 function selectInent(intent) {
