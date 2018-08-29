@@ -3810,6 +3810,7 @@ router.post('/selectScenarioList', function (req, res) {
             res.send({ "rows": rows });
         } catch (err) {
             console.log(err);
+            res.send({ status: 500, message: 'selectScenarioList Error' });
         } finally {
             sql.close();
         }
@@ -3819,5 +3820,7 @@ router.post('/selectScenarioList', function (req, res) {
         console.log(err);
     })
 });
+
+
 
 module.exports = router;

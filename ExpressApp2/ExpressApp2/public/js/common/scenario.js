@@ -1,6 +1,7 @@
 // JavaScript source code
 var language;
-$(function () {
+;(function($) {
+    console.log("utterance test");
     $.ajax({
         url: '/jsLang',
         dataType: 'json',
@@ -1601,27 +1602,31 @@ function createApiRelation() {
 
 
 function selectScenarioList() {     //  시나리오 목록
-    alert('selectScenarioList()');
+    //alert('selectScenarioList()');
     $.ajax({
-        url: '/learning/getLuisInfo',
+        url: '/learning/selectScenarioList',
         dataType: 'json',
-        data: {'searchInfo': searchInfo, 'luisId': luisId},
+        //data: {'searchInfo': searchInfo, 'luisId': luisId},
         type: 'POST',
+        isloading: true,
         //data: {'selectId':selectId,'selectValue1':str1,'selectValue2':str2},
-        success: function(result) {
-            if(result.res){
-                var scenarioList = result.res;
+        success: function(data) {
+            if(data.rows){
+                //alert('data.rows');
+                var scenarioList = data.rows;
                 var strScenarioList = "";
                 for(var i=0; i<scenarioList.length; i++){
                     strScenarioList += '<TR><TD>'+i+'</TD><TD>'+scenarioList[i].SCENARIO_NM+'</TD><TD>'+scenarioList[i].SCENARIO_COUNT+'</TD></TR>';
-                    alert('SCENARIO_NM : '+scenarioList[i].SCENARIO_NM);
+                    //alert('SCENARIO_NM : '+scenarioList[i].SCENARIO_NM);
                 }
+                $('#utterTableBody').html(strScenarioList);
+            }else{
+                alert('selectScenarioList fail');
             }
-
         }
     });
 }
-/**/
+
 
 //** 모달창 끝 */
 
