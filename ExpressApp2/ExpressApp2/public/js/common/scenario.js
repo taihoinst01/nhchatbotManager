@@ -110,6 +110,8 @@ $(document).on('change', 'select[name=dlgType]', function (e) {
 
     if (cardType == '2') {
         $('.insertBtnArea').addClass('dpN');
+        $('.inputBtnArea > div').remove();
+        $('.previewBtnArea > button').remove();
     } else if (cardType == '3') {
         $('.insertBtnArea').removeClass('dpN');
     } else if (cardType == '4') {
