@@ -1148,7 +1148,7 @@ function createDialog(){
         var object  = {};
         var carouselArr = [];
         var objectCarousel = {};
-        if (tmp[0].value === "3") {
+        if (tmp[0].value === "3") { //  CARD
             var btnTypeCount = 1;
             var cButtonContentCount = 1;
             var cButtonNameCount = 1;
@@ -1188,7 +1188,8 @@ function createDialog(){
                     objectCarousel = {};
                     break;
                 }
-                object[tmp[0].name] = tmp[0].value;
+                //object[tmp[0].name] = tmp[0].value;
+                object[tmp[j].name] = tmp[j].value;
                 objectCarousel[tmp[j].name] = tmp[j].value;
             }
             //carouselArr.push(objectCarousel);
@@ -1242,7 +1243,7 @@ function createDialog(){
             }
             var largeGroup = $('#appInsertForm').find('#largeGroup')[0].value
             var middleGroup;
-             $('#appInsertForm').find('[name=middleGroup]').each(function() {
+            $('#appInsertForm').find('[name=middleGroup]').each(function() {
                 if($(this).attr('disabled') == undefined) {
                     middleGroup = $(this).val();
                     return false;

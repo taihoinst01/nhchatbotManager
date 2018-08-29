@@ -2696,7 +2696,7 @@ router.post('/addDialog', function (req, res) {
                         .input('dialogText', sql.NVarChar, (array[i]["dialogText"].trim() == '' ? null : array[i]["dialogText"].trim()))
                         .query(inserTblDlgText);
 
-                } else if (array[i]["dlgType"] == "3") {
+                } else if (array[i]["dlgType"] == "3") {    //  CARD Type
                     /*
                     let result2 = await pool.request()
                     .input('dlgId', sql.Int, dlgId[0].DLG_ID)
@@ -3595,6 +3595,7 @@ router.post('/scenarioAddDialog', function (req, res) {
     var array = [];
     var queryText = "";
     var tblDlgId = [];
+    var scenarioName = "";
     if (typeof data == "string") {
         console.log("data is string");
         var json = JSON.parse(data);
@@ -3614,10 +3615,20 @@ router.post('/scenarioAddDialog', function (req, res) {
         for (var i = 0; i < array.length; i++) {
             for (var key in array[i]) {
                 console.log("key : " + key + " value : " + array[i][key]);
+                if(key == "scenarioName") scenarioName = array[i][key];
+                if(key == "carouselArr"){
+                    /*
+                    for(var j = 0; j < array[i].length; j++){
+                        for(var key in array[i].["scenarioName"]){
+                            console.log("+ key : " + key + " value : " + array[i][j][key]);
+                        }
+                    }
+                    */
+                }
             }
         }
     }
-
+    console.log("* scenarioName : "+scenarioName);
     (async () => {
         try {
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
@@ -3633,14 +3644,17 @@ router.post('/scenarioAddDialog', function (req, res) {
                 '(@dlgId,@dialogTitle,@dialogText,@mediaImgUrl,@btn1Type,@buttonName1,@buttonContent1,@btn2Type,@buttonName2,@buttonContent2,@btn3Type,@buttonName3,@buttonContent3,@btn4Type,@buttonName4,@buttonContent4,@cardValue,\'Y\')';
             // insertTblScenario
             var insertTblScenario = 'INSERT INTO TBL_SCENARIO_DLG (SCENARIO_NM, SCENARIO_GROUP, DLG_ID, DLG_DEPTH, DLG_ORDER_BY, PARENT_DLG_ID) VALUES ' + 
-                '(@scenarioNm, \'\', @dlgId, \'\', \'\', \'0\')';
+                '(@scenarioName, \'\', @dlgId, \'\', @dlgOrderBy, @parentDlgId)';
 
             var largeGroup = array[array.length - 1]["largeGroup"];
             var middleGroup = array[array.length - 1]["middleGroup"];
             var description = array[array.length - 1]["description"];
-            //var sourceType = array[array.length - 1]["sourceType"];
-
+            
             for (var i = 0; i < (array.length - 1); i++) {
+                
+                for (var key in array[i]) {
+                    console.log("* key : " + key + " value : " + array[i][key]);
+                }
 
                 let result1 = await pool.request()
                     .query(selectDlgId)
@@ -3648,7 +3662,7 @@ router.post('/scenarioAddDialog', function (req, res) {
 
                 let result2 = await pool.request()
                     .input('dlgId', sql.Int, dlgId[0].DLG_ID)
-                    .input('dialogText', sql.NVarChar, (description.trim() == '' ? null : description.trim()))
+                    .input('dialogText', sql.NVarChar, (array[i]["dialogText"].trim() == '' ? null : array[i]["dialogText"].trim()))
                     .input('dlgType', sql.NVarChar, array[i]["dlgType"])
                     .input('dialogOrderNo', sql.Int, (i + 1))
                     .input('largeGroup', sql.NVarChar, largeGroup)
@@ -3658,13 +3672,7 @@ router.post('/scenarioAddDialog', function (req, res) {
 
                 if (array[i]["dlgType"] == "2") {
 
-                    /*
                     let result3 = await pool.request()
-                    .query(selectTextDlgId)
-                    let textDlgId = result3.recordset;
-                    */
-
-                    let result4 = await pool.request()
                         .input('dlgId', sql.Int, dlgId[0].DLG_ID)
                         .input('dialogTitle', sql.NVarChar, (array[i]["dialogTitle"].trim() == '' ? null : array[i]["dialogTitle"].trim()))
                         .input('dialogText', sql.NVarChar, (array[i]["dialogText"].trim() == '' ? null : array[i]["dialogText"].trim()))
@@ -3685,7 +3693,7 @@ router.post('/scenarioAddDialog', function (req, res) {
                             }
                         }
 
-                        let result2 = await pool.request()
+                        let result3 = await pool.request()
                             .input('typeDlgId', sql.NVarChar, array[i].dlgType)
                             .input('dlgId', sql.Int, dlgId[0].DLG_ID)
                             .input('dialogTitle', sql.NVarChar, carTmp["dialogTitle"])
@@ -3706,12 +3714,11 @@ router.post('/scenarioAddDialog', function (req, res) {
                             .input('cardOrderNo', sql.Int, (j + 1))
                             .query(insertTblCarousel);
                        
-
                     }
 
                     tblDlgId.push(dlgId[0].DLG_ID);
 
-                } else if (array[i]["dlgType"] == "4") {
+                } else if (array[i]["dlgType"] == "4") {    // 
                    
                     // 공백은 Null 처리
                     for (var key in array[i]) {
@@ -3723,7 +3730,7 @@ router.post('/scenarioAddDialog', function (req, res) {
                         }
                     }
 
-                    let result4 = await pool.request()
+                    let result3 = await pool.request()
                         .input('dlgId', sql.Int, dlgId[0].DLG_ID)
                         .input('dialogTitle', sql.NVarChar, array[i]["dialogTitle"])
                         .input('dialogText', sql.NVarChar, array[i]["dialogText"])
@@ -3745,6 +3752,15 @@ router.post('/scenarioAddDialog', function (req, res) {
 
                     tblDlgId.push(dlgId[0].DLG_ID);
                 }
+
+                console.log("- scenarioName : "+scenarioName)
+                //  INSERT TBL_SCENARIO_DLG
+                let result4 = await pool.request()
+                    .input('scenarioName', sql.NVarChar, (scenarioName.trim() == '' ? null : scenarioName.trim()))
+                    .input('dlgId', sql.Int, dlgId[0].DLG_ID)
+                    .input('dlgOrderBy', sql.Int, 0)
+                    .input('parentDlgId', sql.Int, 0)
+                    .query(insertTblScenario);
 
                 tblDlgId.push(dlgId[0].DLG_ID);
 
