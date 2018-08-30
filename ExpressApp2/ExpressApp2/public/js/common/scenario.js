@@ -78,7 +78,7 @@ function openModalBox(target) {
             "</div>" +
             "<div class='scenario-form-group dlg_input_img dpN'>" +
                 "<label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label><button class='dlg_input_img_change'>적용</button>" +
-                "<div>sample URL : https://bot.hyundai.com/assets/images/movieImg/teasure/02_teaser.jpg </div>" +
+                "<div>sample URL : /images/ico_car.png </div>" +
                 "<input type='text' name='imgUrl' class='form-control' onkeyup='writeCarouselImg(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
             "</div>" +
             // 버튼선택
