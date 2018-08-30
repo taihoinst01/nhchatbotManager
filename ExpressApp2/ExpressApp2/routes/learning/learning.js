@@ -3782,6 +3782,51 @@ router.post('/scenarioAddDialog', function (req, res) {
 
 });
 
+
+router.post('/getScenarioDialogs', function (req, res) {
+
+	var strScenarioName = req.body.strScenarioName;
+    console.log("- getScenarioDialogs() - strScenarioName : " + strScenarioName);
+
+    (async () => {
+        try {
+
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            // call SP (sp_scenario)
+            console.log("- sp_scenario START" + req.session.appName + " | " + req.session.dbValue);
+            let query = "sp_scenario_select";
+            let result1 = await pool.request()
+                .input('scenarioNm', req.body.strScenarioName)
+                .execute('sp_scenario_select').then(function(err, recordset, returnValue, affected) {
+                //.query(query, function(err, recordset){
+                    if (err) {
+                        console.log(err);    
+                        console.log(recordset); 
+                        console.log(returnValue); 
+                        sql.close();    
+                    }    
+                    sql.close();   
+                    console.log(recordset.recordsets[0]); 
+                    res.send(recordset);
+                });
+            //console.log(result1);
+        } catch (err) {
+            console.log(err);
+            res.send({ status: 500, message: 'getScenarioDialogs Error' });
+        } finally {
+            sql.close();
+        }
+    })()
+
+    sql.on('error', err => {
+    })
+
+
+});
+
+
+
+
 /*
 let selectGroupL = await pool.request()
 .query(selectGroupLQuery);
