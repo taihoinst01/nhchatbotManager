@@ -270,5 +270,9 @@
   "SCENARIO_LIST": "sceanario list",
   "DLG_COUNT": "Dialog count",
   "SCENARIO_NUM": "No",
-  "SCENARIO_BTN_CNT_VALIDATION": "You can create up to four buttons."
+  "SCENARIO_BTN_CNT_VALIDATION": "You can create up to four buttons.",
+  "CARD_DIVISION": "card division",
+  "CARD_DIVISION_DEFAULT": "division default card",
+  "CARD_DIVISION_IMG": "division img card",
+  "CARD_DIVISION_PLAY": "division play card"
 }

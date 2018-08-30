@@ -68,7 +68,7 @@ function openModalBox(target) {
                 "<label>" + language.DIALOG_BOX_TITLE + "<span class='nec_ico'>*</span></label>" +
                 "<input type='text' name='dialogTitle' class='form-control' onkeyup='writeDialogTitle(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
             "</div>" +
-            "<div class='scenario-form-group dlg_input_sub_title'>" +
+            "<div class='scenario-form-group dlg_input_sub_title dpN'>" +
                 "<label>" + language.DIALOG_BOX_SUBTITLE + "<span class='nec_ico'>*</span></label>" +
                 "<input type='text' name='dialogSubTitle' class='form-control' onkeyup='writeDialogSubTitle(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
             "</div>" +
@@ -111,7 +111,9 @@ $(document).on('change', 'select[name=dlgType]', function (e) {
 
     if (cardType == '2') {
         $('.insertBtnArea').addClass('dpN');
+        $('.dlg_input_sub_title').addClass('dpN');
         $('.dlg_input_img').addClass('dpN');
+        $('.previewSubTitle').addClass('dpN');
         $('.previewImg').addClass("dpN");
         $('.previewImg').attr('src', '');
         $('.dlg_input_img').val('');
@@ -119,11 +121,15 @@ $(document).on('change', 'select[name=dlgType]', function (e) {
         $('.previewBtnArea > button').remove();
     } else if (cardType == '3') {
         $('.insertBtnArea').removeClass('dpN');
+        $('.dlg_input_sub_title').removeClass('dpN');
         $('.dlg_input_img').removeClass('dpN');
+        $('.previewSubTitle').removeClass('dpN');
         $('.previewImg').attr('src', '');
     } else if (cardType == '4') {
         $('.insertBtnArea').removeClass('dpN');
+        $('.dlg_input_sub_title').removeClass('dpN');
         $('.dlg_input_img').removeClass('dpN');
+        $('.previewSubTitle').removeClass('dpN');
         $('.previewImg').attr('src', '');
     }
 
@@ -208,7 +214,7 @@ $(document).on('click', '.carouseBtn', function (e) {
             "</div>"
         ).appendTo(".inputBtnArea");
 
-        $('.previewBtnArea > div').add("<button type='button' class='btn btn-default w100'alt='" + btnCnt + "'>button1</button>").appendTo(".previewBtnArea");
+        $('.previewBtnArea > div').add("<button type='button' class='btn btn-default w100'alt='" + btnCnt + "'>" + language.Please_enter + "</button>").appendTo(".previewBtnArea");
 
         btnNum_temp = btnCnt.toString();
         if (divCnt == 0) {
@@ -1727,8 +1733,9 @@ function getScenarioDialogs(strScenarioName){
                         strDialogLists += ' </div>';
                         strDialogLists += '</div>';
 
-                    }else if(dialogLists[i].DLG_TYPE == "3"){
-                        strDialogLists +='<div class="wc-message wc-message-from-bot" style="width:80%;">';
+                    } else if (dialogLists[i].DLG_TYPE == "3") {
+                        strDialogLists +='<div class="dialogView">';
+                        strDialogLists +=' <div class="wc-message wc-message-from-bot" style="width:80%;">';
                         strDialogLists +='  <div class="wc-message-content">';
                         strDialogLists +='      <svg class="wc-message-callout"></svg>';
                         strDialogLists +='      <div>';
@@ -1748,6 +1755,7 @@ function getScenarioDialogs(strScenarioName){
                         strDialogLists +='          </div>';
                         strDialogLists +='      </div>';
                         strDialogLists +='  </div>';
+                        strDialogLists +=' </div>';
                         strDialogLists +='</div>';
 
                     }else if(dialogLists[i].DLG_TYPE == "4"){
