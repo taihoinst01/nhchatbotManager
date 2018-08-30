@@ -105,6 +105,21 @@ function openModalBox(target) {
     ).appendTo(".inputArea");
 }
 
+function openModalBoxEdit(strDlgId, strDlgType) {
+    alert('openModalBoxEdit() strDlgId:'+strDlgId+' | strDlgType:'+strDlgType);
+    
+    //  시나리오명
+    $("#iptScenarioName").val($('#spanScenarioNm').text());
+    //  대화상자 타입
+    $("#dlgType").val(strDlgType).prop("selected", true);
+    
+    
+
+
+    
+}
+
+
 // 카드타입 변경
 $(document).on('change', 'select[name=dlgType]', function (e) {
     var cardType = $(this).val();
@@ -1727,10 +1742,9 @@ function getScenarioDialogs(strScenarioName){
                         strDialogLists += '     <div class="wc-message-content">';
                         strDialogLists += '         <svg class="wc-message-callout"></svg>';
                         strDialogLists += '         <div>';
-                        strDialogLists += '             <div class="format-markdown textTypeView dpB">';
+                        strDialogLists += '             <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID +',' + dialogLists[i].DLG_TYPE + ');">';
                         strDialogLists += '                 <div class="textMent">';
                         strDialogLists += '                     <h1 class="scenario_dlg_Title">'+dialogLists[i].CARD_TITLE+'</h1>';
-                        //strDialogLists += '                     <p class="scenario_dlg_SubTitle">서브타이틀</p>';
                         strDialogLists += '                     <p class="scenario_dlg_Text">'+dialogLists[i].CARD_TEXT+'</p>';
                         strDialogLists += '                     <div class="scenario_dlg_BtnArea"></div>';
                         strDialogLists += '                 </div>';
@@ -1746,7 +1760,7 @@ function getScenarioDialogs(strScenarioName){
                         strDialogLists +='  <div class="wc-message-content">';
                         strDialogLists +='      <svg class="wc-message-callout"></svg>';
                         strDialogLists +='      <div>';
-                        strDialogLists +='          <div class="format-markdown textTypeView dpB">';
+                        strDialogLists +='          <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID +',' + dialogLists[i].DLG_TYPE + ');">';
                         strDialogLists +='              <div class="textMent">';
                         strDialogLists +='                  <img src="'+dialogLists[i].IMG_URL+'">';
                         strDialogLists +='                  <h1 class="scenario_dlg_Title">'+dialogLists[i].CARD_TITLE+'</h1>';
@@ -1771,10 +1785,9 @@ function getScenarioDialogs(strScenarioName){
                         strDialogLists += '     <div class="wc-message-content">';
                         strDialogLists += '         <svg class="wc-message-callout"></svg>';
                         strDialogLists += '         <div>';
-                        strDialogLists += '             <div class="format-markdown textTypeView dpB">';
+                        strDialogLists += '             <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID +',' + dialogLists[i].DLG_TYPE + ');">';
                         strDialogLists += '                 <div class="textMent">';
                         strDialogLists += '                     <h1 class="scenario_dlg_Title">'+dialogLists[i].CARD_TITLE+'</h1>';
-                        //strDialogLists += '                     <p class="scenario_dlg_SubTitle">서브타이틀</p>';
                         strDialogLists += '                     <p class="scenario_dlg_Text">'+dialogLists[i].CARD_TEXT+'</p>';
                         strDialogLists += '                     <div class="scenario_dlg_BtnArea"></div>';
                         strDialogLists += '                 </div>';
@@ -1790,10 +1803,9 @@ function getScenarioDialogs(strScenarioName){
                         strDialogLists += '     <div class="wc-message-content">';
                         strDialogLists += '         <svg class="wc-message-callout"></svg>';
                         strDialogLists += '         <div>';
-                        strDialogLists += '             <div class="format-markdown textTypeView dpB">';
+                        strDialogLists += '             <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID +',' + dialogLists[i].DLG_TYPE + ');">';
                         strDialogLists += '                 <div class="textMent">';
                         strDialogLists += '                     <h1 class="scenario_dlg_Title">'+dialogLists[i].CARD_TITLE+'</h1>';
-                        //strDialogLists += '                     <p class="scenario_dlg_SubTitle">서브타이틀</p>';
                         strDialogLists += '                     <p class="scenario_dlg_Text">'+dialogLists[i].CARD_TEXT+'</p>';
                         strDialogLists += '                     <div class="scenario_dlg_BtnArea"></div>';
                         strDialogLists += '                 </div>';
@@ -1807,7 +1819,7 @@ function getScenarioDialogs(strScenarioName){
 
                 }
                 $('#divScenarioDialogs').html(strDialogLists);
-                
+                $('#spanScenarioNm').html(strScenarioName);
             }else{
                 alert('selectScenarioList fail');
             }
