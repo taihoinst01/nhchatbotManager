@@ -113,10 +113,37 @@ function openModalBoxEdit(strDlgId, strDlgType) {
     //  대화상자 타입
     $("#dlgType").val(strDlgType).prop("selected", true);
     
-    
+    $.ajax({
+        url: '/learning/getScenarioDlg',
+        dataType: 'json',
+        data: {'dlgId': strDlgId, 'dlgType':strDlgType},
+        type: 'POST',
+        isloading: true,
+        success: function(data) {
+            console.log(data.rows);
+            if(data.rows){
+                alert('data.rows');
+                var dlgInfo = data.rows;
+                //console.log('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE + ' | ' + dlgInfo[0].CARD_TITLE );
+                //alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE + ' | ' + dlgInfo[0].CARD_TITLE );
+                alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE);
+                /*
+                var strScenarioList = "";
+                var j = 1;
+                for(var i=0; i<dlgInfo.length; i++){
+                    
+                    //strScenarioList += '<TR><TD>'+j+'</TD><TD><A href="#" onclick="getScenarioDialogs(\''+scenarioList[i].SCENARIO_NM+'\')">'+scenarioList[i].SCENARIO_NM+'</A></TD><TD>'+scenarioList[i].SCENARIO_COUNT+'</TD></TR>';
+                    //alert('SCENARIO_NM : '+scenarioList[i].SCENARIO_NM);
+                }
+                */
+            }else{
+                alert('fail');
+            }
+
+        }
+    });
 
 
-    
 }
 
 
@@ -1724,18 +1751,11 @@ function getScenarioDialogs(strScenarioName){
                 var dialogLists = data.list;
                 var strDialogLists = "";
                 var j = 1;
-                var firstDlg = 0;
                 for(var i=0; i<dialogLists.length; i++){
 
                     //strDialogLists += '<TR><TD>'+j+'</TD><TD><A href="#" onclick="">'+dialogLists[i].CARD_TITLE+'</A></TD><TD>'+dialogLists[i].CARD_TEXT+'</TD></TR>';
                     //alert('CARD_TITLE : '+dialogLists[i].CARD_TITLE);
 
-                    //DEPTH 구분
-                    if (firstDlg != parseInt(data.list[i].DLG_DEPTH)) {
-                        strDialogLists += '<div class="row"></div>';
-                        firstDlg = parseInt(data.list[i].DLG_DEPTH);
-                    }
-                    
                     if(dialogLists[i].DLG_TYPE == "2"){ //  TEXT
                         strDialogLists += '<div class="dialogView">';
                         strDialogLists += ' <div class="wc-message wc-message-from-bot" style="width:80%;">';
