@@ -1684,7 +1684,7 @@ function selectScenarioList() {     //  시나리오 목록
 }
 
 function getScenarioDialogs(strScenarioName){
-    alert('getScenarioDialogs():'+strScenarioName);
+    //alert('getScenarioDialogs():'+strScenarioName);
     
     $.ajax({
         url: '/learning/getScenarioDialogs',
@@ -1693,7 +1693,7 @@ function getScenarioDialogs(strScenarioName){
         type: 'POST',
         isloading: true,
         success: function(data) {
-            alert('getScenarioDialogs SUCCESS!');
+            //alert('getScenarioDialogs SUCCESS!');
              
             if(data.list){
                 //alert('data.list'+data.list);
