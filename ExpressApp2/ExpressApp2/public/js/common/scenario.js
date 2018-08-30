@@ -1669,21 +1669,104 @@ function getScenarioDialogs(strScenarioName){
         success: function(data) {
             alert('getScenarioDialogs SUCCESS!');
              
-            if(data.message){
-                alert('data.message'+data.message);
-                console.log(data.recordsets);
-                alert('data.recordsets'+data.recordsets);
-                /*
-                var scenarioList = data.dialogList;
-                var strScenarioList = "";
+            if(data.list){
+                //alert('data.list'+data.list);
+                console.log(data.list);
+                //alert('data.list'+data.list);
+                 
+                var dialogLists = data.list;
+                var strDialogLists = "";
                 var j = 1;
-                for(var i=0; i<scenarioList.length; i++){
-                    j = i + 1;
-                    strScenarioList += '<TR><TD>'+j+'</TD><TD><A href="#" onclick="">'+scenarioList[i].SCENARIO_NM+'</A></TD><TD>'+scenarioList[i].SCENARIO_COUNT+'</TD></TR>';
-                    //alert('SCENARIO_NM : '+scenarioList[i].SCENARIO_NM);
+                for(var i=0; i<dialogLists.length; i++){
+
+                    //strDialogLists += '<TR><TD>'+j+'</TD><TD><A href="#" onclick="">'+dialogLists[i].CARD_TITLE+'</A></TD><TD>'+dialogLists[i].CARD_TEXT+'</TD></TR>';
+                    //alert('CARD_TITLE : '+dialogLists[i].CARD_TITLE);
+
+                    if(dialogLists[i].DLG_TYPE == "2"){ //  TEXT
+                        strDialogLists += '<div class="dialogView">';
+                        strDialogLists += ' <div class="wc-message wc-message-from-bot" style="width:80%;">';
+                        strDialogLists += '     <div class="wc-message-content">';
+                        strDialogLists += '         <svg class="wc-message-callout"></svg>';
+                        strDialogLists += '         <div>';
+                        strDialogLists += '             <div class="format-markdown textTypeView dpB">';
+                        strDialogLists += '                 <div class="textMent">';
+                        strDialogLists += '                     <h1 class="scenario_dlg_Title">'+dialogLists[i].CARD_TITLE+'</h1>';
+                        //strDialogLists += '                     <p class="scenario_dlg_SubTitle">서브타이틀</p>';
+                        strDialogLists += '                     <p class="scenario_dlg_Text">'+dialogLists[i].CARD_TEXT+'</p>';
+                        strDialogLists += '                     <div class="scenario_dlg_BtnArea"></div>';
+                        strDialogLists += '                 </div>';
+                        strDialogLists += '             </div>';
+                        strDialogLists += '         </div>';
+                        strDialogLists += '     </div>';
+                        strDialogLists += ' </div>';
+                        strDialogLists += '</div>';
+
+                    }else if(dialogLists[i].DLG_TYPE == "3"){
+                        strDialogLists +='<div class="wc-message wc-message-from-bot" style="width:80%;">';
+                        strDialogLists +='  <div class="wc-message-content">';
+                        strDialogLists +='      <svg class="wc-message-callout"></svg>';
+                        strDialogLists +='      <div>';
+                        strDialogLists +='          <div class="format-markdown textTypeView dpB">';
+                        strDialogLists +='              <div class="textMent">';
+                        strDialogLists +='                  <img src="'+dialogLists[i].IMG_URL+'">';
+                        strDialogLists +='                  <h1 class="scenario_dlg_Title">'+dialogLists[i].CARD_TITLE+'</h1>';
+                        strDialogLists +='                  <p class="scenario_dlg_SubTitle">'+dialogLists[i].CARD_SUBTITLE+'</p>';
+                        strDialogLists +='                  <p class="scenario_dlg_Text">'+dialogLists[i].CARD_TEXT+'</p>';
+                        strDialogLists +='                  <div class="scenario_dlg_BtnArea">';
+                        if(dialogLists[i].BTN_1_TITLE != '' ) strDialogLists +='                      <button type="button" class="btn btn-default w100">'+dialogLists[i].BTN_1_TITLE+'</button>';
+                        if(dialogLists[i].BTN_2_TITLE != '' ) strDialogLists +='                      <button type="button" class="btn btn-default w100">'+dialogLists[i].BTN_2_TITLE+'</button>';
+                        if(dialogLists[i].BTN_3_TITLE != '' ) strDialogLists +='                      <button type="button" class="btn btn-default w100">'+dialogLists[i].BTN_3_TITLE+'</button>';
+                        if(dialogLists[i].BTN_4_TITLE != '' ) strDialogLists +='                      <button type="button" class="btn btn-default w100">'+dialogLists[i].BTN_4_TITLE+'</button>';
+                        strDialogLists +='                  </div>';
+                        strDialogLists +='              </div>';
+                        strDialogLists +='          </div>';
+                        strDialogLists +='      </div>';
+                        strDialogLists +='  </div>';
+                        strDialogLists +='</div>';
+
+                    }else if(dialogLists[i].DLG_TYPE == "4"){
+                        strDialogLists += '<div class="dialogView">';
+                        strDialogLists += ' <div class="wc-message wc-message-from-bot" style="width:80%;">';
+                        strDialogLists += '     <div class="wc-message-content">';
+                        strDialogLists += '         <svg class="wc-message-callout"></svg>';
+                        strDialogLists += '         <div>';
+                        strDialogLists += '             <div class="format-markdown textTypeView dpB">';
+                        strDialogLists += '                 <div class="textMent">';
+                        strDialogLists += '                     <h1 class="scenario_dlg_Title">'+dialogLists[i].CARD_TITLE+'</h1>';
+                        //strDialogLists += '                     <p class="scenario_dlg_SubTitle">서브타이틀</p>';
+                        strDialogLists += '                     <p class="scenario_dlg_Text">'+dialogLists[i].CARD_TEXT+'</p>';
+                        strDialogLists += '                     <div class="scenario_dlg_BtnArea"></div>';
+                        strDialogLists += '                 </div>';
+                        strDialogLists += '             </div>';
+                        strDialogLists += '         </div>';
+                        strDialogLists += '     </div>';
+                        strDialogLists += ' </div>';
+                        strDialogLists += '</div>';
+
+                    }else{
+                        strDialogLists += '<div class="dialogView">';
+                        strDialogLists += ' <div class="wc-message wc-message-from-bot" style="width:80%;">';
+                        strDialogLists += '     <div class="wc-message-content">';
+                        strDialogLists += '         <svg class="wc-message-callout"></svg>';
+                        strDialogLists += '         <div>';
+                        strDialogLists += '             <div class="format-markdown textTypeView dpB">';
+                        strDialogLists += '                 <div class="textMent">';
+                        strDialogLists += '                     <h1 class="scenario_dlg_Title">'+dialogLists[i].CARD_TITLE+'</h1>';
+                        //strDialogLists += '                     <p class="scenario_dlg_SubTitle">서브타이틀</p>';
+                        strDialogLists += '                     <p class="scenario_dlg_Text">'+dialogLists[i].CARD_TEXT+'</p>';
+                        strDialogLists += '                     <div class="scenario_dlg_BtnArea"></div>';
+                        strDialogLists += '                 </div>';
+                        strDialogLists += '             </div>';
+                        strDialogLists += '         </div>';
+                        strDialogLists += '     </div>';
+                        strDialogLists += ' </div>';
+                        strDialogLists += '</div>';
+
+                    }
+
                 }
-                $('#utterTableBody').html(strScenarioList);
-                */
+                $('#divScenarioDialogs').html(strDialogLists);
+                
             }else{
                 alert('selectScenarioList fail');
             }

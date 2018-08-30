@@ -3797,17 +3797,21 @@ router.post('/getScenarioDialogs', function (req, res) {
             let query = "sp_scenario_select";
             let result1 = await pool.request()
                 .input('scenarioNm', req.body.strScenarioName)
-                .execute('sp_scenario_select').then(function(err, recordset, returnValue, affected) {
+                .execute('sp_scenario_select').then(function(recordset) {
                 //.query(query, function(err, recordset){
-                    if (err) {
-                        console.log(err);    
-                        console.log(recordset); 
-                        console.log(returnValue); 
-                        sql.close();    
-                    }    
-                    sql.close();   
-                    console.log(recordset.recordsets[0]); 
-                    res.send(recordset);
+                    if (recordset) {
+                        //console.log(err);
+                        console.log(recordset);
+                        console.log(recordset.recordsets[0]);
+                        //console.log(returnValue);
+                        sql.close();
+                    }
+                    //console.log(err);
+                    console.log(recordset);
+                    console.log(recordset.recordsets[0]);
+                    //res.send(recordset.recordsets[0]);
+                    res.send({ list: recordset.recordsets[0] });
+                    sql.close();
                 });
             //console.log(result1);
         } catch (err) {
