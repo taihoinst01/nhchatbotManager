@@ -3793,7 +3793,7 @@ router.post('/getScenarioDialogs', function (req, res) {
 
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
             // call SP (sp_scenario)
-            console.log("- sp_scenario START" + req.session.appName + " | " + req.session.dbValue);
+            //console.log("- sp_scenario START" + req.session.appName + " | " + req.session.dbValue);
             let query = "sp_scenario_select";
             let result1 = await pool.request()
                 .input('scenarioNm', req.body.strScenarioName)
