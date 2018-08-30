@@ -77,7 +77,8 @@ function openModalBox(target) {
                 "<input type='text' name='dialogText' class='form-control' onkeyup='writeDialog(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
             "</div>" +
             "<div class='scenario-form-group dlg_input_img dpN'>" +
-                "<label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label>" +
+                "<label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label><button class='dlg_input_img_change'>적용</button>" +
+                "<div>sample URL : https://bot.hyundai.com/assets/images/movieImg/teasure/02_teaser.jpg </div>" +
                 "<input type='text' name='imgUrl' class='form-control' onkeyup='writeCarouselImg(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
             "</div>" +
             // 버튼선택
@@ -110,12 +111,20 @@ $(document).on('change', 'select[name=dlgType]', function (e) {
 
     if (cardType == '2') {
         $('.insertBtnArea').addClass('dpN');
+        $('.dlg_input_img').addClass('dpN');
+        $('.previewImg').addClass("dpN");
+        $('.previewImg').attr('src', '');
+        $('.dlg_input_img').val('');
         $('.inputBtnArea > div').remove();
         $('.previewBtnArea > button').remove();
     } else if (cardType == '3') {
         $('.insertBtnArea').removeClass('dpN');
+        $('.dlg_input_img').removeClass('dpN');
+        $('.previewImg').attr('src', '');
     } else if (cardType == '4') {
         $('.insertBtnArea').removeClass('dpN');
+        $('.dlg_input_img').removeClass('dpN');
+        $('.previewImg').attr('src', '');
     }
 
 });
@@ -217,6 +226,23 @@ $(document).on('click', '.carouseBtn', function (e) {
 $(document).on('click', '.btn_delete', function (e) {
     $('button[alt=' + $(this).attr('alt') + ']').remove();
     $(this).parent().parent().parent().parent().parent().parent().parent().remove();
+});
+
+// 대화상자 이미지 URL 입력
+var imgUrl = "";
+function writeCarouselImg(e) {
+    imgURL = $(e).parents('.dlg_input_img').find('input[name=imgUrl]').context.value;
+}
+// 대화상자 미리보기 이미지 출력
+$(document).on('click', '.dlg_input_img_change', function (e) {
+    //console.log(imgURL);
+    if (imgURL == "") {
+        $('.previewImg').addClass("dpN");
+        $('.previewImg').attr('src', '');
+    } else {
+        $('.previewImg').removeClass("dpN");
+        $('.previewImg').attr('src', imgURL);
+    }
 });
 
 // 대화상자 미리보기 타이틀 입력
