@@ -1709,11 +1709,18 @@ function getScenarioDialogs(strScenarioName){
                 var dialogLists = data.list;
                 var strDialogLists = "";
                 var j = 1;
+                var firstDlg = 0;
                 for(var i=0; i<dialogLists.length; i++){
 
                     //strDialogLists += '<TR><TD>'+j+'</TD><TD><A href="#" onclick="">'+dialogLists[i].CARD_TITLE+'</A></TD><TD>'+dialogLists[i].CARD_TEXT+'</TD></TR>';
                     //alert('CARD_TITLE : '+dialogLists[i].CARD_TITLE);
 
+                    //DEPTH 구분
+                    if (firstDlg != parseInt(data.list[i].DLG_DEPTH)) {
+                        strDialogLists += '<div class="row"></div>';
+                        firstDlg = parseInt(data.list[i].DLG_DEPTH);
+                    }
+                    
                     if(dialogLists[i].DLG_TYPE == "2"){ //  TEXT
                         strDialogLists += '<div class="dialogView">';
                         strDialogLists += ' <div class="wc-message wc-message-from-bot" style="width:80%;">';

@@ -18,5 +18,7 @@ td.clickUtter {
 .dpB{display:block !important}
 .w100{width:100%}
 
-/*.inputArea{}
-#divScenarioDialogs{white-space:nowrap; overflow:auto;}*/
+.inputArea{}
+#divScenarioDialogs{width:1500px}
+.dialogView{width:100%; max-width:350px;display:inline-block}
+.scenario_box{ width:98%; height:450px; background-color:#e6e9ec; border-radius:5px; display:inline-block; padding:1%; overflow:auto 
