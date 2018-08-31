@@ -10,6 +10,8 @@ $(function () {
             language= data.lang;
         }
     });
+
+    $( ".wc-message" ).draggable();
 });
 
 $(document).ready(function(){
@@ -1736,7 +1738,7 @@ function selectScenarioList() {     //  시나리오 목록
 
 function getScenarioDialogs(strScenarioName){
     //alert('getScenarioDialogs():'+strScenarioName);
-    
+    $('#divScenarioDialogs > div').remove();
     $.ajax({
         url: '/learning/getScenarioDialogs',
         dataType: 'json',
@@ -1752,7 +1754,6 @@ function getScenarioDialogs(strScenarioName){
                 //alert('data.list'+data.list);
                  
                 var dialogLists = data.list;
-                var strDialogLists = "";
                 var j = 1;
                 var firstDlg = 0;
                 for(var i=0; i<dialogLists.length; i++){
@@ -1762,101 +1763,112 @@ function getScenarioDialogs(strScenarioName){
 
                     //DEPTH 구분
                     if (firstDlg != parseInt(data.list[i].DLG_DEPTH)) {
-                        strDialogLists += '<div class="row"></div>';
+                        $('#divScenarioDialogs > div').add('<div class="row"></div>').appendTo('#divScenarioDialogs');
                         firstDlg = parseInt(data.list[i].DLG_DEPTH);
                     }
 
-                    if(dialogLists[i].DLG_TYPE == "2"){ //  TEXT
-                        strDialogLists += '<div class="dialogView">';
-                        strDialogLists += ' <div class="wc-message wc-message-from-bot" style="width:80%;">';
-                        strDialogLists += '     <div class="wc-message-content">';
-                        strDialogLists += '         <svg class="wc-message-callout"></svg>';
-                        strDialogLists += '         <div>';
-                        strDialogLists += '             <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID +',' + dialogLists[i].DLG_TYPE + ');">';
-                        strDialogLists += '                 <div class="textMent">';
-                        strDialogLists += '                     <h1 class="scenario_dlg_Title">'+dialogLists[i].CARD_TITLE+'</h1>';
-                        strDialogLists += '                     <p class="scenario_dlg_Text">'+dialogLists[i].CARD_TEXT+'</p>';
-                        strDialogLists += '                     <div class="scenario_dlg_BtnArea"></div>';
-                        strDialogLists += '                 </div>';
-                        strDialogLists += '             </div>';
-                        strDialogLists += '         </div>';
-                        strDialogLists += '     </div>';
-                        strDialogLists += ' </div>';
-                        strDialogLists += '</div>';
-
+                    if (dialogLists[i].DLG_TYPE == "2") { //  TEXT
+                        $('#divScenarioDialogs > div').add(
+                            '<div class="dialogView">'+
+                            ' <div class="wc-message wc-message-from-bot" style="width:80%;">'+
+                            '     <div class="wc-message-content">'+
+                            '         <svg class="wc-message-callout"></svg>'+
+                            '         <div>'+
+                            '             <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID + ',' + dialogLists[i].DLG_TYPE + ');">'+
+                            '                 <div class="textMent">'+
+                            '                     <h1 class="scenario_dlg_Title">' + dialogLists[i].CARD_TITLE + '</h1>'+
+                            '                     <p class="scenario_dlg_Text">' + dialogLists[i].CARD_TEXT + '</p>'+
+                            '                     <div class="scenario_dlg_BtnArea"></div>'+
+                            '                 </div>'+
+                            '             </div>'+
+                            '         </div>'+
+                            '     </div>'+
+                            ' </div>'+
+                            '</div>'
+                        ).appendTo('#divScenarioDialogs');
                     } else if (dialogLists[i].DLG_TYPE == "3") {
-                        strDialogLists +='<div class="dialogView">';
-                        strDialogLists +=' <div class="wc-message wc-message-from-bot" style="width:80%;">';
-                        strDialogLists +='  <div class="wc-message-content">';
-                        strDialogLists +='      <svg class="wc-message-callout"></svg>';
-                        strDialogLists +='      <div>';
-                        strDialogLists +='          <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID +',' + dialogLists[i].DLG_TYPE + ');">';
-                        strDialogLists +='              <div class="textMent">';
-                        strDialogLists +='                  <img src="'+dialogLists[i].IMG_URL+'">';
-                        strDialogLists +='                  <h1 class="scenario_dlg_Title">'+dialogLists[i].CARD_TITLE+'</h1>';
-                        strDialogLists +='                  <p class="scenario_dlg_SubTitle">'+dialogLists[i].CARD_SUBTITLE+'</p>';
-                        strDialogLists +='                  <p class="scenario_dlg_Text">'+dialogLists[i].CARD_TEXT+'</p>';
-                        strDialogLists +='                  <div class="scenario_dlg_BtnArea">';
-                        if(dialogLists[i].BTN_1_TITLE != '' ) strDialogLists +='                      <button type="button" class="btn btn-default w100">'+dialogLists[i].BTN_1_TITLE+'</button>';
-                        if(dialogLists[i].BTN_2_TITLE != '' ) strDialogLists +='                      <button type="button" class="btn btn-default w100">'+dialogLists[i].BTN_2_TITLE+'</button>';
-                        if(dialogLists[i].BTN_3_TITLE != '' ) strDialogLists +='                      <button type="button" class="btn btn-default w100">'+dialogLists[i].BTN_3_TITLE+'</button>';
-                        if(dialogLists[i].BTN_4_TITLE != '' ) strDialogLists +='                      <button type="button" class="btn btn-default w100">'+dialogLists[i].BTN_4_TITLE+'</button>';
-                        strDialogLists +='                  </div>';
-                        strDialogLists +='              </div>';
-                        strDialogLists +='          </div>';
-                        strDialogLists +='      </div>';
-                        strDialogLists +='  </div>';
-                        strDialogLists +=' </div>';
-                        strDialogLists +='</div>';
-
-                    }else if(dialogLists[i].DLG_TYPE == "4"){
-                        strDialogLists += '<div class="dialogView">';
-                        strDialogLists += ' <div class="wc-message wc-message-from-bot" style="width:80%;">';
-                        strDialogLists += '     <div class="wc-message-content">';
-                        strDialogLists += '         <svg class="wc-message-callout"></svg>';
-                        strDialogLists += '         <div>';
-                        strDialogLists += '             <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID +',' + dialogLists[i].DLG_TYPE + ');">';
-                        strDialogLists += '                 <div class="textMent">';
-                        strDialogLists += '                     <h1 class="scenario_dlg_Title">'+dialogLists[i].CARD_TITLE+'</h1>';
-                        strDialogLists += '                     <p class="scenario_dlg_Text">'+dialogLists[i].CARD_TEXT+'</p>';
-                        strDialogLists += '                     <div class="scenario_dlg_BtnArea"></div>';
-                        strDialogLists += '                 </div>';
-                        strDialogLists += '             </div>';
-                        strDialogLists += '         </div>';
-                        strDialogLists += '     </div>';
-                        strDialogLists += ' </div>';
-                        strDialogLists += '</div>';
-
-                    }else{
-                        strDialogLists += '<div class="dialogView">';
-                        strDialogLists += ' <div class="wc-message wc-message-from-bot" style="width:80%;">';
-                        strDialogLists += '     <div class="wc-message-content">';
-                        strDialogLists += '         <svg class="wc-message-callout"></svg>';
-                        strDialogLists += '         <div>';
-                        strDialogLists += '             <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID +',' + dialogLists[i].DLG_TYPE + ');">';
-                        strDialogLists += '                 <div class="textMent">';
-                        strDialogLists += '                     <h1 class="scenario_dlg_Title">'+dialogLists[i].CARD_TITLE+'</h1>';
-                        strDialogLists += '                     <p class="scenario_dlg_Text">'+dialogLists[i].CARD_TEXT+'</p>';
-                        strDialogLists += '                     <div class="scenario_dlg_BtnArea"></div>';
-                        strDialogLists += '                 </div>';
-                        strDialogLists += '             </div>';
-                        strDialogLists += '         </div>';
-                        strDialogLists += '     </div>';
-                        strDialogLists += ' </div>';
-                        strDialogLists += '</div>';
-
+                        var btnTitle1 = '';
+                        var btnTitle2 = '';
+                        var btnTitle3 = '';
+                        var btnTitle4 = '';
+                        if (dialogLists[i].BTN_1_TITLE != '') btnTitle1 = '<button type="button" class="btn btn-default w100">' + dialogLists[i].BTN_1_TITLE + '</button>';
+                        if (dialogLists[i].BTN_2_TITLE != '') btnTitle2 = '<button type="button" class="btn btn-default w100">' + dialogLists[i].BTN_2_TITLE + '</button>';
+                        if (dialogLists[i].BTN_3_TITLE != '') btnTitle3 = '<button type="button" class="btn btn-default w100">' + dialogLists[i].BTN_3_TITLE + '</button>';
+                        if (dialogLists[i].BTN_4_TITLE != '') btnTitle4 = '<button type="button" class="btn btn-default w100">' + dialogLists[i].BTN_4_TITLE + '</button>';
+                        $('#divScenarioDialogs > div').add(
+                            '<div class="dialogView">' +
+                            ' <div class="wc-message wc-message-from-bot" style="width:80%+">' +
+                            '  <div class="wc-message-content">' +
+                            '      <svg class="wc-message-callout"></svg>' +
+                            '      <div>' +
+                            '          <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID + ',' + dialogLists[i].DLG_TYPE + ')+">' +
+                            '              <div class="textMent">' +
+                            '                  <img src="' + dialogLists[i].IMG_URL + '">' +
+                            '                  <h1 class="scenario_dlg_Title">' + dialogLists[i].CARD_TITLE + '</h1>' +
+                            '                  <p class="scenario_dlg_SubTitle">' + dialogLists[i].CARD_SUBTITLE + '</p>' +
+                            '                  <p class="scenario_dlg_Text">' + dialogLists[i].CARD_TEXT + '</p>' +
+                            '                  <div class="scenario_dlg_BtnArea">' +
+                            btnTitle1 +
+                            btnTitle2 +
+                            btnTitle3 +
+                            btnTitle4 +
+                            '                  </div>' +
+                            '              </div>' +
+                            '          </div>' +
+                            '      </div>' +
+                            '  </div>' +
+                            ' </div>' +
+                            '</div>'
+                        ).appendTo('#divScenarioDialogs');
+                    } else if (dialogLists[i].DLG_TYPE == "4") {
+                        $('#divScenarioDialogs > div').add(
+                            '<div class="dialogView">'+
+                            ' <div class="wc-message wc-message-from-bot" style="width:80%;">'+
+                            '     <div class="wc-message-content">'+
+                            '         <svg class="wc-message-callout"></svg>'+
+                            '         <div>'+
+                            '             <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID +',' + dialogLists[i].DLG_TYPE + ');">'+
+                            '                 <div class="textMent">'+
+                            '                     <h1 class="scenario_dlg_Title">'+dialogLists[i].CARD_TITLE+'</h1>'+
+                            '                     <p class="scenario_dlg_Text">'+dialogLists[i].CARD_TEXT+'</p>'+
+                            '                     <div class="scenario_dlg_BtnArea"></div>'+
+                            '                 </div>'+
+                            '             </div>'+
+                            '         </div>'+
+                            '     </div>'+
+                            ' </div>'+
+                            '</div>'
+                        ).appendTo('#divScenarioDialogs');
+                    } else {
+                        $('#divScenarioDialogs > div').add(
+                            '<div class="dialogView">' +
+                            ' <div class="wc-message wc-message-from-bot" style="width:80%+">' +
+                            '     <div class="wc-message-content">' +
+                            '         <svg class="wc-message-callout"></svg>' +
+                            '         <div>' +
+                            '             <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID + ',' + dialogLists[i].DLG_TYPE + ')+">' +
+                            '                 <div class="textMent">' +
+                            '                     <h1 class="scenario_dlg_Title">' + dialogLists[i].CARD_TITLE + '</h1>' +
+                            '                     <p class="scenario_dlg_Text">' + dialogLists[i].CARD_TEXT + '</p>' +
+                            '                     <div class="scenario_dlg_BtnArea"></div>' +
+                            '                 </div>' +
+                            '             </div>' +
+                            '         </div>' +
+                            '     </div>' +
+                            ' </div>' +
+                            '</div>'
+                        ).appendTo('#divScenarioDialogs');
                     }
 
                 }
-                $('#divScenarioDialogs').html(strDialogLists);
                 $('#spanScenarioNm').html(strScenarioName);
+                $('.dialogView').draggable();
             }else{
                 alert('selectScenarioList fail');
             }
             
         }
     });
-    
 }
 
 
