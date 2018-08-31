@@ -1,7 +1,7 @@
 // JavaScript source code
 var language;
 $(function () {
-    console.log("scenario test");
+    console.log("utterance test");
     $.ajax({
         url: '/jsLang',
         dataType: 'json',
@@ -128,10 +128,9 @@ function openModalBoxEdit(strDlgId, strDlgType) {
         isloading: true,
         success: function(data) {
             console.log(data.rows);
-            if(data.rows){      //alert('data.rows');
+            if(data.rows){
                 
-                var dlgInfo = data.rows;    //alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE);
-                
+                var dlgInfo = data.rows;    //alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE);                
                 //var largeGroup = $('#appInsertForm').find('#largeGroup')[0].value;
                 //alert('largeGroup:'+largeGroup);
                 
@@ -264,14 +263,14 @@ $(document).on('change', 'select[name=dlgType]', function (e) {
         $('.insertBtnArea').removeClass('dpN');
         $('.dlg_input_sub_title').removeClass('dpN');
         $('.dlg_input_img').removeClass('dpN');
-        $('.dlg_card_division').removeClass('dpN');
+        $('.dlg_card_division').addClass('dpN');
         $('.previewSubTitle').removeClass('dpN');
         $('.previewImg').attr('src', '');
     } else if (cardType == '4') {
         $('.insertBtnArea').removeClass('dpN');
         $('.dlg_input_sub_title').removeClass('dpN');
         $('.dlg_input_img').removeClass('dpN');
-        $('.dlg_card_division').removeClass('dpN');
+        $('.dlg_card_division').addClass('dpN');
         $('.previewSubTitle').removeClass('dpN');
         $('.previewImg').attr('src', '');
     }
@@ -1837,7 +1836,7 @@ function selectScenarioList() {     //  시나리오 목록
 
 function getScenarioDialogs(strScenarioName){
     //alert('getScenarioDialogs():'+strScenarioName);
-    $('#divScenarioDialogs > div').remove();
+    
     $.ajax({
         url: '/learning/getScenarioDialogs',
         dataType: 'json',
@@ -1853,6 +1852,7 @@ function getScenarioDialogs(strScenarioName){
                 //alert('data.list'+data.list);
                  
                 var dialogLists = data.list;
+                var strDialogLists = "";
                 var j = 1;
                 var firstDlg = 0;
                 for(var i=0; i<dialogLists.length; i++){
@@ -1960,6 +1960,7 @@ function getScenarioDialogs(strScenarioName){
                     }
 
                 }
+                
                 $('#spanScenarioNm').html(strScenarioName);
                 $('.dialogView').draggable();
             }else{
@@ -1968,6 +1969,7 @@ function getScenarioDialogs(strScenarioName){
             
         }
     });
+    
 }
 
 
