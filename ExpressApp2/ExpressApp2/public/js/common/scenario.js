@@ -23,7 +23,7 @@ $(document).ready(function(){
     //getLuisInfo('luisId');
 
     //새로운 다이얼로그 생성 모달창에 필요한 그룹 가져오기
-    getGroupSeelectBox();
+    getGroupSelectBox();
 
     //엔티티 추가 모달 초기 설정
     entityValidation();
@@ -108,11 +108,16 @@ function openModalBox(target) {
 function openModalBoxEdit(strDlgId, strDlgType) {
     alert('openModalBoxEdit() strDlgId:'+strDlgId+' | strDlgType:'+strDlgType);
     
+    
     //  시나리오명
-    $("#iptScenarioName").val($('#spanScenarioNm').text());
+    $("#iptScenarioName").val($('#spanScenarioNm').text());     
     //  대화상자 타입
     $("#dlgType").val(strDlgType).prop("selected", true);
+    //  대그룹,중그룹 init
+    getGroupSelectBox();
     
+
+    //inputAreaAdd();
     $.ajax({
         url: '/learning/getScenarioDlg',
         dataType: 'json',
@@ -121,28 +126,119 @@ function openModalBoxEdit(strDlgId, strDlgType) {
         isloading: true,
         success: function(data) {
             console.log(data.rows);
-            if(data.rows){
-                alert('data.rows');
-                var dlgInfo = data.rows;
-                //console.log('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE + ' | ' + dlgInfo[0].CARD_TITLE );
-                //alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE + ' | ' + dlgInfo[0].CARD_TITLE );
-                alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE);
-                /*
-                var strScenarioList = "";
-                var j = 1;
-                for(var i=0; i<dlgInfo.length; i++){
-                    
-                    //strScenarioList += '<TR><TD>'+j+'</TD><TD><A href="#" onclick="getScenarioDialogs(\''+scenarioList[i].SCENARIO_NM+'\')">'+scenarioList[i].SCENARIO_NM+'</A></TD><TD>'+scenarioList[i].SCENARIO_COUNT+'</TD></TR>';
-                    //alert('SCENARIO_NM : '+scenarioList[i].SCENARIO_NM);
-                }
-                */
+            if(data.rows){      //alert('data.rows');
+                
+                var dlgInfo = data.rows;    //alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE);
+                
+                //var largeGroup = $('#appInsertForm').find('#largeGroup')[0].value;
+                //alert('largeGroup:'+largeGroup);
+                
+                //  대그룹,중그룹 출력.. (dlgInfo.GROUPL, dlgInfo.GROUPM)
+                alert('대그룹:'+dlgInfo.GROUPL+' | 중그룹:'+dlgInfo.GROUPM);
+                var strGroupM = dlgInfo.GROUPM;
+                $("#iptLargeGroup").val(dlgInfo.GROUPL).prop("selected", true);
+                $("#iptMiddleGroup").val(dlgInfo.GROUPM).prop("selected", true);
+                
+                //  설명
+                $("#iptDescription").val(dlgInfo.DLG_DESCRIPTION);
+                
+                $(".inputArea > div").remove();
+                var htmlInputArea = "";
+                htmlInputArea = "<div class='textLayout'>" +
+                        // 텍스트
+                        "<div class='scenario-form-group dlg_input_title'>" +
+                            "<label>" + language.DIALOG_BOX_TITLE + "<span class='nec_ico'>*</span></label>" +
+                            "<input type='text' name='dialogTitle' id='iptDialogTitle' value='"+dlgInfo.CARD_TITLE+"' class='form-control' onkeyup='writeDialogTitle(this);' spellcheck='false' autocomplete='off'>" +
+                        "</div>" +
+                        "<div class='scenario-form-group dlg_input_sub_title dpN'>" +
+                            "<label>" + language.DIALOG_BOX_SUBTITLE + "<span class='nec_ico'>*</span></label>" +
+                            "<input type='text' name='dialogSubTitle' id='iptDialogSubTitle' class='form-control' onkeyup='writeDialogSubTitle(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+                        "</div>" +
+                        "<div class='scenario-form-group dlg_input_text'>" +
+                            "<label>" + language.DIALOG_BOX_CONTENTS + "<span class='nec_ico'>*</span></label>" +
+                            "<input type='text' name='dialogText' id='iptDialogText' value='"+dlgInfo.CARD_TEXT+"' class='form-control' onkeyup='writeDialog(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+                        "</div>" +
+                        "<div class='scenario-form-group dlg_input_img dpN'>" +
+                            "<label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label><button class='dlg_input_img_change'>적용</button>" +
+                            "<div>sample URL : /images/ico_car.png </div>" +
+                            "<input type='text' name='imgUrl' id='iptImgUrl' class='form-control' onkeyup='writeCarouselImg(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+                        "</div>" +
+                        // 버튼선택
+                        "<div class='clear- both'></div>" +
+                        "<div class='btn-group btn-group-justified insertBtnArea dpN' role='group'> " + 
+                            "<div class='btn-group dlg_btn_insert' role='group'>" +
+                                "<button type='button' class='btn btn-default carouseBtn'>" + language.INSERT_MORE_BUTTON + "</button>" +
+                            "</div>" +
+                            "<div class='btn-group dlg_btn_insert_card' role='group'>" +
+                                "<button type='button' class='btn btn-default addCarouselBtn'>" + language.INSERT_MORE_CARDS + "</button>" +
+                            "</div>" +
+                        "</div > " +
+                        "<div class='btn-group btn-group-justified deleteBtnArea'role='group'> " + 
+                            "<div class='btn-group deleteInsertFormDiv dlg_btn_delete dpN'role='group'>" +
+                                "<button type='button' class='btn btn-default deleteInsertForm'>" + language.DELETE_DIALOG + "</button>" +
+                            "</div>" +
+                            "<div class='btn-group dlg_btn_delete_card dpN'role='group'>" +
+                                "<button type='button' class='btn btn-default deleteCard'>" + language.DELETE_CARD + "</button>" +
+                            "</div>" +
+                        "</div>" +
+                        // 추가될버튼 영역
+                        "<div class='inputBtnArea'></div>" +
+                    "</div>";
+            
+                $(".inputArea > div").add(htmlInputArea).appendTo(".inputArea");
+
             }else{
                 alert('fail');
             }
-
         }
     });
+}
 
+function inputAreaAdd(){
+    $(".inputArea > div").remove();
+    var htmlInputArea = "";
+    htmlInputArea = "<div class='textLayout'>" +
+            // 텍스트
+            "<div class='scenario-form-group dlg_input_title'>" +
+                "<label>" + language.DIALOG_BOX_TITLE + "<span class='nec_ico'>*</span></label>" +
+                "<input type='text' name='dialogTitle' id='iptDialogTitle' value='' class='form-control' onkeyup='writeDialogTitle(this);' spellcheck='false' autocomplete='off'>" +
+            "</div>" +
+            "<div class='scenario-form-group dlg_input_sub_title dpN'>" +
+                "<label>" + language.DIALOG_BOX_SUBTITLE + "<span class='nec_ico'>*</span></label>" +
+                "<input type='text' name='dialogSubTitle' id='iptDialogSubTitle' class='form-control' onkeyup='writeDialogSubTitle(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+            "</div>" +
+            "<div class='scenario-form-group dlg_input_text'>" +
+                "<label>" + language.DIALOG_BOX_CONTENTS + "<span class='nec_ico'>*</span></label>" +
+                "<input type='text' name='dialogText' id='iptDialogText' class='form-control' onkeyup='writeDialog(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+            "</div>" +
+            "<div class='scenario-form-group dlg_input_img dpN'>" +
+                "<label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label><button class='dlg_input_img_change'>적용</button>" +
+                "<div>sample URL : /images/ico_car.png </div>" +
+                "<input type='text' name='imgUrl' id='iptImgUrl' class='form-control' onkeyup='writeCarouselImg(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+            "</div>" +
+            // 버튼선택
+            "<div class='clear- both'></div>" +
+            "<div class='btn-group btn-group-justified insertBtnArea dpN' role='group'> " + 
+                "<div class='btn-group dlg_btn_insert' role='group'>" +
+                    "<button type='button' class='btn btn-default carouseBtn'>" + language.INSERT_MORE_BUTTON + "</button>" +
+                "</div>" +
+                "<div class='btn-group dlg_btn_insert_card' role='group'>" +
+                    "<button type='button' class='btn btn-default addCarouselBtn'>" + language.INSERT_MORE_CARDS + "</button>" +
+                "</div>" +
+            "</div > " +
+            "<div class='btn-group btn-group-justified deleteBtnArea'role='group'> " + 
+                "<div class='btn-group deleteInsertFormDiv dlg_btn_delete dpN'role='group'>" +
+                    "<button type='button' class='btn btn-default deleteInsertForm'>" + language.DELETE_DIALOG + "</button>" +
+                "</div>" +
+                "<div class='btn-group dlg_btn_delete_card dpN'role='group'>" +
+                    "<button type='button' class='btn btn-default deleteCard'>" + language.DELETE_CARD + "</button>" +
+                "</div>" +
+            "</div>" +
+            // 추가될버튼 영역
+            "<div class='inputBtnArea'></div>" +
+        "</div>";
+
+    $(".inputArea > div").add(htmlInputArea).appendTo(".inputArea");
 
 }
 
@@ -1604,7 +1700,7 @@ $(document).on('click', '.newMidBtn, .cancelMidBtn', function() {
 
 
 
-function getGroupSeelectBox() {
+function getGroupSelectBox() {
     $.ajax({
         type: 'POST',
         url: '/learning/getGroupSelectBox',
@@ -1617,9 +1713,11 @@ function getGroupSeelectBox() {
 
             for(var i = 0; i < groupL.length; i++ ) {
                 groupHtml += '<option value="' + groupL[i].GROUPL + '">' + groupL[i].GROUPL + '</option>';
+                //alert('groupL[i].GROUPL:'+groupL[i].GROUPL);
             }
 
             $("#largeGroup").html(groupHtml);
+            $("#iptLargeGroup").html(groupHtml);
 
             groupHtml = "";
             for(var i = 0; i < groupM.length; i++ ) {
@@ -1627,6 +1725,7 @@ function getGroupSeelectBox() {
             }
 
             $("#middleGroup").html(groupHtml);
+            $("#iptMiddleGroup").html(groupHtml);
 
         }
     });

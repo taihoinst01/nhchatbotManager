@@ -3834,30 +3834,36 @@ router.post('/getScenarioDlg', function (req, res) {
     (async () => {
         try {
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
-            var selectDlgText = 'SELECT ISNULL(MAX(DLG_ID)+1,1) AS DLG_ID FROM TBL_DLG';
-            var selectDlgCard = 'SELECT TD.DLG_ID, TD.DLG_NAME, TD.DLG_DESCRIPTION, TDC.CARD_TITLE, TDC.CARD_SUBTITLE, TDC.CARD_TEXT, TDC.IMG_URL, ' + 
+            var selectDlgText = 'SELECT TD.DLG_ID, TD.DLG_NAME, TD.DLG_DESCRIPTION, TD.GROUPL, TD.GROUPM, TDT.CARD_TITLE, TDT.CARD_TEXT   ' +
+                ' FROM TBL_DLG AS TD, TBL_DLG_TEXT AS TDT ' + 
+                ' WHERE TD.DLG_ID=\'' + strDlgId + '\' AND TD.DLG_ID = TDT.DLG_ID ';
+            var selectDlgCard = 'SELECT TD.DLG_ID, TD.DLG_NAME, TD.DLG_DESCRIPTION, TD.GROUPL, TD.GROUPM, TDC.CARD_TITLE, TDC.CARD_SUBTITLE, TDC.CARD_TEXT, TDC.IMG_URL, ' + 
                 ' TDC.BTN_1_TYPE, TDC.BTN_1_TITLE, TDC.BTN_1_CONTEXT, TDC.BTN_2_TYPE, TDC.BTN_2_TITLE, TDC.BTN_2_CONTEXT, ' + 
                 ' TDC.BTN_3_TYPE, TDC.BTN_3_TITLE, TDC.BTN_3_CONTEXT, TDC.BTN_4_TYPE, TDC.BTN_4_TITLE, TDC.BTN_4_CONTEXT ' + 
                 ' FROM TBL_DLG AS TD, TBL_DLG_CARD AS TDC ' + 
                 ' WHERE TD.DLG_ID=\'' + strDlgId + '\' AND TD.DLG_ID = TDC.DLG_ID ';
             var selectDlgMedia = 'SELECT ISNULL(MAX(DLG_ID)+1,1) AS DLG_ID FROM TBL_DLG';
 
-            if(strDlgType == '2'){
-
-            }else if (strDlgType == '3'){
-                console.log('selectDlgCard : ' +  selectDlgCard);
-
-                let result1 = await pool.request().query(selectDlgCard);
-                let rows = result1.recordset;
-
-                //console.log('selectDlgCard - rows : '+rows);
-                //console.dir(rows);
-
-                for (var key in rows[0]) {
-                    console.log("*** key : " + key + " value : " + rows[0][key]);
+            if(strDlgType == '2') {
+                console.log('* selectDlgText : ' +  selectDlgText);
+                let result1 = await pool.request().query(selectDlgText);
+                let rows = result1.recordset[0];
+                for (var key in rows) {
+                    console.log("key : " + key + " value : " + rows[key]);
                 }
+                res.send({ "rows": rows});
+            } else if (strDlgType == '3') {
+                console.log('* selectDlgCard : ' +  selectDlgCard);
+                let result1 = await pool.request().query(selectDlgCard);
+                let rows = result1.recordset[0];
+                for (var key in rows) {
+                    console.log("key : " + key + " value : " + rows[key]);
+                }
+                res.send({ "rows": rows});
+            } else if (strDlgType == '4') {
 
-                res.send({ "rows": rows[0] });
+            } else {
+            
             }
 
         }catch (err) {

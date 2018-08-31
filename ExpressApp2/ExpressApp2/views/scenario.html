@@ -562,7 +562,7 @@
                                 </div>
                                 <div class="scenario-form-group col-md-6" style="padding:0">
                                     <label><%= __('Large_group') %><span class="nec_ico">*</span></label>
-                                    <select class="form-control" id="largeGroup" name="largeGroup">
+                                    <select class="form-control" id="iptLargeGroup" name="largeGroup">
                                         <option value="">선택</option>
                                     </select>
                                 </div>
@@ -572,7 +572,7 @@
                                     </label>
                                     <button type="button" class="btn btn-block btn-default btn-xs fr newMidBtn"><%= __('NEW') %></button>
                                     <button type="button" class="btn btn-default btn-xs fr cancelMidBtn" style="display: none;"><%= __('CANCEL') %></button>
-                                    <select class="form-control" id="middleGroup" name="middleGroup">
+                                    <select class="form-control" id="iptMiddleGroup" name="middleGroup">
                                         <option value="">선택</option>
                                     </select>
                                     <input type="text" name="middleGroup" class="form-control" style="display: none;" disabled>
@@ -580,7 +580,7 @@
                                 <div class="clear-both"></div>
                                 <div class="scenario-form-group">
                                     <label><%= __('explanation') %></label>
-                                    <textarea class="form-control" name="description" id="description" rows="2" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'></textarea>
+                                    <textarea class="form-control" name="description" id="iptDescription" rows="2" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'></textarea>
                                 </div>
                             </form>
                             <div id="commonLayout" class="dialog_s">
@@ -595,19 +595,18 @@
                                                 <option value="4"><%= __('MEDIA_TYPE') %></option>
                                             </select>
                                             <div class="clear-both"></div>
-
+                                            <!--
                                             <label><%= __('CARD_DIVISION') %></label>
                                             <select class="form-control" name="dlgCardValue">
                                                 <option value=""><%= __('CARD_DIVISION_DEFAULT') %></option>
                                                 <option value="img"><%= __('CARD_DIVISION_IMG') %></option>
                                                 <option value="play"><%= __('CARD_DIVISION_PLAY') %></option>
                                             </select>
+                                            -->
                                             <div class="inputArea"></div>
                                         </form>
                                     </div>
                                 </div>
-
-                                
 
                                 <!-- 미디어 타입 -->
                                 <div class="mediaLayout dpN" id="dialog3">
