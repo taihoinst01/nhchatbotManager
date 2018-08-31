@@ -1,7 +1,7 @@
 // JavaScript source code
 var language;
 $(function () {
-    console.log("utterance test");
+    console.log("scenario test");
     $.ajax({
         url: '/jsLang',
         dataType: 'json',
@@ -155,6 +155,7 @@ $(document).on('change', 'select[name=dlgType]', function (e) {
         $('.insertBtnArea').addClass('dpN');
         $('.dlg_input_sub_title').addClass('dpN');
         $('.dlg_input_img').addClass('dpN');
+        $('.dlg_card_division').addClass('dpN');
         $('.previewSubTitle').addClass('dpN');
         $('.previewImg').addClass("dpN");
         $('.previewImg').attr('src', '');
@@ -165,12 +166,14 @@ $(document).on('change', 'select[name=dlgType]', function (e) {
         $('.insertBtnArea').removeClass('dpN');
         $('.dlg_input_sub_title').removeClass('dpN');
         $('.dlg_input_img').removeClass('dpN');
+        $('.dlg_card_division').removeClass('dpN');
         $('.previewSubTitle').removeClass('dpN');
         $('.previewImg').attr('src', '');
     } else if (cardType == '4') {
         $('.insertBtnArea').removeClass('dpN');
         $('.dlg_input_sub_title').removeClass('dpN');
         $('.dlg_input_img').removeClass('dpN');
+        $('.dlg_card_division').removeClass('dpN');
         $('.previewSubTitle').removeClass('dpN');
         $('.previewImg').attr('src', '');
     }

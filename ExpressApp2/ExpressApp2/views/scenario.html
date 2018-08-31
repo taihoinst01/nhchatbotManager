@@ -404,12 +404,21 @@
                                             </select>
                                             <div class="clear-both"></div>
 
-                                            <label><%= __('CARD_DIVISION') %></label>
+                                            <!--<label><%= __('CARD_DIVISION') %></label>
                                             <select class="form-control" name="dlgCardValue">
                                                 <option value=""><%= __('CARD_DIVISION_DEFAULT') %></option>
                                                 <option value="img"><%= __('CARD_DIVISION_IMG') %></option>
                                                 <option value="play"><%= __('CARD_DIVISION_PLAY') %></option>
-                                            </select>
+                                            </select>-->
+
+                                            <div class="dlg_card_division dpN">
+                                                <label><%= __('CARD_DIVISION') %></label>
+                                                <select class="form-control" name="dlgCardDivision">
+                                                    <option value=""><%= __('CARD_DIVISION_DEFAULT') %></option>
+                                                    <option value="img"><%= __('CARD_DIVISION_IMG') %></option>
+                                                    <option value="play"><%= __('CARD_DIVISION_PLAY') %></option>
+                                                </select>
+                                            </div>
                                             <div class="inputArea"></div>
                                         </form>
                                     </div>
@@ -596,12 +605,15 @@
                                             </select>
                                             <div class="clear-both"></div>
 
-                                            <label><%= __('CARD_DIVISION') %></label>
-                                            <select class="form-control" name="dlgCardValue">
-                                                <option value=""><%= __('CARD_DIVISION_DEFAULT') %></option>
-                                                <option value="img"><%= __('CARD_DIVISION_IMG') %></option>
-                                                <option value="play"><%= __('CARD_DIVISION_PLAY') %></option>
-                                            </select>
+                                            <!--<div class="card_division dpN">
+                                                <label><%= __('CARD_DIVISION') %></label>
+                                                <select class="form-control" name="dlgCardValue">
+                                                    <option value=""><%= __('CARD_DIVISION_DEFAULT') %></option>
+                                                    <option value="img"><%= __('CARD_DIVISION_IMG') %></option>
+                                                    <option value="play"><%= __('CARD_DIVISION_PLAY') %></option>
+                                                </select>
+                                            </div>-->
+                                            
                                             <div class="inputArea"></div>
                                         </form>
                                     </div>
