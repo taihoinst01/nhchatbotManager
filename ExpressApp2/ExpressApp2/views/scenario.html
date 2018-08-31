@@ -11,6 +11,7 @@
     <%include  ./common/commonLib.html%>
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
+    <link rel='stylesheet' href='/css/ext/plugin/jquery_ui/jquery-ui.css' />
     <link rel='stylesheet' href='/css/scenario.css' />
     <link rel='stylesheet' href='/css/botchat.css' />
 
@@ -404,12 +405,21 @@
                                             </select>
                                             <div class="clear-both"></div>
 
-                                            <label><%= __('CARD_DIVISION') %></label>
+                                            <!--<label><%= __('CARD_DIVISION') %></label>
                                             <select class="form-control" name="dlgCardValue">
                                                 <option value=""><%= __('CARD_DIVISION_DEFAULT') %></option>
                                                 <option value="img"><%= __('CARD_DIVISION_IMG') %></option>
                                                 <option value="play"><%= __('CARD_DIVISION_PLAY') %></option>
-                                            </select>
+                                            </select>-->
+
+                                            <div class="dlg_card_division dpN">
+                                                <label><%= __('CARD_DIVISION') %></label>
+                                                <select class="form-control" name="dlgCardDivision">
+                                                    <option value=""><%= __('CARD_DIVISION_DEFAULT') %></option>
+                                                    <option value="img"><%= __('CARD_DIVISION_IMG') %></option>
+                                                    <option value="play"><%= __('CARD_DIVISION_PLAY') %></option>
+                                                </select>
+                                            </div>
                                             <div class="inputArea"></div>
                                         </form>
                                     </div>
@@ -595,14 +605,16 @@
                                                 <option value="4"><%= __('MEDIA_TYPE') %></option>
                                             </select>
                                             <div class="clear-both"></div>
-                                            <!--
-                                            <label><%= __('CARD_DIVISION') %></label>
-                                            <select class="form-control" name="dlgCardValue">
-                                                <option value=""><%= __('CARD_DIVISION_DEFAULT') %></option>
-                                                <option value="img"><%= __('CARD_DIVISION_IMG') %></option>
-                                                <option value="play"><%= __('CARD_DIVISION_PLAY') %></option>
-                                            </select>
-                                            -->
+
+                                            <!--<div class="card_division dpN">
+                                                <label><%= __('CARD_DIVISION') %></label>
+                                                <select class="form-control" name="dlgCardValue">
+                                                    <option value=""><%= __('CARD_DIVISION_DEFAULT') %></option>
+                                                    <option value="img"><%= __('CARD_DIVISION_IMG') %></option>
+                                                    <option value="play"><%= __('CARD_DIVISION_PLAY') %></option>
+                                                </select>
+                                            </div>-->
+                                            
                                             <div class="inputArea"></div>
                                         </form>
                                     </div>
