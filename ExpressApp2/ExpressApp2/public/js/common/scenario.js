@@ -108,15 +108,16 @@ function openModalBox(target) {
 function openModalBoxEdit(strDlgId, strDlgType) {
     alert('openModalBoxEdit() strDlgId:'+strDlgId+' | strDlgType:'+strDlgType);
     
-    
     //  시나리오명
     $("#iptScenarioName").val($('#spanScenarioNm').text());     
+    //  대그룹,중그룹 init
+    $("#iptMiddleGroup").ajaxComplete(function () {
+        getGroupSelectBox();
+    });
     //  대화상자 타입
     $("#dlgType").val(strDlgType).prop("selected", true);
-    //  대그룹,중그룹 init
-    getGroupSelectBox();
     
-
+    
     //inputAreaAdd();
     $.ajax({
         url: '/learning/getScenarioDlg',
@@ -125,16 +126,12 @@ function openModalBoxEdit(strDlgId, strDlgType) {
         type: 'POST',
         isloading: true,
         success: function(data) {
-            console.log(data.rows);
+            //console.log(data.rows);
             if(data.rows){
                 
                 var dlgInfo = data.rows;    //alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE);                
-                //var largeGroup = $('#appInsertForm').find('#largeGroup')[0].value;
-                //alert('largeGroup:'+largeGroup);
                 
                 //  대그룹,중그룹 출력.. (dlgInfo.GROUPL, dlgInfo.GROUPM)
-                alert('대그룹:'+dlgInfo.GROUPL+' | 중그룹:'+dlgInfo.GROUPM);
-                var strGroupM = dlgInfo.GROUPM;
                 $("#iptLargeGroup").val(dlgInfo.GROUPL).prop("selected", true);
                 $("#iptMiddleGroup").val(dlgInfo.GROUPM).prop("selected", true);
                 
@@ -185,6 +182,9 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                     "</div>";
             
                 $(".inputArea > div").add(htmlInputArea).appendTo(".inputArea");
+
+
+                
 
             }else{
                 alert('fail');
@@ -573,18 +573,6 @@ function createDialog(){
     
     if(exit) return;
 
-    /*
-    $('.insertForm input[name=imgUrl]').each(function(index) {
-        if ($(this).val().trim() === "") {
-            alert(language.ImageURL_must_be_entered);
-            exit = true;
-            return false;
-        }
-    });
-   */
-
-    if(exit) return;
-
     $('.insertForm input[name=mediaImgUrl]').each(function(index) {
         if ($(this).val().trim() === "") {
             alert(language.ImageURL_must_be_entered);
@@ -733,6 +721,120 @@ function createDialog(){
             $('.createDlgModalClose').click();
         }
     });
+}
+
+function editDialog(){  //  대화상자 수정
+    
+    //var idx = $('form[name=dialogLayout]').length;
+    var array = [];
+    var exit = false;
+
+    $('.editForm input[name=iptDialogTitle]').each(function(index) {    //  대화상자 제목
+        alert('editDialog : iptDialogTitle chk' + $(this).val() + ">>>");
+        if ($(this).val().trim() === "") {
+            alert(language.You_must_enter_a_Dialog_Title);
+            exit = true;
+            return false;
+        }
+    });    
+    if(exit) return;
+
+    $('.editForm input[name=dialogText]').each(function(index) {    //  대화상자 내용
+        alert('editDialog : dialogText chk' + $(this).val() + ">>>");
+        if ($(this).val().trim() === "") {
+            alert(language.You_must_enter_the_dialog_text);
+            exit = true;
+            return false;
+        }
+    });    
+    if(exit) return;
+
+    for(var i = 0 ; i < idx ; i++) {
+        var tmp = $("form[name=dialogLayout]").eq(i).serializeArray();
+        var object  = {};
+        var carouselArr = [];
+        var objectCarousel = {};
+        if (tmp[0].value === "3") {
+            var btnTypeCount = 1;
+            var cButtonContentCount = 1;
+            var cButtonNameCount = 1;
+            for (var j = 1; j < tmp.length; j++) {
+                if(tmp[j].name == 'btnType') {
+                    tmp[j].name = 'btn'+ (btnTypeCount++) +'Type';
+                    if(btnTypeCount == 5) {
+                        btnTypeCount = 1;
+                    }
+                }
+                if(tmp[j].name == 'cButtonContent') {
+                    tmp[j].name = 'cButtonContent'+ (cButtonContentCount++);
+                    if(cButtonContentCount == 5) {
+                        cButtonContentCount = 1;
+                    }
+                }
+                if(tmp[j].name == 'cButtonName') {
+                    tmp[j].name = 'cButtonName'+ (cButtonNameCount++);
+                    if(cButtonNameCount == 5) {
+                        cButtonNameCount = 1;
+                    }
+                }
+                
+                if (typeof objectCarousel[tmp[j].name] !== "undefined" ) {
+                    carouselArr.push(objectCarousel);
+                    objectCarousel = {};
+                    btnTypeCount = 1;
+                    cButtonContentCount = 1;
+                    cButtonNameCount = 1;
+                } 
+
+                if(j === tmp.length-1){
+                    object[tmp[0].name] = tmp[0].value;
+                    objectCarousel[tmp[j].name] = tmp[j].value;    
+
+                    carouselArr.push(objectCarousel);
+                    objectCarousel = {};
+                    break;
+                }
+                object[tmp[0].name] = tmp[0].value;
+                objectCarousel[tmp[j].name] = tmp[j].value;
+            }
+            //carouselArr.push(objectCarousel);
+            object['carouselArr'] = carouselArr;
+        } else if (tmp[0].value === "4") {
+
+            var btnTypeCount = 1;
+            var mButtonContentCount = 1;
+            var mButtonNameCount = 1;
+
+            for (var j = 0; j < tmp.length; j++) {
+
+                if(tmp[j].name == 'btnType') {
+                    tmp[j].name = 'btn'+ (btnTypeCount++) +'Type';
+                }
+                if(tmp[j].name == 'mButtonContent') {
+                    tmp[j].name = 'mButtonContent'+ (mButtonContentCount++);
+    
+                }
+                if(tmp[j].name == 'mButtonName') {
+                    tmp[j].name = 'mButtonName'+ (mButtonNameCount++);
+                }
+
+                object[tmp[j].name] = tmp[j].value;
+            }
+            
+        } else {
+            for (var j = 0; j < tmp.length; j++) {
+                object[tmp[j].name] = tmp[j].value;
+            }
+        }
+
+        
+        
+        array[i] = JSON.stringify(object);//JSON.stringify(tmp);//tmp.substring(1, tmp.length-2);
+    }
+    //JSON.stringify($("form[name=appInsertForm]").serializeObject());
+    array[array.length] = JSON.stringify($("form[name=appInsertForm]").serializeObject());//JSON.stringify($("form[name=appInsertForm]"));
+
+
 }
 
 var botChatNum = 1; 
@@ -913,43 +1015,6 @@ function prevBtn(botChatNum, e) {
 }
 
 
-//checkbox ���ý� �̺�Ʈ $(this).attr("checked")
-/*
-$(document).on('ifChecked', '.icheckbox_flat-green',function(event){
-    
-    var checkedVal = false;
-    var checkedVal2 = false;
-
-    if ($(this).hasClass("checked") == false) {
-        $(this).iCheck('check');
-    } else {
-        $(this).iCheck('uncheck');
-    }
-    
-
-    $("input[name=tableCheckBox]").each(function() {
-        if ($(this).parent().hasClass("checked") != false) {
-            checkedVal = true;
-        } 
-    });
-    //changeBtnAble('delete', checkedVal);
-
-    $("input[name=dlgChk]").each(function() {
-        if ($(this).parent().hasClass("checked") != false) {
-            checkedVal2 = true;
-        } 
-    });
-
-    if(checkedVal == true && checkedVal2 == true) {
-        changeBtnAble('learn', true);
-    } else {
-        changeBtnAble('learn', false);
-    }
-
-});
-
-*/
-
 function utterInput(queryText) {
     var queryTextArr = [];
     if (typeof queryText === 'string') {
@@ -1046,15 +1111,12 @@ function utterInput(queryText) {
 }
 
 $(document).on('ifChecked','input[name=tableAllChk]', function() {  
-    
     $('input[name=tableCheckBox]').parent().iCheck('check');
 });
 
-$(document).on('ifUnchecked','input[name=tableAllChk]', function() {  
-   
+$(document).on('ifUnchecked','input[name=tableAllChk]', function() { 
     $('input[name=tableCheckBox]').parent().iCheck('uncheck');
 });
-
 
 function utterHighlight(entities, utter) {
     var result = utter;
@@ -1130,9 +1192,7 @@ function searchDialog() {
         type: 'POST',
         data: formData,
         success: function(result) {
-
             var inputUttrHtml = '';
-
             var row = [];
             var arrayNum = 0;
             for (var k = 0; k < result['list'].length; k++) {
@@ -1305,7 +1365,6 @@ $(document).on('ifChecked', 'input[name=searchDlgChk]', function(event) {
 })
 
 function selectDialog() {
-
     var successFlagg = false;
     $("input[name=searchDlgChk]").each(function(n) {
         var chk = $(this).parent().hasClass('checked');
@@ -1322,62 +1381,11 @@ function selectDialog() {
     });
 
     if(successFlagg == false) {
-
         alert(language.Please_select_a_dialogue);
     }
 
 }
 
-/*
-function searchSaveDialog() {
-
-    
-    var entity = $('input[name=entity]').val();
-
-    var rowNum;
-    $("input[name=chksearch]").each(function(n) {
-        var chk = $("input[name=chksearch]").parent().eq(n).attr('checked');
-        if(chk == "checked") {
-            rowNum = n;
-        }
-    });
-
-    var dlgId = [];
-
-    $("input[name=chksearch]").parent().parent().eq(rowNum).next().find('input[name=searchDlgId]').each(function(n){
-        dlgId[n] = $(this).val();
-    });
-
-    $.ajax({
-        url: '/learning/learnUtterAjax',
-        dataType: 'json',
-        type: 'POST',
-        data: {'entity':entity, 'dlgId':dlgId},
-        success: function(result) {
-            alert('�߰� �Ǿ����ϴ�.');
-            $("#searchDialogCancel").click();
-        }
-    });
-    
-
-
-}
-*/
-/*
-$(document).on('click', '.carouseBtn',function(e){
-    //e.stopPropagation();
-    //e.preventDefault();
-    //var index = 0;
-    $(this).parent().parent().find('select').each(function(index) {
-        if ( $(this).css("display") === 'none') {
-            $(this).show().removeAttr('disabled');
-            $(this).parent().next().find('input').eq(index).show().removeAttr('disabled');;
-            $(this).parent().next().next().find('input').eq(index).show().removeAttr('disabled');;
-            return false;   
-        }
-    });
-});
-*/
 
 //���̾�α׻������ - ��ư�߰�
 $(document).on('click', '.carouseBtn',function(e){
@@ -1703,6 +1711,7 @@ $(document).on('click', '.newMidBtn, .cancelMidBtn', function() {
 
 
 function getGroupSelectBox() {
+    //$("#iptMiddleGroup > option").remove();
     $.ajax({
         type: 'POST',
         url: '/learning/getGroupSelectBox',
@@ -1710,25 +1719,20 @@ function getGroupSelectBox() {
         success: function(data) {
             var groupL = data.groupL;
             var groupM = data.groupM;
-
             var groupHtml = "";
-
-            for(var i = 0; i < groupL.length; i++ ) {
+            for(var i = 0; i < groupL.length; i++ ) {   //  대그룹
                 groupHtml += '<option value="' + groupL[i].GROUPL + '">' + groupL[i].GROUPL + '</option>';
-                //alert('groupL[i].GROUPL:'+groupL[i].GROUPL);
             }
-
-            $("#largeGroup").html(groupHtml);
+            $("#largeGroup").html(groupHtml);   
             $("#iptLargeGroup").html(groupHtml);
 
             groupHtml = "";
-            for(var i = 0; i < groupM.length; i++ ) {
+            for(var i = 0; i < groupM.length; i++ ) {   //  중그룹
                 groupHtml += '<option value="' + groupM[i].GROUPM + '">' + groupM[i].GROUPM + '</option>';
             }
-
-            $("#middleGroup").html(groupHtml);
-            $("#iptMiddleGroup").html(groupHtml);
-
+            $("#middleGroup").html(groupHtml);  // 중그룹 목록 생성
+            $("#iptMiddleGroup").html(groupHtml);   // 중그룹 목록 수정
+            
         }
     });
 }
@@ -1809,10 +1813,8 @@ function selectScenarioList() {     //  시나리오 목록
     $.ajax({
         url: '/learning/selectScenarioList',
         dataType: 'json',
-        //data: {'searchInfo': searchInfo, 'luisId': luisId},
         type: 'POST',
         isloading: true,
-        //data: {'selectId':selectId,'selectValue1':str1,'selectValue2':str2},
         success: function(data) {
             if(data.rows){
                 //alert('data.rows');
@@ -1842,22 +1844,16 @@ function getScenarioDialogs(strScenarioName){
         type: 'POST',
         isloading: true,
         success: function(data) {
-            //alert('getScenarioDialogs SUCCESS!');
-             
+            //alert('getScenarioDialogs SUCCESS!');             
             if(data.list){
-                //alert('data.list'+data.list);
                 console.log(data.list);
-                //alert('data.list'+data.list);
-                 
                 var dialogLists = data.list;
                 var strDialogLists = "";
                 var j = 1;
                 var firstDlg = 0;
                 for(var i=0; i<dialogLists.length; i++){
-
                     //strDialogLists += '<TR><TD>'+j+'</TD><TD><A href="#" onclick="">'+dialogLists[i].CARD_TITLE+'</A></TD><TD>'+dialogLists[i].CARD_TEXT+'</TD></TR>';
                     //alert('CARD_TITLE : '+dialogLists[i].CARD_TITLE);
-
                     //DEPTH 구분
                     if (firstDlg != parseInt(data.list[i].DLG_DEPTH)) {
                         $('#divScenarioDialogs > div').add('<div class="row"></div>').appendTo('#divScenarioDialogs');
@@ -1898,7 +1894,7 @@ function getScenarioDialogs(strScenarioName){
                             '  <div class="wc-message-content">' +
                             '      <svg class="wc-message-callout"></svg>' +
                             '      <div>' +
-                            '          <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID + ',' + dialogLists[i].DLG_TYPE + ')+">' +
+                            '          <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID + ',' + dialogLists[i].DLG_TYPE + ');">' +
                             '              <div class="textMent">' +
                             '                  <img src="' + dialogLists[i].IMG_URL + '">' +
                             '                  <h1 class="scenario_dlg_Title">' + dialogLists[i].CARD_TITLE + '</h1>' +

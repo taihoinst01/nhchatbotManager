@@ -564,7 +564,7 @@
                     <div class="modal_con">
                         <!-- 그룹 정보 -->
                         <div class="col-md-6" style="padding:0">
-                            <form name="appInsertForm" id="appInsertForm">
+                            <form name="appEditForm" id="appEditForm">
                                 <h5><span class="col01 fa fa-chevron-right"></span> <%= __('GROUP_INFORMATION') %></h5>
                                 <div class="scenario-form-group col-md-12" style="padding:0">
                                     <label><%= __('SCENARIO_NAME') %><span class="nec_ico">*</span></label>
@@ -583,7 +583,7 @@
                                     <button type="button" class="btn btn-block btn-default btn-xs fr newMidBtn"><%= __('NEW') %></button>
                                     <button type="button" class="btn btn-default btn-xs fr cancelMidBtn" style="display: none;"><%= __('CANCEL') %></button>
                                     <select class="form-control" id="iptMiddleGroup" name="middleGroup">
-                                        <option value="">선택</option>
+                                        
                                     </select>
                                     <input type="text" name="middleGroup" class="form-control" style="display: none;" disabled>
                                 </div>
@@ -594,27 +594,16 @@
                                 </div>
                             </form>
                             <div id="commonLayout" class="dialog_s">
-                                <div class="insertForm">
+                                <div class="editForm">
                                     <div class="scenario-form-group">
                                         <form name="dialogLayout" id="dialogLayout">
-
                                             <label><%= __('DIALOG_BOX_TYPE') %></label>
                                             <select class="form-control" name="dlgType" id="dlgType">
                                                 <option value="2"><%= __('TEXT_TYPE') %></option>
                                                 <option value="3"><%= __('CARD_TYPE') %></option>
                                                 <option value="4"><%= __('MEDIA_TYPE') %></option>
                                             </select>
-                                            <div class="clear-both"></div>
-
-                                            <!--<div class="card_division dpN">
-                                                <label><%= __('CARD_DIVISION') %></label>
-                                                <select class="form-control" name="dlgCardValue">
-                                                    <option value=""><%= __('CARD_DIVISION_DEFAULT') %></option>
-                                                    <option value="img"><%= __('CARD_DIVISION_IMG') %></option>
-                                                    <option value="play"><%= __('CARD_DIVISION_PLAY') %></option>
-                                                </select>
-                                            </div>-->
-                                            
+                                            <div class="clear-both"></div>                                            
                                             <div class="inputArea"></div>
                                         </form>
                                     </div>
@@ -734,7 +723,7 @@
                         <span class="nec_ico">*</span> <%= __('IS_REQUIRED') %>
                     </div>
                     <div class="btn_wrap">
-                        <button type="button" class="btn btn_01" onclick="createDialog();"><%= __('CREAT') %></button>
+                        <button type="button" class="btn btn_01" onclick="editDialog();"><%= __('EDIT') %></button>
                         <button type="button" class="btn btn-default createDlgModalClose" data-dismiss="modal"><%= __('CANCEL') %></button>
                     </div>
                 </div>
