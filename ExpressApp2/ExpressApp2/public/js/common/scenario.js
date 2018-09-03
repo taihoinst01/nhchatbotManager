@@ -110,17 +110,16 @@ function openModalBox(target) {
 function openModalBoxEdit(strDlgId, strDlgType) {
     alert('openModalBoxEdit() strDlgId:'+strDlgId+' | strDlgType:'+strDlgType);
     
-    
     //  시나리오명
     $("#iptScenarioName").val($('#spanScenarioNm').text());     
-    //  대화상자 타입
-    $("#dlgType").val(strDlgType).prop("selected", true);
     //  대그룹,중그룹 init
     $("#iptMiddleGroup").ajaxComplete(function () {
         getGroupSelectBox();
     });
+    //  대화상자 타입
+    $("#dlgType").val(strDlgType).prop("selected", true);
     
-
+    
     //inputAreaAdd();
     $.ajax({
         url: '/learning/getScenarioDlg',
@@ -133,8 +132,6 @@ function openModalBoxEdit(strDlgId, strDlgType) {
             if(data.rows){
                 
                 var dlgInfo = data.rows;    //alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE);                
-                //var largeGroup = $('#appInsertForm').find('#largeGroup')[0].value;
-                //alert('largeGroup:'+largeGroup);
                 
                 //  대그룹,중그룹 출력.. (dlgInfo.GROUPL, dlgInfo.GROUPM)
                 $("#iptLargeGroup").val(dlgInfo.GROUPL).prop("selected", true);
@@ -187,6 +184,9 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                     "</div>";
             
                 $(".inputArea > div").add(htmlInputArea).appendTo(".inputArea");
+
+
+                
 
             }else{
                 alert('fail');
@@ -1722,18 +1722,18 @@ function getGroupSelectBox() {
             var groupL = data.groupL;
             var groupM = data.groupM;
             var groupHtml = "";
-            for(var i = 0; i < groupL.length; i++ ) {
+            for(var i = 0; i < groupL.length; i++ ) {   //  대그룹
                 groupHtml += '<option value="' + groupL[i].GROUPL + '">' + groupL[i].GROUPL + '</option>';
             }
-            $("#largeGroup").html(groupHtml);
+            $("#largeGroup").html(groupHtml);   
             $("#iptLargeGroup").html(groupHtml);
 
             groupHtml = "";
-            for(var i = 0; i < groupM.length; i++ ) {
+            for(var i = 0; i < groupM.length; i++ ) {   //  중그룹
                 groupHtml += '<option value="' + groupM[i].GROUPM + '">' + groupM[i].GROUPM + '</option>';
             }
-            $("#middleGroup").html(groupHtml);            
-            $("#iptMiddleGroup").html(groupHtml);
+            $("#middleGroup").html(groupHtml);  // 중그룹 목록 생성
+            $("#iptMiddleGroup").html(groupHtml);   // 중그룹 목록 수정
             
         }
     });
