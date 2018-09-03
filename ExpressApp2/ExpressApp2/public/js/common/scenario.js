@@ -10,8 +10,6 @@ $(function () {
             language= data.lang;
         }
     });
-
-    $( ".wc-message" ).draggable();
 });
 
 $(document).ready(function(){
@@ -1969,7 +1967,12 @@ function getScenarioDialogs(strScenarioName){
             
         }
     });
+    //var canvas = document.getElementById('divScenarioDialogs');
+    //var context = canvas.getContext("2d");
     
+    //context.moveTo(10, 10);
+    //context.lineTo(20, 50);
+    //context.stroke();
 }
 
 
