@@ -116,7 +116,9 @@ function openModalBoxEdit(strDlgId, strDlgType) {
     //  대화상자 타입
     $("#dlgType").val(strDlgType).prop("selected", true);
     //  대그룹,중그룹 init
-    getGroupSelectBox();
+    $("#iptMiddleGroup").ajaxComplete(function () {
+        getGroupSelectBox();
+    });
     
 
     //inputAreaAdd();
@@ -127,7 +129,7 @@ function openModalBoxEdit(strDlgId, strDlgType) {
         type: 'POST',
         isloading: true,
         success: function(data) {
-            console.log(data.rows);
+            //console.log(data.rows);
             if(data.rows){
                 
                 var dlgInfo = data.rows;    //alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE);                
@@ -135,8 +137,6 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                 //alert('largeGroup:'+largeGroup);
                 
                 //  대그룹,중그룹 출력.. (dlgInfo.GROUPL, dlgInfo.GROUPM)
-                alert('대그룹:'+dlgInfo.GROUPL+' | 중그룹:'+dlgInfo.GROUPM);
-                var strGroupM = dlgInfo.GROUPM;
                 $("#iptLargeGroup").val(dlgInfo.GROUPL).prop("selected", true);
                 $("#iptMiddleGroup").val(dlgInfo.GROUPM).prop("selected", true);
                 
@@ -575,18 +575,6 @@ function createDialog(){
     
     if(exit) return;
 
-    /*
-    $('.insertForm input[name=imgUrl]').each(function(index) {
-        if ($(this).val().trim() === "") {
-            alert(language.ImageURL_must_be_entered);
-            exit = true;
-            return false;
-        }
-    });
-   */
-
-    if(exit) return;
-
     $('.insertForm input[name=mediaImgUrl]').each(function(index) {
         if ($(this).val().trim() === "") {
             alert(language.ImageURL_must_be_entered);
@@ -735,6 +723,37 @@ function createDialog(){
             $('.createDlgModalClose').click();
         }
     });
+}
+
+function editDialog(){  //  대화상자 수정
+    alert('editDialog()');
+    
+    //var idx = $('form[name=dialogLayout]').length;
+    var array = [];
+    var exit = false;
+
+    $('.editForm input[name=iptDialogTitle]').each(function(index) {    //  대화상자 제목
+        alert('editDialog : iptDialogTitle chk' + $(this).val() + ">>>");
+        if ($(this).val().trim() === "") {
+            alert(language.You_must_enter_a_Dialog_Title);
+            exit = true;
+            return false;
+        }
+    });    
+    if(exit) return;
+
+    $('.editForm input[name=dialogText]').each(function(index) {    //  대화상자 내용
+        alert('editDialog : dialogText chk' + $(this).val() + ">>>");
+        if ($(this).val().trim() === "") {
+            alert(language.You_must_enter_the_dialog_text);
+            exit = true;
+            return false;
+        }
+    });    
+    if(exit) return;
+
+
+
 }
 
 var botChatNum = 1; 
@@ -1705,6 +1724,7 @@ $(document).on('click', '.newMidBtn, .cancelMidBtn', function() {
 
 
 function getGroupSelectBox() {
+    //$("#iptMiddleGroup > option").remove();
     $.ajax({
         type: 'POST',
         url: '/learning/getGroupSelectBox',
@@ -1712,14 +1732,11 @@ function getGroupSelectBox() {
         success: function(data) {
             var groupL = data.groupL;
             var groupM = data.groupM;
-
             var groupHtml = "";
-
             for(var i = 0; i < groupL.length; i++ ) {
                 groupHtml += '<option value="' + groupL[i].GROUPL + '">' + groupL[i].GROUPL + '</option>';
                 //alert('groupL[i].GROUPL:'+groupL[i].GROUPL);
             }
-
             $("#largeGroup").html(groupHtml);
             $("#iptLargeGroup").html(groupHtml);
 
@@ -1727,9 +1744,13 @@ function getGroupSelectBox() {
             for(var i = 0; i < groupM.length; i++ ) {
                 groupHtml += '<option value="' + groupM[i].GROUPM + '">' + groupM[i].GROUPM + '</option>';
             }
-
+            //$("#iptMiddleGroup").empty();
             $("#middleGroup").html(groupHtml);
-            $("#iptMiddleGroup").html(groupHtml);
+            //$("#iptMiddleGroup").html(groupHtml);
+            //$("#iptMiddleGroup").html('');
+            //$("#iptMiddleGroup").find('option').remove().end().append(groupHtml);
+            
+            $("#iptMiddleGroup").append(groupHtml);
 
         }
     });
@@ -1900,7 +1921,7 @@ function getScenarioDialogs(strScenarioName){
                             '  <div class="wc-message-content">' +
                             '      <svg class="wc-message-callout"></svg>' +
                             '      <div>' +
-                            '          <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID + ',' + dialogLists[i].DLG_TYPE + ')+">' +
+                            '          <div class="format-markdown textTypeView dpB" data-toggle="modal" data-target="#myModalEdit" onclick="openModalBoxEdit(' + dialogLists[i].DLG_ID + ',' + dialogLists[i].DLG_TYPE + ');">' +
                             '              <div class="textMent">' +
                             '                  <img src="' + dialogLists[i].IMG_URL + '">' +
                             '                  <h1 class="scenario_dlg_Title">' + dialogLists[i].CARD_TITLE + '</h1>' +
