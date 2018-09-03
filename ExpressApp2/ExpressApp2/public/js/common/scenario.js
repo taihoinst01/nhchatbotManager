@@ -126,7 +126,7 @@ function openModalBoxEdit(strDlgId, strDlgType) {
         type: 'POST',
         isloading: true,
         success: function(data) {
-            //console.log(data.rows);
+            console.log(data.rows);
             if(data.rows){
                 
                 var dlgInfo = data.rows;    //alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE);                
@@ -138,53 +138,131 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                 //  설명
                 $("#iptDescription").val(dlgInfo.DLG_DESCRIPTION);
                 
-                $(".inputArea > div").remove();
+                $(".editArea > div").remove();
                 var htmlInputArea = "";
                 htmlInputArea = "<div class='textLayout'>" +
                         // 텍스트
-                        "<div class='scenario-form-group dlg_input_title'>" +
+                        "<div class='scenario-form-group dlg_edit_title'>" +
                             "<label>" + language.DIALOG_BOX_TITLE + "<span class='nec_ico'>*</span></label>" +
                             "<input type='text' name='dialogTitle' id='iptDialogTitle' value='"+dlgInfo.CARD_TITLE+"' class='form-control' onkeyup='writeDialogTitle(this);' spellcheck='false' autocomplete='off'>" +
                         "</div>" +
-                        "<div class='scenario-form-group dlg_input_sub_title dpN'>" +
+                        "<div class='scenario-form-group dlg_edit_sub_title dpN'>" +
                             "<label>" + language.DIALOG_BOX_SUBTITLE + "<span class='nec_ico'>*</span></label>" +
-                            "<input type='text' name='dialogSubTitle' id='iptDialogSubTitle' class='form-control' onkeyup='writeDialogSubTitle(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+                            "<input type='text' name='dialogSubTitle' id='iptDialogSubTitle' value='" + dlgInfo.CARD_SUBTITLE +"' class='form-control' onkeyup='writeDialogSubTitle(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
                         "</div>" +
-                        "<div class='scenario-form-group dlg_input_text'>" +
+                        "<div class='scenario-form-group dlg_edit_text'>" +
                             "<label>" + language.DIALOG_BOX_CONTENTS + "<span class='nec_ico'>*</span></label>" +
                             "<input type='text' name='dialogText' id='iptDialogText' value='"+dlgInfo.CARD_TEXT+"' class='form-control' onkeyup='writeDialog(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
                         "</div>" +
-                        "<div class='scenario-form-group dlg_input_img dpN'>" +
-                            "<label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label><button class='dlg_input_img_change'>적용</button>" +
+                        "<div class='scenario-form-group dlg_edit_img dpN'>" +
+                            "<label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label><button class='dlg_edit_img_change'>적용</button>" +
                             "<div>sample URL : /images/ico_car.png </div>" +
-                            "<input type='text' name='imgUrl' id='iptImgUrl' class='form-control' onkeyup='writeCarouselImg(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+                            "<input type='text' name='imgUrl' id='iptImgUrl' value='" + dlgInfo.IMG_URL +"' class='form-control' onkeyup='writeCarouselImg(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
                         "</div>" +
                         // 버튼선택
-                        "<div class='clear- both'></div>" +
-                        "<div class='btn-group btn-group-justified insertBtnArea dpN' role='group'> " + 
-                            "<div class='btn-group dlg_btn_insert' role='group'>" +
-                                "<button type='button' class='btn btn-default carouseBtn'>" + language.INSERT_MORE_BUTTON + "</button>" +
-                            "</div>" +
-                            "<div class='btn-group dlg_btn_insert_card' role='group'>" +
-                                "<button type='button' class='btn btn-default addCarouselBtn'>" + language.INSERT_MORE_CARDS + "</button>" +
-                            "</div>" +
-                        "</div > " +
-                        "<div class='btn-group btn-group-justified deleteBtnArea'role='group'> " + 
-                            "<div class='btn-group deleteInsertFormDiv dlg_btn_delete dpN'role='group'>" +
-                                "<button type='button' class='btn btn-default deleteInsertForm'>" + language.DELETE_DIALOG + "</button>" +
-                            "</div>" +
-                            "<div class='btn-group dlg_btn_delete_card dpN'role='group'>" +
-                                "<button type='button' class='btn btn-default deleteCard'>" + language.DELETE_CARD + "</button>" +
-                            "</div>" +
-                        "</div>" +
+                        //"<div class='clear- both'></div>" +
+                        //"<div class='btn-group btn-group-justified editBtnArea dpN' role='group'> " + 
+                        //    "<div class='btn-group edit_dlg_btn_insert' role='group'>" +
+                        //        "<button type='button' class='btn btn-default edit_carouseBtn'>" + language.INSERT_MORE_BUTTON + "</button>" +
+                        //    "</div>" +
+                        //    "<div class='btn-group edit_dlg_btn_insert_card' role='group'>" +
+                        //        "<button type='button' class='btn btn-default edit_addCarouselBtn'>" + language.INSERT_MORE_CARDS + "</button>" +
+                        //    "</div>" +
+                        //"</div > " +
+                        //"<div class='btn-group btn-group-justified editDeleteBtnArea dpN'role='group'> " + 
+                        //    "<div class='btn-group deleteInsertFormDiv edit_dlg_btn_delete'role='group'>" +
+                        //        "<button type='button' class='btn btn-default edit_deleteInsertForm'>" + language.DELETE_DIALOG + "</button>" +
+                        //    "</div>" +
+                        //    "<div class='btn-group edit_dlg_btn_delete_card'role='group'>" +
+                        //        "<button type='button' class='btn btn-default edit_deleteCard'>" + language.DELETE_CARD + "</button>" +
+                        //    "</div>" +
+                        //"</div>" +
                         // 추가될버튼 영역
-                        "<div class='inputBtnArea'></div>" +
+                        "<div class='editBtnArea'></div>" +
                     "</div>";
             
-                $(".inputArea > div").add(htmlInputArea).appendTo(".inputArea");
+                $(".editArea > div").add(htmlInputArea).appendTo(".editArea");
 
+                if (strDlgType == "3" || strDlgType == "4") {
+                    $('.dlg_edit_sub_title').removeClass("dpN");
+                    $('.dlg_edit_img').removeClass('dpN');
+                } else {
+                    $('.dlg_edit_sub_title').addClass("dpN");
+                    $('.dlg_edit_img').addClass('dpN');
+                }
 
+                //btn 갯수 파악 및 생성
+                var _btnCnt = 0;
+                if (dlgInfo.BTN_4_TITLE != null) {
+                    _btnCnt = 4;
+                } else if (dlgInfo.BTN_3_TITLE != null) {
+                    _btnCnt = 3;
+                } else if (dlgInfo.BTN_2_TITLE != null) {
+                    _btnCnt = 2;
+                } else if (dlgInfo.BTN_1_TITLE != null) {
+                    _btnCnt = 1;
+                }
+
+                if (_btnCnt > 0) {
+                    for (var i = 1; i <= _btnCnt; i++) {
+                        $(".editBtnArea > div").add(
+                            "<div class='btnEditOptionDiv' alt='" + i + "'>" +
+                            "   <div class='cardBtnCopyDiv'><div>" +
+                            "	    <label>" + language.BUTTON + "</label>" +
+                            "	</div>" +
+                            "	<div class='scenario-form-group col-md-13' style='padding-left:0; margin-top: 0px;'>" +
+                            "	    <table class='cardCopyTbl' style='width:100%'>" +
+                            "		<col width='21%'>" +
+                            "		<col width='1%'>" +
+                            "		<col width='35%'>" +
+                            "		<col width='1%'>" +
+                            "		<col width='35%'>" +
+                            "		<col width='1%'>" +
+                            "		<col width='6%'>" +
+                            "		<thead>" +
+                            "		    <tr>" +
+                            "			<th>" + language.Type + "</th>" +
+                            "			<th></th>" +
+                            "			<th>" + language.NAME + "</th>" +
+                            "			<th></th>" +
+                            "			<th>" + language.CONTENTS + "</th>" +
+                            "			<th></th>" +
+                            "			<th></th>" +
+                            "		    </tr>" +
+                            "		</thead>" +
+                            "		<tbody>" +
+                            "		    <tr>" +
+                            "			<td>" +
+                            "			    <select class='form-control' name='btnType'>" +
+                            "				<option value='imBack' selected>imBack</option>" +
+                            "				<option value='openURL'>openURL</option>" +
+                            "			    </select>" +
+                            "			</td>" +
+                            "			<td></td>" +
+                            "			<td>" +
+                            "			    <input type='text' name='cButtonName' class='form-control' placeholder='" + language.Please_enter + "' onkeyup='writeBtnTitle(this," + i + ");' spellcheck='false' autocomplete='off' alt='" + i + "'>" +
+                            "			</td>" +
+                            "			<td></td>" +
+                            "			<td>" +
+                            "			    <input type='text' name='cButtonContent' class='form-control' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off' alt='" + i + "'>" +
+                            "			</td>" +
+                            "			<td></td>" +
+                            "			<td>" +
+                            "			    <a href='#' class='btn_delete' style='margin:0px;' alt='" + i + "'><span class='fa fa-trash'></span></a>" +
+                            "			</td>" +
+                            "		    </tr>" +
+                            "		</tbody>" +
+                            "	    </table>" +
+                            "	</div>" +
+                            "    </div>" +
+                            "</div>"
+                        ).appendTo(".editBtnArea");
+
+                        $('.previewBtnArea > div').add("<button type='button' class='btn btn-default w100'alt='" + i + "'>" + language.Please_enter + "</button>").appendTo(".previewBtnArea");
+                    }
+                }
                 
+
 
             }else{
                 alert('fail');
