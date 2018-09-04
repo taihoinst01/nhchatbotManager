@@ -918,7 +918,7 @@ function editDialog(){  //  대화상자 수정
     //JSON.stringify($("form[name=appInsertForm]").serializeObject());
     array[array.length] = JSON.stringify($("form[name=appInsertForm]").serializeObject());//JSON.stringify($("form[name=appInsertForm]"));
 
-
+    
 }
 
 var botChatNum = 1; 
