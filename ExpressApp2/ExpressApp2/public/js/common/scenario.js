@@ -159,25 +159,6 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                             "<div>sample URL : /images/ico_car.png </div>" +
                             "<input type='text' name='imgUrl' id='iptImgUrl' value='" + dlgInfo.IMG_URL +"' class='form-control' onkeyup='writeCarouselImg(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
                         "</div>" +
-                        // 버튼선택
-                        //"<div class='clear- both'></div>" +
-                        //"<div class='btn-group btn-group-justified editBtnArea dpN' role='group'> " + 
-                        //    "<div class='btn-group edit_dlg_btn_insert' role='group'>" +
-                        //        "<button type='button' class='btn btn-default edit_carouseBtn'>" + language.INSERT_MORE_BUTTON + "</button>" +
-                        //    "</div>" +
-                        //    "<div class='btn-group edit_dlg_btn_insert_card' role='group'>" +
-                        //        "<button type='button' class='btn btn-default edit_addCarouselBtn'>" + language.INSERT_MORE_CARDS + "</button>" +
-                        //    "</div>" +
-                        //"</div > " +
-                        //"<div class='btn-group btn-group-justified editDeleteBtnArea dpN'role='group'> " + 
-                        //    "<div class='btn-group deleteInsertFormDiv edit_dlg_btn_delete'role='group'>" +
-                        //        "<button type='button' class='btn btn-default edit_deleteInsertForm'>" + language.DELETE_DIALOG + "</button>" +
-                        //    "</div>" +
-                        //    "<div class='btn-group edit_dlg_btn_delete_card'role='group'>" +
-                        //        "<button type='button' class='btn btn-default edit_deleteCard'>" + language.DELETE_CARD + "</button>" +
-                        //    "</div>" +
-                        //"</div>" +
-                        // 추가될버튼 영역
                         "<div class='editBtnArea'></div>" +
                     "</div>";
             
@@ -186,14 +167,15 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                 if (strDlgType == "3" || strDlgType == "4") {
                     $('.dlg_edit_sub_title').removeClass("dpN");
                     $('.dlg_edit_img').removeClass('dpN');
-                    $('.previewSubTitle').removeClass('dpN');
-                    $('.edit_previewImg').removeClass('dpN');
                 } else {
                     $('.dlg_edit_sub_title').addClass("dpN");
                     $('.dlg_edit_img').addClass('dpN');
-                    $('.previewSubTitle').addClass('dpN');
-                    $('.edit_previewImg').addClass('dpN');
                 }
+
+                // 미리보기 적용..
+                $(".previewTitle").text(dlgInfo.CARD_TITLE);
+                $(".previewSubTitle").text(dlgInfo.CARD_SUBTITLE);
+                $(".previewText").text(dlgInfo.CARD_TEXT);
 
                 //btn 갯수 파악 및 생성
                 var _btnCnt = 0;
@@ -206,12 +188,10 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                 } else if (dlgInfo.BTN_1_TITLE != null) {
                     _btnCnt = 1;
                 }
-                var btnTitle = [dlgInfo.BTN_1_TITLE, dlgInfo.BTN_2_TITLE, dlgInfo.BTN_3_TITLE, dlgInfo.BTN_4_TITLE];
-                var btnContext = [dlgInfo.BTN_1_CONTEXT, dlgInfo.BTN_2_CONTEXT, dlgInfo.BTN_3_CONTEXT, dlgInfo.BTN_4_CONTEXT];
-                var btnType = [dlgInfo.BTN_1_TYPE, dlgInfo.BTN_2_TYPE, dlgInfo.BTN_3_TYPE, dlgInfo.BTN_4_TYPE];
 
                 if (_btnCnt > 0) {
                     for (var i = 1; i <= _btnCnt; i++) {
+
                         $(".editBtnArea > div").add(
                             "<div class='btnEditOptionDiv' alt='" + i + "'>" +
                             "   <div class='cardBtnCopyDiv'><div>" +
@@ -240,18 +220,18 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                             "		<tbody>" +
                             "		    <tr>" +
                             "			<td>" +
-                            "			    <select class='form-control' name='btnType'>" +
-                            "				<option value='imBack' selected>imBack</option>" +
-                            "				<option value='openURL'>openURL</option>" +
+                            "			    <select class='form-control' name='btnType' id='iptBtnType"+i+"'>" +
+                            "				    <option value='imBack' selected>imBack</option>" +
+                            "				    <option value='openURL'>openURL</option>" +
                             "			    </select>" +
                             "			</td>" +
                             "			<td></td>" +
                             "			<td>" +
-                            "			    <input type='text' name='cButtonName' class='form-control' value='" + btnTitle[i - 1] + "' placeholder='" + language.Please_enter + "' onkeyup='writeBtnTitle(this," + i + ");' spellcheck='false' autocomplete='off' alt='" + i + "'>" +
+                            "			    <input type='text' name='cButtonName' id='iptBtnName"+i+"' class='form-control' placeholder='" + language.Please_enter + "' onkeyup='writeBtnTitle(this," + i + ");' spellcheck='false' autocomplete='off' alt='" + i + "'>" +
                             "			</td>" +
                             "			<td></td>" +
                             "			<td>" +
-                            "			    <input type='text' name='cButtonContent' class='form-control' value='" + btnContext[i - 1] +"' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off' alt='" + i + "'>" +
+                            "			    <input type='text' name='cButtonContent' id='iptBtnContent"+i+"' class='form-control' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off' alt='" + i + "'>" +
                             "			</td>" +
                             "			<td></td>" +
                             "			<td>" +
@@ -265,15 +245,31 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                             "</div>"
                         ).appendTo(".editBtnArea");
 
-                        $('.previewBtnArea > div').add("<button type='button' class='btn btn-default w100'alt='" + i + "'>" + btnTitle[i - 1] + "</button>").appendTo(".previewBtnArea");
+                        if (i == 1) {
+                            $("#iptBtnType1").val(dlgInfo.BTN_1_TYPE).prop("selected", true);
+                            $("#iptBtnName1").val(dlgInfo.BTN_1_TITLE);
+                            $("#iptBtnContent1").val(dlgInfo.BTN_1_CONTEXT);
+                            $('.previewBtnArea > div').add("<button type='button' class='btn btn-default w100'alt='" + i + "'>"+dlgInfo.BTN_1_TITLE+"</button>").appendTo(".previewBtnArea");
+                        } else if (i == 2){
+                            $("#iptBtnType2").val(dlgInfo.BTN_2_TYPE).prop("selected", true);
+                            $("#iptBtnName2").val(dlgInfo.BTN_2_TITLE);
+                            $("#iptBtnContent2").val(dlgInfo.BTN_2_CONTEXT);
+                            $('.previewBtnArea > div').add("<button type='button' class='btn btn-default w100'alt='" + i + "'>"+dlgInfo.BTN_2_TITLE+"</button>").appendTo(".previewBtnArea");
+                        } else if (i == 3){
+                            $("#iptBtnType3").val(dlgInfo.BTN_3_TYPE).prop("selected", true);
+                            $("#iptBtnName3").val(dlgInfo.BTN_3_TITLE);
+                            $("#iptBtnContent3").val(dlgInfo.BTN_3_CONTEXT);
+                            $('.previewBtnArea > div').add("<button type='button' class='btn btn-default w100'alt='" + i + "'>"+dlgInfo.BTN_3_TITLE+"</button>").appendTo(".previewBtnArea");
+                        } else if (i == 4){
+                            $("#iptBtnType4").val(dlgInfo.BTN_4_TYPE).prop("selected", true);
+                            $("#iptBtnName4").val(dlgInfo.BTN_4_TITLE);
+                            $("#iptBtnContent4").val(dlgInfo.BTN_4_CONTEXT);
+                            $('.previewBtnArea > div').add("<button type='button' class='btn btn-default w100'alt='" + i + "'>"+dlgInfo.BTN_4_TITLE+"</button>").appendTo(".previewBtnArea");
+                        }
+                        //$('.previewBtnArea > div').add("<button type='button' class='btn btn-default w100'alt='" + i + "'>" + language.Please_enter + "</button>").appendTo(".previewBtnArea");
                     }
                 }
                 
-                $('.previewTitle').text(dlgInfo.CARD_TITLE);
-                $('.previewSubTitle').text(dlgInfo.CARD_SUBTITLE);
-                $('.previewText').text(dlgInfo.CARD_TEXT);
-                $('.edit_previewImg').attr('src', dlgInfo.IMG_URL);
-
             }else{
                 alert('fail');
             }
