@@ -186,9 +186,13 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                 if (strDlgType == "3" || strDlgType == "4") {
                     $('.dlg_edit_sub_title').removeClass("dpN");
                     $('.dlg_edit_img').removeClass('dpN');
+                    $('.previewSubTitle').removeClass('dpN');
+                    $('.edit_previewImg').removeClass('dpN');
                 } else {
                     $('.dlg_edit_sub_title').addClass("dpN");
                     $('.dlg_edit_img').addClass('dpN');
+                    $('.previewSubTitle').addClass('dpN');
+                    $('.edit_previewImg').addClass('dpN');
                 }
 
                 //btn 갯수 파악 및 생성
@@ -202,6 +206,9 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                 } else if (dlgInfo.BTN_1_TITLE != null) {
                     _btnCnt = 1;
                 }
+                var btnTitle = [dlgInfo.BTN_1_TITLE, dlgInfo.BTN_2_TITLE, dlgInfo.BTN_3_TITLE, dlgInfo.BTN_4_TITLE];
+                var btnContext = [dlgInfo.BTN_1_CONTEXT, dlgInfo.BTN_2_CONTEXT, dlgInfo.BTN_3_CONTEXT, dlgInfo.BTN_4_CONTEXT];
+                var btnType = [dlgInfo.BTN_1_TYPE, dlgInfo.BTN_2_TYPE, dlgInfo.BTN_3_TYPE, dlgInfo.BTN_4_TYPE];
 
                 if (_btnCnt > 0) {
                     for (var i = 1; i <= _btnCnt; i++) {
@@ -240,11 +247,11 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                             "			</td>" +
                             "			<td></td>" +
                             "			<td>" +
-                            "			    <input type='text' name='cButtonName' class='form-control' placeholder='" + language.Please_enter + "' onkeyup='writeBtnTitle(this," + i + ");' spellcheck='false' autocomplete='off' alt='" + i + "'>" +
+                            "			    <input type='text' name='cButtonName' class='form-control' value='" + btnTitle[i - 1] + "' placeholder='" + language.Please_enter + "' onkeyup='writeBtnTitle(this," + i + ");' spellcheck='false' autocomplete='off' alt='" + i + "'>" +
                             "			</td>" +
                             "			<td></td>" +
                             "			<td>" +
-                            "			    <input type='text' name='cButtonContent' class='form-control' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off' alt='" + i + "'>" +
+                            "			    <input type='text' name='cButtonContent' class='form-control' value='" + btnContext[i - 1] +"' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off' alt='" + i + "'>" +
                             "			</td>" +
                             "			<td></td>" +
                             "			<td>" +
@@ -258,11 +265,14 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                             "</div>"
                         ).appendTo(".editBtnArea");
 
-                        $('.previewBtnArea > div').add("<button type='button' class='btn btn-default w100'alt='" + i + "'>" + language.Please_enter + "</button>").appendTo(".previewBtnArea");
+                        $('.previewBtnArea > div').add("<button type='button' class='btn btn-default w100'alt='" + i + "'>" + btnTitle[i - 1] + "</button>").appendTo(".previewBtnArea");
                     }
                 }
                 
-
+                $('.previewTitle').text(dlgInfo.CARD_TITLE);
+                $('.previewSubTitle').text(dlgInfo.CARD_SUBTITLE);
+                $('.previewText').text(dlgInfo.CARD_TEXT);
+                $('.edit_previewImg').attr('src', dlgInfo.IMG_URL);
 
             }else{
                 alert('fail');
