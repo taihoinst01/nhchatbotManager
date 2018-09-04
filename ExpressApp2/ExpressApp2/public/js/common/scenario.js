@@ -117,7 +117,7 @@ function openModalBoxEdit(strDlgId, strDlgType) {
     //  대화상자 타입
     $("#dlgType").val(strDlgType).prop("selected", true);
     
-    
+    $(".previewBtnArea > button").remove();
     //inputAreaAdd();
     $.ajax({
         url: '/learning/getScenarioDlg',
