@@ -110,6 +110,8 @@ function openModalBoxEdit(strDlgId, strDlgType) {
     
     //  시나리오명
     $("#iptScenarioName").val($('#spanScenarioNm').text());     
+    //  다이얼로그 ID
+    $("#iptDlgId").val(strDlgId);     
     //  대그룹,중그룹 init
     $("#iptMiddleGroup").ajaxComplete(function () {
         getGroupSelectBox();
@@ -361,14 +363,12 @@ $(document).on('change', 'select[name=dlgType]', function (e) {
 
 // 다이얼로그 삭제 버튼
 $(document).on('click', '.deleteInsertForm', function (e) {
-
     insertFormLength = $('.insertForm').length;
     if (insertFormLength == 1) {
         alert(language.You_must_have_one_dialog_by_default);
     } else {
         var idx = $(".deleteInsertForm").index(this);
         if (idx == 0) {
-
             $(this).parents('.insertForm').next().remove();
         }
         $(".dialogView").eq(idx).remove();
@@ -809,12 +809,12 @@ function createDialog(){
 
 function editDialog(){  //  대화상자 수정
     
-    //var idx = $('form[name=dialogLayout]').length;
+    //var idx = $('form[name=dialogLayoutEdit]').length;
     var array = [];
     var exit = false;
 
-    $('.editForm input[name=iptDialogTitle]').each(function(index) {    //  대화상자 제목
-        alert('editDialog : iptDialogTitle chk' + $(this).val() + ">>>");
+    $('.editForm input[name=dialogTitle]').each(function(index) {    //  대화상자 제목
+        //alert('editDialog : dialogTitle chk' + $(this).val() + ">>>");
         if ($(this).val().trim() === "") {
             alert(language.You_must_enter_a_Dialog_Title);
             exit = true;
@@ -824,7 +824,6 @@ function editDialog(){  //  대화상자 수정
     if(exit) return;
 
     $('.editForm input[name=dialogText]').each(function(index) {    //  대화상자 내용
-        alert('editDialog : dialogText chk' + $(this).val() + ">>>");
         if ($(this).val().trim() === "") {
             alert(language.You_must_enter_the_dialog_text);
             exit = true;
@@ -832,92 +831,121 @@ function editDialog(){  //  대화상자 수정
         }
     });    
     if(exit) return;
-
-    for(var i = 0 ; i < idx ; i++) {
-        var tmp = $("form[name=dialogLayout]").eq(i).serializeArray();
-        var object  = {};
-        var carouselArr = [];
-        var objectCarousel = {};
-        if (tmp[0].value === "3") {
-            var btnTypeCount = 1;
-            var cButtonContentCount = 1;
-            var cButtonNameCount = 1;
-            for (var j = 1; j < tmp.length; j++) {
-                if(tmp[j].name == 'btnType') {
-                    tmp[j].name = 'btn'+ (btnTypeCount++) +'Type';
-                    if(btnTypeCount == 5) {
-                        btnTypeCount = 1;
-                    }
-                }
-                if(tmp[j].name == 'cButtonContent') {
-                    tmp[j].name = 'cButtonContent'+ (cButtonContentCount++);
-                    if(cButtonContentCount == 5) {
-                        cButtonContentCount = 1;
-                    }
-                }
-                if(tmp[j].name == 'cButtonName') {
-                    tmp[j].name = 'cButtonName'+ (cButtonNameCount++);
-                    if(cButtonNameCount == 5) {
-                        cButtonNameCount = 1;
-                    }
-                }
-                
-                if (typeof objectCarousel[tmp[j].name] !== "undefined" ) {
-                    carouselArr.push(objectCarousel);
-                    objectCarousel = {};
-                    btnTypeCount = 1;
-                    cButtonContentCount = 1;
-                    cButtonNameCount = 1;
-                } 
-
-                if(j === tmp.length-1){
-                    object[tmp[0].name] = tmp[0].value;
-                    objectCarousel[tmp[j].name] = tmp[j].value;    
-
-                    carouselArr.push(objectCarousel);
-                    objectCarousel = {};
-                    break;
-                }
-                object[tmp[0].name] = tmp[0].value;
-                objectCarousel[tmp[j].name] = tmp[j].value;
-            }
-            //carouselArr.push(objectCarousel);
-            object['carouselArr'] = carouselArr;
-        } else if (tmp[0].value === "4") {
-
-            var btnTypeCount = 1;
-            var mButtonContentCount = 1;
-            var mButtonNameCount = 1;
-
-            for (var j = 0; j < tmp.length; j++) {
-
-                if(tmp[j].name == 'btnType') {
-                    tmp[j].name = 'btn'+ (btnTypeCount++) +'Type';
-                }
-                if(tmp[j].name == 'mButtonContent') {
-                    tmp[j].name = 'mButtonContent'+ (mButtonContentCount++);
     
-                }
-                if(tmp[j].name == 'mButtonName') {
-                    tmp[j].name = 'mButtonName'+ (mButtonNameCount++);
-                }
+    $("#iptGroupL").val($("#iptLargeGroup").val());     // 대그룹
+    $("#iptGroupM").val($("#iptMiddleGroup").val());    // 중그룹
+    $("#iptDlgDescription").val($("#iptDescription").val());    // 설명
 
-                object[tmp[j].name] = tmp[j].value;
+    //  GET FORM DATA - FROM dialogLayoutEdit  
+    var tmp = $("form[name=dialogLayoutEdit]").serializeArray();
+    console.log(tmp);
+    //alert('* dialogLayoutEdit - tmp[0].name:'+tmp[0].name+'|tmp[0].value:'+tmp[0].value);
+    var object  = {};
+    var carouselArr = [];
+    var objectCarousel = {};
+
+    if (tmp[0].value === "3") { //  dlgType     
+        var btnTypeCount = 1;
+        var cButtonContentCount = 1;
+        var cButtonNameCount = 1;
+        for (var j = 1; j < tmp.length; j++) {
+            if(tmp[j].name == 'btnType') {
+                tmp[j].name = 'btn'+ (btnTypeCount++) +'Type';
+                if(btnTypeCount == 5) {
+                    btnTypeCount = 1;
+                }
+            }
+            if(tmp[j].name == 'cButtonContent') {
+                tmp[j].name = 'cButtonContent'+ (cButtonContentCount++);
+                if(cButtonContentCount == 5) {
+                    cButtonContentCount = 1;
+                }
+            }
+            if(tmp[j].name == 'cButtonName') {
+                tmp[j].name = 'cButtonName'+ (cButtonNameCount++);
+                if(cButtonNameCount == 5) {
+                    cButtonNameCount = 1;
+                }
             }
             
-        } else {
-            for (var j = 0; j < tmp.length; j++) {
-                object[tmp[j].name] = tmp[j].value;
+            if (typeof objectCarousel[tmp[j].name] !== "undefined" ) {
+                carouselArr.push(objectCarousel);
+                objectCarousel = {};
+                btnTypeCount = 1;
+                cButtonContentCount = 1;
+                cButtonNameCount = 1;
+            } 
+
+            if(j === tmp.length-1){
+                object[tmp[0].name] = tmp[0].value;
+                objectCarousel[tmp[j].name] = tmp[j].value;    
+
+                carouselArr.push(objectCarousel);
+                objectCarousel = {};
+                break;
             }
+            object[tmp[0].name] = tmp[0].value;
+            objectCarousel[tmp[j].name] = tmp[j].value;
         }
+        //carouselArr.push(objectCarousel);
+        object['carouselArr'] = carouselArr;
+    } else if (tmp[0].value === "4") {
 
+        var btnTypeCount = 1;
+        var mButtonContentCount = 1;
+        var mButtonNameCount = 1;
+
+        for (var j = 0; j < tmp.length; j++) {
+
+            if(tmp[j].name == 'btnType') {
+                tmp[j].name = 'btn'+ (btnTypeCount++) +'Type';
+            }
+            if(tmp[j].name == 'mButtonContent') {
+                tmp[j].name = 'mButtonContent'+ (mButtonContentCount++);
+
+            }
+            if(tmp[j].name == 'mButtonName') {
+                tmp[j].name = 'mButtonName'+ (mButtonNameCount++);
+            }
+
+            object[tmp[j].name] = tmp[j].value;
+        }
         
-        
-        array[i] = JSON.stringify(object);//JSON.stringify(tmp);//tmp.substring(1, tmp.length-2);
+    } else {
+        for (var j = 0; j < tmp.length; j++) {
+            object[tmp[j].name] = tmp[j].value;
+        }
     }
-    //JSON.stringify($("form[name=appInsertForm]").serializeObject());
-    array[array.length] = JSON.stringify($("form[name=appInsertForm]").serializeObject());//JSON.stringify($("form[name=appInsertForm]"));
 
+    
+    
+    //array[i] = JSON.stringify(object);//JSON.stringify(tmp);//tmp.substring(1, tmp.length-2);
+    array = JSON.stringify(object);//JSON.stringify(tmp);//tmp.substring(1, tmp.length-2);
+    
+
+
+    //array[array.length] = JSON.stringify($("form[name=appInsertForm]").serializeObject());//JSON.stringify($("form[name=appInsertForm]"));
+    //array[0] = JSON.stringify($("form[name=appEditForm]").serializeObject()); //JSON.stringify($("form[name=appInsertForm]"));
+    console.log("editDialog - END")
+    console.log(array);
+
+    $.ajax({
+        url: '/learning/scenarioEditDialog',
+        dataType: 'json',
+        type: 'POST',
+        data: {'data' : array},
+        success: function(data) {
+
+            if(data['status'] == '200'){
+                alert(language.Edited);
+                $('.createDlgModalClose').click();
+
+            }
+            
+
+            
+        } 
+    });
     
 }
 
@@ -926,12 +954,11 @@ var botChatNum = 1;
 var dlgMap = new Object();
 function selectDlgListAjax(entity) {
     $.ajax({
-        url: '/learning/selectDlgListAjax',                //�ּ�
-        dataType: 'json',                  //������ ����
-        type: 'POST',                      //���� Ÿ��
-        data: {'entity':entity},      //�����͸� json ����, ��ü�������� ����
-
-        success: function(result) {          //�������� �� �Լ� ���� ������ ��� �� ����
+        url: '/learning/selectDlgListAjax',
+        dataType: 'json',
+        type: 'POST',
+        data: {'entity':entity},
+        success: function(result) {
             var inputUttrHtml = '';
             for (var i=0; i<result['list'].length; i++) {
                 var tmp = result['list'][i];
@@ -982,7 +1009,6 @@ function selectDlgListAjax(entity) {
                         inputUttrHtml += '</div>';
                         inputUttrHtml += '</li>';
                         
-                        //���̾�αװ� �Ѱ��϶����� ������ ��ư x
                         if((tmp.dlg.length == 2 && j == 1) || (tmp.dlg.length == 1 && j == 0)) {
                             inputUttrHtml += '</ul>';
                             inputUttrHtml += '</div>';
@@ -1024,7 +1050,6 @@ function selectDlgListAjax(entity) {
                         inputUttrHtml += '</div>';
                         inputUttrHtml += '</li>';
 
-                        //���̾�αװ� �Ѱ��϶����� ������ ��ư x
                         if((tmp.dlg.length == 2 && j == 1) || (tmp.dlg.length == 1 && j == 0)) {
                             inputUttrHtml += '</ul>';
                             inputUttrHtml += '</div>';
@@ -1050,7 +1075,7 @@ function selectDlgListAjax(entity) {
 
             $('#dlgViewDiv').prepend(inputUttrHtml);
 
-            //dlg ���.
+            //dlg
             var utter ="";
             for (var i=0; i<entity.length; i++) {
                 utter += entity[i] + ",";
@@ -1068,7 +1093,7 @@ function selectDlgListAjax(entity) {
 
 
 
-//������ ��ư Ŭ���� �����̵�
+// 
 function nextBtn(botChatNum, e) {
 
     var width = parseInt($(e).parent().parent().css('width'));
@@ -1084,7 +1109,7 @@ function nextBtn(botChatNum, e) {
     $("#prevBtn" + botChatNum).show();
 }
 
-//���� ��ư Ŭ���� �����̵�
+// 
 function prevBtn(botChatNum, e) {
 
     var width = parseInt($(e).parent().parent().css('width'));
@@ -1106,7 +1131,6 @@ function utterInput(queryText) {
     } else {  //'object'
         queryTextArr = queryText.reverse();
     }
-
 
     $.ajax({
         url: '/learning/utterInputAjax',                //�ּ�

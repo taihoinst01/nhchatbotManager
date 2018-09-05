@@ -3783,6 +3783,83 @@ router.post('/scenarioAddDialog', function (req, res) {
 });
 
 
+router.post('/scenarioEditDialog', function (req, res) {
+    //console.log('/scenarioEditDialog - START');    
+    var data = req.body['data'];
+    var array = [];
+    var queryText = "";
+    var dlgType = "";
+    var dlgId = "";
+
+    if (typeof data == "string") {
+        //console.log("data is string");
+        var json = JSON.parse(data);
+        //console.log(data);
+        for (var key in json) {
+            //console.log("key : " + key + " value : " + json[key]);
+            //array = json[key];
+            array[key] = json[key];
+        }        
+    }  
+    console.log(array);
+    //console.log('dlgId:'+array["dlgId"]+' | dialogText:'+array["dialogText"]);
+    
+    (async () => {
+        try {
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+
+            var updateDlg = "UPDATE TBL_DLG SET DLG_NAME='"+array['dialogTitle']+"', DLG_DESCRIPTION='"+array['dlg_description']+"', DLG_TYPE='"+array['dlgType']+"', GroupL='"+array['groupL']+"', GroupM='"+array['groupM']+"' " + 
+                " WHERE DLG_ID='"+array['dlgId']+"'";
+            var updateDlgText = "UPDATE TBL_DLG_TEXT SET " + 
+                " CARD_TITLE='"+array['dialogTitle']+"', CARD_TEXT='"+array['dialogText']+"' " + 
+                " WHERE DLG_ID='"+array['dlgId']+"'";
+            var updateDlgCard = "UPDATE TBL_DLG_CARD SET " + 
+                " CARD_TITLE='', CARD_SUBTITLE='', CARD_TEXT='', IMG_URL='', " + 
+                " BTN_1_TYPE='', BTN_1_TITLE='', BTN_1_CONTEXT='', BTN_2_TYPE='', BTN_2_TITLE='', BTN_2_CONTEXT='', " + 
+                " BTN_3_TYPE='', BTN_3_TITLE='', BTN_4_CONTEXT='', BTN_4_TYPE='', BTN_4_TITLE='', BTN_4_CONTEXT='', " + 
+                " WHERE DLG_ID='"+array['dlgId']+"'";
+            var updateDlgMedia = "UPDATE TBL_DLG_MEDIA SET " + 
+                " CARD_TITLE='', CARD_SUBTITLE='', CARD_TEXT='', MEDIA_URL='', " + 
+                " BTN_1_TYPE='', BTN_1_TITLE='', BTN_1_CONTEXT='', BTN_2_TYPE='', BTN_2_TITLE='', BTN_2_CONTEXT='', " + 
+                " BTN_3_TYPE='', BTN_3_TITLE='', BTN_4_CONTEXT='', BTN_4_TYPE='', BTN_4_TITLE='', BTN_4_CONTEXT='', " + 
+                " WHERE DLG_ID='"+array['dlgId']+"'";
+
+            if(array['dlgType'] == '2') {
+                console.log('* updateDlgText : ' +  updateDlgText);
+                let result1 = await pool.request().query(updateDlgText);
+
+            } else if (array['dlgType'] == '3') {
+                console.log('* updateDlgCard : ' +  updateDlgCard);
+                /*
+                let result1 = await pool.request().query(selectDlgCard);
+                let rows = result1.recordset[0];
+                for (var key in rows) {
+                    console.log("key : " + key + " value : " + rows[key]);
+                }
+                res.send({ "rows": rows});*/
+            } else if (array['dlgType'] == '4') {
+                console.log('* updateDlgMedia : ' +  updateDlgMedia);
+            } 
+
+            console.log('* updateDlg : ' +  updateDlg);
+            let result2 = await pool.request().query(updateDlg);
+
+        }catch (err) {
+            console.log(err);
+            res.send({ status: 500, message: 'scenarioEditDialog Error' });
+        } finally {
+            sql.close();
+            res.send({status:200 , message:'Save Success'});
+        }
+    })()
+
+    sql.on('error', err => {
+    })
+
+
+
+});
+
 router.post('/getScenarioDialogs', function (req, res) {
 
 	var strScenarioName = req.body.strScenarioName;
