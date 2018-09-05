@@ -3849,11 +3849,11 @@ router.post('/scenarioEditDialog', function (req, res) {
 
             if(array['dlgType'] == '2') {
                 console.log('* updateDlgText : ' +  updateDlgText);
-                //let result1 = await pool.request().query(updateDlgText);
+                let result1 = await pool.request().query(updateDlgText);
 
             } else if (array['dlgType'] == '3') {
                 console.log('* updateDlgCard : ' +  updateDlgCard);
-                //let result1 = await pool.request().query(updateDlgCard);
+                let result1 = await pool.request().query(updateDlgCard);
               
             } else if (array['dlgType'] == '4') {
                 console.log('* updateDlgMedia : ' +  updateDlgMedia);
@@ -3861,7 +3861,7 @@ router.post('/scenarioEditDialog', function (req, res) {
             } 
 
             console.log('* updateDlg : ' +  updateDlg);
-            //let result2 = await pool.request().query(updateDlg);
+            let result2 = await pool.request().query(updateDlg);
 
             /*  임의 주석 (dlgType 값 변경시..)
             //  'dlgType' and 'originDlgType' are not the same..
@@ -3879,7 +3879,7 @@ router.post('/scenarioEditDialog', function (req, res) {
                 //let result3 = await pool.request().query(deleteDlgQuery);
             }
             */
-           
+
         }catch (err) {
             console.log(err);
             res.send({ status: 500, message: 'scenarioEditDialog Error' });

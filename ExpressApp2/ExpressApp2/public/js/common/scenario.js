@@ -106,7 +106,7 @@ function openModalBox(target) {
 }
 
 function openModalBoxEdit(strDlgId, strDlgType) {
-    alert('openModalBoxEdit() strDlgId:'+strDlgId+' | strDlgType:'+strDlgType);
+    //alert('openModalBoxEdit() strDlgId:'+strDlgId+' | strDlgType:'+strDlgType);
     
     //  시나리오명
     $("#iptScenarioName").val($('#spanScenarioNm').text());     
@@ -814,7 +814,7 @@ function editDialog(){  //  대화상자 수정
     //var idx = $('form[name=dialogLayoutEdit]').length;
     var array = [];
     var exit = false;
-
+    var scenarioNm = $("#iptScenarioName").val();
     $('.editForm input[name=dialogTitle]').each(function(index) {    //  대화상자 제목
         //alert('editDialog : dialogTitle chk' + $(this).val() + ">>>");
         if ($(this).val().trim() === "") {
@@ -936,7 +936,12 @@ function editDialog(){  //  대화상자 수정
         success: function(data) {
             if(data['status'] == '200'){
                 alert(language.Edited);
+                //  modal pop close..
                 $('.createDlgModalClose').click();
+                //  dialogs list refresh..
+                alert('scenarioNm:'+scenarioNm);
+                getScenarioDialogs(scenarioNm);
+
             }
         } 
     });
