@@ -3792,9 +3792,9 @@ router.post('/scenarioEditDialog', function (req, res) {
     var dlgId = "";
 
     if (typeof data == "string") {
-        //console.log("data is string");
+        console.log("data is string");
         var json = JSON.parse(data);
-        //console.log(data);
+        console.log(data);
         for (var key in json) {
             //console.log("key : " + key + " value : " + json[key]);
             //array = json[key];
@@ -3810,40 +3810,76 @@ router.post('/scenarioEditDialog', function (req, res) {
 
             var updateDlg = "UPDATE TBL_DLG SET DLG_NAME='"+array['dialogTitle']+"', DLG_DESCRIPTION='"+array['dlg_description']+"', DLG_TYPE='"+array['dlgType']+"', GroupL='"+array['groupL']+"', GroupM='"+array['groupM']+"' " + 
                 " WHERE DLG_ID='"+array['dlgId']+"'";
+
             var updateDlgText = "UPDATE TBL_DLG_TEXT SET " + 
                 " CARD_TITLE='"+array['dialogTitle']+"', CARD_TEXT='"+array['dialogText']+"' " + 
                 " WHERE DLG_ID='"+array['dlgId']+"'";
+
             var updateDlgCard = "UPDATE TBL_DLG_CARD SET " + 
-                " CARD_TITLE='', CARD_SUBTITLE='', CARD_TEXT='', IMG_URL='', " + 
-                " BTN_1_TYPE='', BTN_1_TITLE='', BTN_1_CONTEXT='', BTN_2_TYPE='', BTN_2_TITLE='', BTN_2_CONTEXT='', " + 
-                " BTN_3_TYPE='', BTN_3_TITLE='', BTN_4_CONTEXT='', BTN_4_TYPE='', BTN_4_TITLE='', BTN_4_CONTEXT='', " + 
-                " WHERE DLG_ID='"+array['dlgId']+"'";
+                " CARD_TITLE='"+array['dialogTitle']+"', CARD_SUBTITLE='"+array['dialogSubTitle']+"', CARD_TEXT='"+array['dialogText']+"', IMG_URL='"+array['imgUrl']+"'";
+                if (array['cButtonName1'] != null) { 
+                    updateDlgCard = updateDlgCard + ", BTN_1_TYPE='"+array['btn1Type']+"', BTN_1_TITLE='"+array['cButtonName1']+"', BTN_1_CONTEXT='"+array['cButtonContent1']+"'";
+                }
+                if (array['cButtonName2'] != null) { 
+                    updateDlgCard = updateDlgCard + ", BTN_2_TYPE='"+array['btn2Type']+"', BTN_2_TITLE='"+array['cButtonName2']+"', BTN_2_CONTEXT='"+array['cButtonContent2']+"'"; 
+                }
+                if (array['cButtonName3'] != null) { 
+                    updateDlgCard = updateDlgCard + ", BTN_3_TYPE='"+array['btn3Type']+"', BTN_3_TITLE='"+array['cButtonName3']+"', BTN_3_CONTEXT='"+array['cButtonContent3']+"'";
+                }
+                if (array['cButtonName4'] != null) { 
+                    updateDlgCard = updateDlgCard + ", BTN_4_TYPE='"+array['btn4Type']+"', BTN_4_TITLE='"+array['cButtonName4']+"', BTN_4_CONTEXT='"+array['cButtonContent4']+"'"; 
+                } 
+                updateDlgCard = updateDlgCard + " WHERE DLG_ID = '"+array['dlgId']+"'";
+
             var updateDlgMedia = "UPDATE TBL_DLG_MEDIA SET " + 
-                " CARD_TITLE='', CARD_SUBTITLE='', CARD_TEXT='', MEDIA_URL='', " + 
-                " BTN_1_TYPE='', BTN_1_TITLE='', BTN_1_CONTEXT='', BTN_2_TYPE='', BTN_2_TITLE='', BTN_2_CONTEXT='', " + 
-                " BTN_3_TYPE='', BTN_3_TITLE='', BTN_4_CONTEXT='', BTN_4_TYPE='', BTN_4_TITLE='', BTN_4_CONTEXT='', " + 
-                " WHERE DLG_ID='"+array['dlgId']+"'";
+                " CARD_TITLE='"+array['dialogTitle']+"', CARD_SUBTITLE='"+array['dialogSubTitle']+"', CARD_TEXT='"+array['dialogText']+"', MEDIA_URL=''";
+                if (array['cButtonName1'] != null) { 
+                    updateDlgMedia = updateDlgMedia + ", BTN_1_TYPE='"+array['btn1Type']+"', BTN_1_TITLE='"+array['cButtonName1']+"', BTN_1_CONTEXT='"+array['cButtonContent1']+"'";
+                }
+                if (array['cButtonName2'] != null) { 
+                    updateDlgMedia = updateDlgMedia + ", BTN_2_TYPE='"+array['btn2Type']+"', BTN_2_TITLE='"+array['cButtonName2']+"', BTN_2_CONTEXT='"+array['cButtonContent2']+"'"; 
+                }
+                if (array['cButtonName3'] != null) { 
+                    updateDlgMedia = updateDlgMedia + ", BTN_3_TYPE='"+array['btn3Type']+"', BTN_3_TITLE='"+array['cButtonName3']+"', BTN_3_CONTEXT='"+array['cButtonContent3']+"'";
+                }
+                if (array['cButtonName4'] != null) { 
+                    updateDlgMedia = updateDlgMedia + ", BTN_4_TYPE='"+array['btn4Type']+"', BTN_4_TITLE='"+array['cButtonName4']+"', BTN_4_CONTEXT='"+array['cButtonContent4']+"'"; 
+                } 
+                updateDlgMedia = updateDlgMedia + " WHERE DLG_ID='"+array['dlgId']+"'";
 
             if(array['dlgType'] == '2') {
                 console.log('* updateDlgText : ' +  updateDlgText);
-                let result1 = await pool.request().query(updateDlgText);
+                //let result1 = await pool.request().query(updateDlgText);
 
             } else if (array['dlgType'] == '3') {
                 console.log('* updateDlgCard : ' +  updateDlgCard);
-                /*
-                let result1 = await pool.request().query(selectDlgCard);
-                let rows = result1.recordset[0];
-                for (var key in rows) {
-                    console.log("key : " + key + " value : " + rows[key]);
-                }
-                res.send({ "rows": rows});*/
+                //let result1 = await pool.request().query(updateDlgCard);
+              
             } else if (array['dlgType'] == '4') {
                 console.log('* updateDlgMedia : ' +  updateDlgMedia);
+                //let result1 = await pool.request().query(updateDlgMedia);
             } 
 
             console.log('* updateDlg : ' +  updateDlg);
-            let result2 = await pool.request().query(updateDlg);
+            //let result2 = await pool.request().query(updateDlg);
 
+            /*  임의 주석 (dlgType 값 변경시..)
+            //  'dlgType' and 'originDlgType' are not the same..
+            if(array['dlgType'] != array['originDlgType']) {    
+                console.log("* 'dlgType' and 'originDlgType' are not the same");
+                var deleteDlgQuery ="";
+                if(array['originDlgType'] == '2'){
+                    deleteDlgQuery = "DELETE FROM TBL_DLG_TEXT WHERE DLG_ID = '"+array['dlgId']+"'";
+                } else if(array['originDlgType'] == '3'){
+                    deleteDlgQuery = "DELETE FROM TBL_DLG_CARD WHERE DLG_ID = '"+array['dlgId']+"'";
+                } else if(array['originDlgType'] == '4'){
+                    deleteDlgQuery = "DELETE FROM TBL_DLG_MEDIA WHERE DLG_ID = '"+array['dlgId']+"'";
+                }
+                console.log('* deleteDlgQuery : ' +  deleteDlgQuery);
+                //let result3 = await pool.request().query(deleteDlgQuery);
+            }
+            */
+           
         }catch (err) {
             console.log(err);
             res.send({ status: 500, message: 'scenarioEditDialog Error' });

@@ -597,11 +597,13 @@
                                 <div class="editForm">
                                     <div class="scenario-form-group">
                                         <form name="dialogLayoutEdit" id="dialogLayoutEdit">
-                                            
+
+                                            <input type="hidden" name="scenario_nm" id="iptScenarioNm" value="">
                                             <input type="hidden" name="dlgId" id="iptDlgId" value="">
                                             <input type="hidden" name="groupL" id="iptGroupL" value="">
                                             <input type="hidden" name="groupM" id="iptGroupM" value="">
                                             <input type="hidden" name="dlg_description" id="iptDlgDescription" value="">
+                                            <input type="hidden" name="originDlgType" id="iptOriginDlgType" value="">
 
                                             <label><%= __('DIALOG_BOX_TYPE') %></label>
                                             <select class="form-control" name="dlgType" id="dlgType">

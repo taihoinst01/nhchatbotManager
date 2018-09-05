@@ -118,7 +118,9 @@ function openModalBoxEdit(strDlgId, strDlgType) {
     });
     //  대화상자 타입
     $("#dlgType").val(strDlgType).prop("selected", true);
-    
+    //  대화상자 타입 (origin)
+    $("#iptOriginDlgType").val(strDlgType);
+
     $(".previewBtnArea > button").remove();
     //inputAreaAdd();
     $.ajax({
@@ -831,7 +833,8 @@ function editDialog(){  //  대화상자 수정
         }
     });    
     if(exit) return;
-    
+
+    $("#iptScenarioNm").val($("#iptScenarioName").val());   // 시나리오명
     $("#iptGroupL").val($("#iptLargeGroup").val());     // 대그룹
     $("#iptGroupM").val($("#iptMiddleGroup").val());    // 중그룹
     $("#iptDlgDescription").val($("#iptDescription").val());    // 설명
@@ -843,12 +846,15 @@ function editDialog(){  //  대화상자 수정
     var object  = {};
     var carouselArr = [];
     var objectCarousel = {};
+    console.log('tmp[0].value:'+tmp[0].value);
 
-    if (tmp[0].value === "3") { //  dlgType     
+    if (tmp[5].value === "3") { //  dlgType (CARD)     
         var btnTypeCount = 1;
         var cButtonContentCount = 1;
         var cButtonNameCount = 1;
+        console.log('tmp.length:'+tmp.length);
         for (var j = 1; j < tmp.length; j++) {
+            console.log('tmp[j].name:'+tmp[j].name);
             if(tmp[j].name == 'btnType') {
                 tmp[j].name = 'btn'+ (btnTypeCount++) +'Type';
                 if(btnTypeCount == 5) {
@@ -867,7 +873,7 @@ function editDialog(){  //  대화상자 수정
                     cButtonNameCount = 1;
                 }
             }
-            
+            /*
             if (typeof objectCarousel[tmp[j].name] !== "undefined" ) {
                 carouselArr.push(objectCarousel);
                 objectCarousel = {};
@@ -875,28 +881,20 @@ function editDialog(){  //  대화상자 수정
                 cButtonContentCount = 1;
                 cButtonNameCount = 1;
             } 
-
+            */
             if(j === tmp.length-1){
-                object[tmp[0].name] = tmp[0].value;
-                objectCarousel[tmp[j].name] = tmp[j].value;    
-
-                carouselArr.push(objectCarousel);
-                objectCarousel = {};
+                object[tmp[j].name] = tmp[j].value;
                 break;
             }
-            object[tmp[0].name] = tmp[0].value;
-            objectCarousel[tmp[j].name] = tmp[j].value;
+            object[tmp[j].name] = tmp[j].value;
         }
-        //carouselArr.push(objectCarousel);
         object['carouselArr'] = carouselArr;
-    } else if (tmp[0].value === "4") {
 
+    } else if (tmp[5].value === "4") { //  dlgType (MEDIA)\
         var btnTypeCount = 1;
         var mButtonContentCount = 1;
         var mButtonNameCount = 1;
-
         for (var j = 0; j < tmp.length; j++) {
-
             if(tmp[j].name == 'btnType') {
                 tmp[j].name = 'btn'+ (btnTypeCount++) +'Type';
             }
@@ -907,7 +905,6 @@ function editDialog(){  //  대화상자 수정
             if(tmp[j].name == 'mButtonName') {
                 tmp[j].name = 'mButtonName'+ (mButtonNameCount++);
             }
-
             object[tmp[j].name] = tmp[j].value;
         }
         
@@ -917,16 +914,18 @@ function editDialog(){  //  대화상자 수정
         }
     }
 
-    
-    
     //array[i] = JSON.stringify(object);//JSON.stringify(tmp);//tmp.substring(1, tmp.length-2);
-    array = JSON.stringify(object);//JSON.stringify(tmp);//tmp.substring(1, tmp.length-2);
+    array = JSON.stringify(object); //JSON.stringify(tmp);//tmp.substring(1, tmp.length-2);
     
-
-
+    //console.log(carouselArr);
+    //console.log('carouselArr[0].length:'+carouselArr[0].length);
     //array[array.length] = JSON.stringify($("form[name=appInsertForm]").serializeObject());//JSON.stringify($("form[name=appInsertForm]"));
-    //array[0] = JSON.stringify($("form[name=appEditForm]").serializeObject()); //JSON.stringify($("form[name=appInsertForm]"));
-    console.log("editDialog - END")
+    //array['carouselArr'] = JSON.stringify($("form[name=appEditForm]").serializeObject()); //JSON.stringify($("form[name=appInsertForm]"));
+    //array.push(JSON.stringify($("form[name=appEditForm]").serializeObject()));
+    //carouselArr = JSON.stringify($("form[name=appEditForm]").serializeObject());
+    
+    //array = array.concat(carouselArr[0]);
+    console.log("editDialog - END");
     console.log(array);
 
     $.ajax({
@@ -935,15 +934,10 @@ function editDialog(){  //  대화상자 수정
         type: 'POST',
         data: {'data' : array},
         success: function(data) {
-
             if(data['status'] == '200'){
                 alert(language.Edited);
                 $('.createDlgModalClose').click();
-
             }
-            
-
-            
         } 
     });
     
@@ -1945,6 +1939,8 @@ function selectScenarioList() {     //  시나리오 목록
 function getScenarioDialogs(strScenarioName){
     //alert('getScenarioDialogs():'+strScenarioName);
     
+    $("#divScenarioDialogs").html('');
+
     $.ajax({
         url: '/learning/getScenarioDialogs',
         dataType: 'json',
