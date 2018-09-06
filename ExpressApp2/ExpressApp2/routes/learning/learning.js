@@ -4031,6 +4031,32 @@ router.post('/selectScenarioList', function (req, res) {
     })
 });
 
+router.post('/selectScenarioInfo', function (req, res) {
+    var dlgId = req.body.dlgId;
+    (async () => {
+        try {
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            var queryText = "";
 
+            queryText = "SELECT SCENARIO_SEQ, SCENARIO_NM, SCENARIO_GROUP, DLG_ID, DLG_DEPTH, DLG_ORDER_BY, PARENT_DLG_ID FROM TBL_SCENARIO_DLG "
+            queryText += "WHERE DLG_ID = '"+dlgId+"'";
+
+            let result = await pool.request().query(queryText);
+            let rows = result.recordset;
+
+            res.send({ "rows": rows });
+        } catch (err) {
+            console.log(err);
+            res.send({ status: 500, message: 'selectScenarioInfo Error' });
+        } finally {
+            sql.close();
+        }
+        
+    })()
+
+    sql.on('error', err => {
+        console.log(err);
+    })
+});
 
 module.exports = router;

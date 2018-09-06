@@ -350,6 +350,7 @@
         </div>
     </div>
     <!-- //팝업_대화상자 찾기 -->
+    
     <!-- 신규 대화상자 생성 -->
     <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg02">
@@ -550,7 +551,6 @@
     </div>
     <!-- // 신규 대화상자 생성 -->
 
-
     <!-- 대화상자 수정 -->
     <div class="modal fade" id="myModalEdit" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg02">
@@ -614,54 +614,11 @@
                                             <div class="clear-both"></div>      
                                             
                                             <div class="editArea">
-
                                             </div>
 
-                                            <!--<div class="inputArea">
-
-                                                <div class='scenario-form-group dlg_input_title'>
-                                                    <label>" + language.DIALOG_BOX_TITLE + "<span class='nec_ico'>*</span></label>
-                                                    <input type='text' name='dialogTitle' class='form-control' onkeyup='writeDialogTitle(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>
-                                                </div>
-                                                <div class='scenario-form-group dlg_input_sub_title dpN'>
-                                                    <label>" + language.DIALOG_BOX_SUBTITLE + "<span class='nec_ico'>*</span></label>
-                                                    <input type='text' name='dialogSubTitle' class='form-control' onkeyup='writeDialogSubTitle(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>
-                                                </div>
-                                                <div class='scenario-form-group dlg_input_text'>
-                                                    <label>" + language.DIALOG_BOX_CONTENTS + "<span class='nec_ico'>*</span></label>
-                                                    <input type='text' name='dialogText' class='form-control' onkeyup='writeDialog(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>
-                                                </div>
-                                                <div class='scenario-form-group dlg_input_img dpN'>
-                                                    <label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label><button class='dlg_input_img_change'>적용</button>
-                                                    <div>sample URL : /images/ico_car.png </div>
-                                                    <input type='text' name='imgUrl' class='form-control' onkeyup='writeCarouselImg(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>
-                                                </div>
-
-                                                <div class='clear- both'></div>
-                                                <div class='btn-group btn-group-justified insertBtnArea dpN' role='group'>
-                                                    <div class='btn-group dlg_btn_insert' role='group'>
-                                                        <button type='button' class='btn btn-default carouseBtn'>" + language.INSERT_MORE_BUTTON + "</button>
-                                                    </div>
-                                                    <div class='btn-group dlg_btn_insert_card' role='group'>
-                                                        <button type='button' class='btn btn-default addCarouselBtn'>" + language.INSERT_MORE_CARDS + "</button>
-                                                    </div>
-                                                </div>
-                                                <div class='btn-group btn-group-justified deleteBtnArea dpN' role='group'>
-                                                    <div class='btn-group deleteInsertFormDiv dlg_btn_delete' role='group'>
-                                                        <button type='button' class='btn btn-default deleteInsertForm'>" + language.DELETE_DIALOG + "</button>
-                                                    </div>
-                                                    <div class='btn-group dlg_btn_delete_card' role='group'>
-                                                        <button type='button' class='btn btn-default deleteCard'>" + language.DELETE_CARD + "</button>
-                                                    </div>
-                                                </div>
-                                                <div class='inputBtnArea'></div>
-
-                                            </div>-->
                                         </form>
                                     </div>
                                 </div>
-
-                                
                             </div>
                         </div>
                         <!-- 대화상자 미리보기 -->
@@ -702,6 +659,7 @@
                     </div>
                     <div class="btn_wrap">
                         <button type="button" class="btn btn_01" onclick="editDialog();"><%= __('EDIT') %></button>
+                        <button type="button" class="btn btn_01" data-toggle="modal" data-target="#myModalAdd" onclick="openModalBoxAdd();"><%= __('Add_dialog') %></button>
                         <button type="button" class="btn btn-default createDlgModalClose" data-dismiss="modal"><%= __('CANCEL') %></button>
                     </div>
                 </div>
@@ -710,24 +668,196 @@
     </div>
     <!-- // 대화상자 수정 -->
 
-    <!--<script>
-        //iCheck for checkbox and radio inputs
-        $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-            checkboxClass: 'icheckbox_minimal-blue',
-            radioClass: 'iradio_minimal-blue'
-        })
-        //Red color scheme for iCheck
-        $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-            checkboxClass: 'icheckbox_minimal-red',
-            radioClass: 'iradio_minimal-red'
-        })
-        //Flat red color scheme for iCheck
-        $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-            checkboxClass: 'icheckbox_flat-green',
-            radioClass: 'iradio_flat-green'
-        })
+    <!-- 대화상자 추가 -->
+    <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg02">
+                <div class="modal-content">
+    
+                    <div class="modal-header" style="clear:both">
+                        <button type="button" class="close createDlgModalClose" data-dismiss="modal"><span aria-hidden="true">×</span><span class="sr-only">Close</span></button>
+                        <h4 class="modal-title" id="myModalLabel"><%= __('ADD_DIALOG_BOX') %></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="modal_con">
+                            <!-- 그룹 정보 -->
+                            <div class="col-md-6" style="padding:0">
+                                <form name="appAddForm" id="appAddForm">
+                                    <h5><span class="col01 fa fa-chevron-right"></span> <%= __('GROUP_INFORMATION') %></h5>
+                                    <div class="scenario-form-group col-md-12" style="padding:0">
+                                        <label><%= __('SCENARIO_NAME') %><span class="nec_ico">*</span></label>
+                                        <input type="text" name="scenarioName" readonly class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
+                                    </div>
+                                    <div class="scenario-form-group col-md-6" style="padding:0">
+                                        <label><%= __('Large_group') %><span class="nec_ico">*</span></label>
+                                        <select class="form-control" id="largeGroup" name="largeGroup">
+                                            <option value="">선택</option>
+                                        </select>
+                                    </div>
+                                    <div class="scenario-form-group col-md-6" style="padding-right:0">
+                                        <label>
+                                            <%= __('Middle_group') %><span class="nec_ico">*</span>
+                                        </label>
+                                        <button type="button" class="btn btn-block btn-default btn-xs fr newMidBtn"><%= __('NEW') %></button>
+                                        <button type="button" class="btn btn-default btn-xs fr cancelMidBtn" style="display: none;"><%= __('CANCEL') %></button>
+                                        <select class="form-control" id="middleGroup" name="middleGroup">
+                                            <option value="">선택</option>
+                                        </select>
+                                        <input type="text" name="middleGroup" class="form-control" style="display: none;" disabled>
+                                    </div>
+                                    <div class="clear-both"></div>
+                                    <div class="scenario-form-group">
+                                        <label><%= __('explanation') %></label>
+                                        <textarea class="form-control" name="description" id="description" rows="2" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'></textarea>
+                                    </div>
+                                </form>
+                                <div id="commonLayout" class="dialog_s">
+                                    <div class="insertForm">
+                                        <div class="scenario-form-group">
+                                            <form name="dialogLayout" id="dialogLayout">
+    
+                                                <label><%= __('DIALOG_BOX_TYPE') %></label>
+                                                <select class="form-control" name="dlgType">
+                                                    <option value="2"><%= __('TEXT_TYPE') %></option>
+                                                    <option value="3"><%= __('CARD_TYPE') %></option>
+                                                    <option value="4"><%= __('MEDIA_TYPE') %></option>
+                                                </select>
+                                                <div class="clear-both"></div>
 
-    </script>-->
+                                                <div class="dlg_card_division dpN">
+                                                    <label><%= __('CARD_DIVISION') %></label>
+                                                    <select class="form-control" name="dlgCardDivision">
+                                                        <option value=""><%= __('CARD_DIVISION_DEFAULT') %></option>
+                                                        <option value="img"><%= __('CARD_DIVISION_IMG') %></option>
+                                                        <option value="play"><%= __('CARD_DIVISION_PLAY') %></option>
+                                                    </select>
+                                                </div>
+                                                <div class="inputArea"></div>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                    <!-- 미디어 타입 -->
+                                    <div class="mediaLayout dpN" id="dialog3">
+                                        <div class="scenario-form-group">
+                                            <label><%= __('IMAGE_URL') %><span class="nec_ico">*</span></label>
+                                            <input type="text" name="mediaImgUrl" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
+                                        </div>
+                                        <div class="scenario-form-group">
+                                            <label><%= __('MEDIA_URL') %></label>
+                                            <input type="text" name="mediaUrl" class="form-control" placeholder="<%= __('Please_enter') %>" spellcheck="false" autocomplete='off'>
+                                        </div>
+                                        <div class="modal_con btnInsertDiv">
+    
+                                        </div>
+                                        <div class="btn_wrap" style="clear:both">
+                                            <button type="button" class="btn btn-default addMediaBtn"><%= __('INSERT_MORE_BUTTON') %></button>
+                                        </div>
+                                    </div>
+    
+                                    <!-- carousal 일 경우 card 순서 input box 추가 layout -->
+                                    <div id="cardLayout" class="dpN">
+                                        <p class="texcon03">Card Order <span>(required) </span></p>
+                                        <p>
+                                            <select name="cardOrderNo" class="inbox02" id="cardOrderNo" style="width:100%">
+                                                <option value="1" selected>1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                                <option value="7">7</option>
+                                            </select>
+                                        </p>
+                                    </div>
+    
+                                    <!-- media , carousal 일 경우 input box 추가 layout -->
+                                    <div id="mediaCarouselLayout" class="dpN">
+                                        <div class="layout-float-left">
+                                            <p class="texcon03">Button Name <span>(optional) </span></p>
+                                            <p>
+                                                <input name="buttonName1" type="text" class="inbox02 btnBox" id="buttonName1" placeholder="Input name.." spellcheck="false" autocomplete='off' />
+                                                <input name="buttonName2" type="text" class="inbox02 btnBox" id="buttonName2" placeholder="Input name.." spellcheck="false" autocomplete='off' />
+                                                <input name="buttonName3" type="text" class="inbox02 btnBox" id="buttonName3" placeholder="Input name.." spellcheck="false" autocomplete='off' />
+                                                <input name="buttonName4" type="text" class="inbox02 btnBox" id="buttonName4" placeholder="Input name.." spellcheck="false" autocomplete='off' />
+                                            </p>
+                                        </div>
+                                        <div class="layout-float-left-last">
+                                            <p class="texcon03">Button Content <span>(optional) </span></p>
+                                            <p>
+                                                <input name="buttonContent1" type="text" class="inbox02 btnBox" id="buttonContent1" placeholder="Input contents.." spellcheck="false" autocomplete='off' />
+                                                <input name="buttonContent2" type="text" class="inbox02 btnBox" id="buttonContent2" placeholder="Input contents.." spellcheck="false" autocomplete='off' />
+                                                <input name="buttonContent3" type="text" class="inbox02 btnBox" id="buttonContent3" placeholder="Input contents.." spellcheck="false" autocomplete='off' />
+                                                <input name="buttonContent4" type="text" class="inbox02 btnBox" id="buttonContent4" placeholder="Input contents.." spellcheck="false" autocomplete='off' />
+                                            </p>
+                                        </div>
+                                        <div class="clear-both"></div>
+    
+                                        <p class="texcon03">Image Url <span>(optional) </span></p>
+                                        <p><input name="imgUrl" type="text" class="inbox02" id="imgUrl" style="width:100%" placeholder="Input image url.." spellcheck="false" autocomplete='off' /></p>
+                                    </div>
+                                    <!--// media , carousal 일 경우 input box 추가 layout -->
+    
+                                    <!--<div class="btn_wrap boline">
+                                        <button type="button" class="btn btn_01" id="addDialogBtn"><%= __('INSERT_ADDITIONAL_DIALOG') %></button>
+                                    </div>-->
+                                </div>
+                                <!-- source type이 API일 경우 -->
+                                <div id="apiLayout" style="display:none;">
+                                    <div class="scenario-form-group">
+                                        <label>API Name<span class="nec_ico">*</span></label>
+                                        <input type="text" name="apiName" class="form-control">
+                                    </div>
+                                    <div class="scenario-form-group">
+                                        <label>API Url<span class="nec_ico">*</span></label>
+                                        <input type="text" name="apiUrl" class="form-control">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 대화상자 미리보기 -->
+                            <div class="col-md-6" style="padding-right:0">
+                                <h5><span class="col01 fa fa-chevron-right"></span><%= __('PREVIEW_DIALOG_BOX') %></h5>
+                                <!-- 대화상자  -->
+                                <div class="dialog_box03" id="dialogViewWrap">
+                                    <div class="dialogView">
+                                        <div class="wc-message wc-message-from-bot" style="width:80%;">
+                                            <div class="wc-message-content">
+                                                <svg class="wc-message-callout"></svg>
+                                                <div>
+                                                    <div class="format-markdown textTypeView dpB">
+                                                        <div class="textMent">
+                                                            <img class="previewImg dpN" src="" />
+                                                            <h1 class="previewTitle"><%= __('Please_enter_a_title') %></h1>
+                                                            <p class="previewSubTitle dpN">
+                                                                <%= __('Please_enter_a_sub_title') %>
+                                                            </p>
+                                                            <p class="previewText">
+                                                                <%= __('Please_enter_your_content') %>
+                                                            </p>
+                                                            <div class="previewBtnArea"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <div class="modal-footer">
+                        <div class="nec02">
+                            <span class="nec_ico">*</span> <%= __('IS_REQUIRED') %>
+                        </div>
+                        <div class="btn_wrap">
+                            <button type="button" class="btn btn_01" onclick="createDialog();"><%= __('CREAT') %></button>
+                            <button type="button" class="btn btn-default createDlgModalClose" data-dismiss="modal"><%= __('CANCEL') %></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- // 대화상자 추가 -->
 
 </body>
 

@@ -278,5 +278,6 @@
 	"CARD_DIVISION_DEFAULT": "기본",
 	"CARD_DIVISION_IMG": "이미지",
 	"CARD_DIVISION_PLAY": "영상",
-	"Edited": "수정되었습니다."
+	"Edited": "수정되었습니다.",
+	"ADD_DIALOG_BOX": "ADD_DIALOG_BOX"
 }

@@ -181,7 +181,7 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                 $(".previewSubTitle").text(dlgInfo.CARD_SUBTITLE);
                 $(".previewText").text(dlgInfo.CARD_TEXT);
 
-                //btn 갯수 파악 및 생성
+                // btn 갯수 파악 및 생성
                 var _btnCnt = 0;
                 if (dlgInfo.BTN_4_TITLE != null) {
                     _btnCnt = 4;
@@ -280,6 +280,16 @@ function openModalBoxEdit(strDlgId, strDlgType) {
         }
     });
 }
+
+function openModalBoxAdd() {
+    var strDlgId = $("#iptDlgId").val();
+    alert('openModalBoxAdd() strDlgId:'+strDlgId);
+    
+    // TBL_SCENARIO_DLG 테이블 정보 가져오기..
+    selectScenarioInfo(strDlgId);   
+
+}
+
 
 function inputAreaAdd(){
     $(".inputArea > div").remove();
@@ -810,8 +820,7 @@ function createDialog(){
 }
 
 function editDialog(){  //  대화상자 수정
-    
-    //var idx = $('form[name=dialogLayoutEdit]').length;
+
     var array = [];
     var exit = false;
     var scenarioNm = $("#iptScenarioName").val();
@@ -841,20 +850,19 @@ function editDialog(){  //  대화상자 수정
 
     //  GET FORM DATA - FROM dialogLayoutEdit  
     var tmp = $("form[name=dialogLayoutEdit]").serializeArray();
-    console.log(tmp);
-    //alert('* dialogLayoutEdit - tmp[0].name:'+tmp[0].name+'|tmp[0].value:'+tmp[0].value);
+    console.log(tmp);    
     var object  = {};
     var carouselArr = [];
     var objectCarousel = {};
-    console.log('tmp[0].value:'+tmp[0].value);
+    //console.log('tmp[0].value:'+tmp[0].value);
 
     if (tmp[5].value === "3") { //  dlgType (CARD)     
         var btnTypeCount = 1;
         var cButtonContentCount = 1;
         var cButtonNameCount = 1;
-        console.log('tmp.length:'+tmp.length);
+        //console.log('tmp.length:'+tmp.length);
         for (var j = 1; j < tmp.length; j++) {
-            console.log('tmp[j].name:'+tmp[j].name);
+            //console.log('tmp[j].name:'+tmp[j].name);
             if(tmp[j].name == 'btnType') {
                 tmp[j].name = 'btn'+ (btnTypeCount++) +'Type';
                 if(btnTypeCount == 5) {
@@ -914,7 +922,6 @@ function editDialog(){  //  대화상자 수정
         }
     }
 
-    //array[i] = JSON.stringify(object);//JSON.stringify(tmp);//tmp.substring(1, tmp.length-2);
     array = JSON.stringify(object); //JSON.stringify(tmp);//tmp.substring(1, tmp.length-2);
     
     //console.log(carouselArr);
@@ -924,7 +931,6 @@ function editDialog(){  //  대화상자 수정
     //array.push(JSON.stringify($("form[name=appEditForm]").serializeObject()));
     //carouselArr = JSON.stringify($("form[name=appEditForm]").serializeObject());
     
-    //array = array.concat(carouselArr[0]);
     console.log("editDialog - END");
     console.log(array);
 
@@ -939,7 +945,6 @@ function editDialog(){  //  대화상자 수정
                 //  modal pop close..
                 $('.createDlgModalClose').click();
                 //  dialogs list refresh..
-                alert('scenarioNm:'+scenarioNm);
                 getScenarioDialogs(scenarioNm);
 
             }
@@ -949,7 +954,7 @@ function editDialog(){  //  대화상자 수정
 }
 
 var botChatNum = 1; 
-//dlg ����
+//dlg 
 var dlgMap = new Object();
 function selectDlgListAjax(entity) {
     $.ajax({
@@ -1124,6 +1129,7 @@ function prevBtn(botChatNum, e) {
 
 
 function utterInput(queryText) {
+    alert('utterInput() queryText:'+queryText);
     var queryTextArr = [];
     if (typeof queryText === 'string') {
         queryTextArr[0] = queryText;
@@ -1936,6 +1942,28 @@ function selectScenarioList() {     //  시나리오 목록
                 $('#utterTableBody').html(strScenarioList);
             }else{
                 alert('selectScenarioList fail');
+            }
+        }
+    });
+}
+
+function selectScenarioInfo(strDlgId) {     //  DLG_ID 별 시나리오 정보
+    //alert('selectScenarioInfo()');
+    $.ajax({
+        url: '/learning/selectScenarioInfo',
+        dataType: 'json',
+        data: {'dlgId':strDlgId},
+        type: 'POST',
+        isloading: true,
+        success: function(data) {
+            if(data.rows){  //alert('data.rows');
+                var scenarioInfo = data.rows;
+                alert("selectScenarioInfo() - "+scenarioInfo[0].SCENARIO_NM+" | DLG_ID:"+scenarioInfo[0].DLG_ID+" | DLG_DEPTH:"+scenarioInfo[0].DLG_DEPTH+" | PARENT_DLG_ID:"+scenarioInfo[0].PARENT_DLG_ID);
+
+                $('form[name="appAddForm"]').find('input[name="scenarioName"]').val(scenarioInfo[0].SCENARIO_NM);
+
+            }else{
+                alert('selectScenarioInfo fail');
             }
         }
     });
