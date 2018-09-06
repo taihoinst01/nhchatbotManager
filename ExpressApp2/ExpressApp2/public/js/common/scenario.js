@@ -74,7 +74,7 @@ function openModalBox(target) {
             "</div>" +
             "<div class='scenario-form-group dlg_input_text'>" +
                 "<label>" + language.DIALOG_BOX_CONTENTS + "<span class='nec_ico'>*</span></label>" +
-                "<input type='text' name='dialogText' class='form-control' onkeyup='writeDialog(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+                "<input type='text' name='dialogText' id='iptDlgText' class='form-control' onkeyup='writeDialog(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
             "</div>" +
             "<div class='scenario-form-group dlg_input_img dpN'>" +
                 "<label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label><button class='dlg_input_img_change'>적용</button>" +
@@ -283,10 +283,17 @@ function openModalBoxEdit(strDlgId, strDlgType) {
 
 function openModalBoxAdd() {
     var strDlgId = $("#iptDlgId").val();
-    alert('openModalBoxAdd() strDlgId:'+strDlgId);
+    //alert('openModalBoxAdd() strDlgId:'+strDlgId);
     
     // TBL_SCENARIO_DLG 테이블 정보 가져오기..
     selectScenarioInfo(strDlgId);   
+    //  대그룹,중그룹 init
+    getGroupSelectBox();
+    /*
+    $("#middleGroup").ajaxComplete(function () {
+        getGroupSelectBox();
+    });
+    */
 
 }
 
@@ -658,8 +665,11 @@ function createDialog(){
     }
     if(exit) return;
     */
-   
-    $('.insertForm input[name=dialogText]').each(function(index) {
+    
+    
+    //$('.insertForm input[name=dialogText]').each(function(index) {
+    $('#iptDlgText').each(function(index) {
+        
         if ($(this).val().trim() === "") {
             alert(language.You_must_enter_the_dialog_text);
             exit = true;
@@ -667,6 +677,7 @@ function createDialog(){
         }
     });
     
+
     if(exit) return;
 
     $('.insertForm input[name=mediaImgUrl]').each(function(index) {
