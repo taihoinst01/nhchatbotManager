@@ -294,6 +294,52 @@ function openModalBoxAdd() {
         getGroupSelectBox();
     });
     */
+    //inputAreaAdd();
+    $("#addChildInputArea > div").remove();
+    $("#addChildInputArea > div").add(
+        "<div class='textLayout'>" +
+            // 텍스트
+            "<div class='scenario-form-group dlg_input_title'>" +
+                "<label>" + language.DIALOG_BOX_TITLE + "<span class='nec_ico'>*</span></label>" +
+                "<input type='text' name='dialogTitle' class='form-control' onkeyup='writeDialogTitle(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+            "</div>" +
+            "<div class='scenario-form-group dlg_input_sub_title dpN'>" +
+                "<label>" + language.DIALOG_BOX_SUBTITLE + "<span class='nec_ico'>*</span></label>" +
+                "<input type='text' name='dialogSubTitle' class='form-control' onkeyup='writeDialogSubTitle(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+            "</div>" +
+            "<div class='scenario-form-group dlg_input_text'>" +
+                "<label>" + language.DIALOG_BOX_CONTENTS + "<span class='nec_ico'>*</span></label>" +
+                "<input type='text' name='dialogText' id='iptDlgText' class='form-control' onkeyup='writeDialog(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+            "</div>" +
+            "<div class='scenario-form-group dlg_input_img dpN'>" +
+                "<label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label><button class='dlg_input_img_change'>적용</button>" +
+                "<div>sample URL : /images/ico_car.png </div>" +
+                "<input type='text' name='imgUrl' class='form-control' onkeyup='writeCarouselImg(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+            "</div>" +
+            // 버튼선택
+            "<div class='clear- both'></div>" +
+            "<div class='btn-group btn-group-justified insertBtnArea dpN' role='group'> " + 
+                "<div class='btn-group dlg_btn_insert' role='group'>" +
+                    "<button type='button' class='btn btn-default carouseBtn'>" + language.INSERT_MORE_BUTTON + "</button>" +
+                "</div>" +
+                "<div class='btn-group dlg_btn_insert_card' role='group'>" +
+                    "<button type='button' class='btn btn-default addCarouselBtn'>" + language.INSERT_MORE_CARDS + "</button>" +
+                "</div>" +
+            "</div > " +
+            "<div class='btn-group btn-group-justified deleteBtnArea'role='group'> " + 
+                "<div class='btn-group deleteInsertFormDiv dlg_btn_delete dpN'role='group'>" +
+                    "<button type='button' class='btn btn-default deleteInsertForm'>" + language.DELETE_DIALOG + "</button>" +
+                "</div>" +
+                "<div class='btn-group dlg_btn_delete_card dpN'role='group'>" +
+                    "<button type='button' class='btn btn-default deleteCard'>" + language.DELETE_CARD + "</button>" +
+                "</div>" +
+            "</div>" +
+            // 추가될버튼 영역
+            "<div class='inputBtnArea'></div>" +
+        "</div>"
+    ).appendTo("#addChildInputArea");
+
+
 
 }
 
@@ -638,7 +684,7 @@ function selectApiGroup() {
 
 
 function createDialog(){
-    alert('1');
+    //alert('1');
     var idx = $('form[name=dialogLayout]').length;
     var array = [];
     var exit = false;
@@ -669,7 +715,6 @@ function createDialog(){
     
     //$('.insertForm input[name=dialogText]').each(function(index) {
     $('#iptDlgText').each(function(index) {
-        
         if ($(this).val().trim() === "") {
             alert(language.You_must_enter_the_dialog_text);
             exit = true;
@@ -677,7 +722,6 @@ function createDialog(){
         }
     });
     
-
     if(exit) return;
 
     $('.insertForm input[name=mediaImgUrl]').each(function(index) {
@@ -963,6 +1007,183 @@ function editDialog(){  //  대화상자 수정
     });
     
 }
+
+
+function addChildDialog(){   //  (자식) 대화상자 추가
+    //alert("addChildDialog() (자식)");
+    var idx = $('form[name=dialogLayoutAdd]').length;
+    var array = [];
+    var exit = false;
+
+    $('form[name=dialogLayoutAdd] input[name=dialogTitle]').each(function(index) {
+        if ($(this).val().trim() === "") {
+            alert(language.You_must_enter_a_Dialog_Title);
+            exit = true;
+            return false;
+        }
+    });    
+    if(exit) return;
+    //alert($('form[name=dialogLayoutAdd] select[name=dlgType]').val());
+    if($('form[name=dialogLayoutAdd] select[name=dlgType]').val() != "2" ){
+        $('form[name=dialogLayoutAdd] input[name=dialogSubTitle]').each(function(index) {
+            if ($(this).val().trim() === "") {
+                alert(language.Please_enter_a_sub_title);
+                exit = true;
+                return false;
+            }
+        });    
+        if(exit) return;
+    }
+    $('form[name=dialogLayoutAdd] input[name=dialogText]').each(function(index) {
+        if ($(this).val().trim() === "") {
+            alert(language.You_must_enter_the_dialog_text);
+            exit = true;
+            return false;
+        }
+    });    
+    if(exit) return;
+    if($('form[name=dialogLayoutAdd] select[name=dlgType]').val() != "2" ){
+        $('form[name=dialogLayoutAdd] input[name=mediaImgUrl]').each(function(index) {
+            if ($(this).val().trim() === "") {
+                alert(language.ImageURL_must_be_entered);
+                exit = true;
+                return false;
+            }
+        });
+        if(exit) return;
+    }
+      
+    $('form[name=dialogLayoutAdd] input[name=groupL]').val($('form[name=appAddForm] select[name=largeGroup]').val());     // 대그룹
+    $('form[name=dialogLayoutAdd] input[name=groupM]').val($('form[name=appAddForm] select[name=middleGroup]').val());    // 중그룹
+    $('form[name=dialogLayoutAdd] input[name=dlg_description]').val($('form[name=appAddForm] textarea[name=description]').val());    // 설명
+
+    for(var i = 0 ; i < idx ; i++) {
+        var tmp = $("form[name=dialogLayoutAdd]").eq(i).serializeArray();
+        console.log(tmp);
+        var object  = {};
+        var carouselArr = [];
+        var objectCarousel = {};
+        if (tmp[6].value === "3") {
+            var btnTypeCount = 1;
+            var cButtonContentCount = 1;
+            var cButtonNameCount = 1;
+            for (var j = 1; j < tmp.length; j++) {
+                if(tmp[j].name == 'btnType') {
+                    tmp[j].name = 'btn'+ (btnTypeCount++) +'Type';
+                    if(btnTypeCount == 5) {
+                        btnTypeCount = 1;
+                    }
+                }
+                if(tmp[j].name == 'cButtonContent') {
+                    tmp[j].name = 'cButtonContent'+ (cButtonContentCount++);
+                    if(cButtonContentCount == 5) {
+                        cButtonContentCount = 1;
+                    }
+                }
+                if(tmp[j].name == 'cButtonName') {
+                    tmp[j].name = 'cButtonName'+ (cButtonNameCount++);
+                    if(cButtonNameCount == 5) {
+                        cButtonNameCount = 1;
+                    }
+                }
+                
+                if (typeof objectCarousel[tmp[j].name] !== "undefined" ) {
+                    carouselArr.push(objectCarousel);
+                    objectCarousel = {};
+                    btnTypeCount = 1;
+                    cButtonContentCount = 1;
+                    cButtonNameCount = 1;
+                } 
+
+                if(j === tmp.length-1){
+                    object[tmp[0].name] = tmp[0].value;
+                    objectCarousel[tmp[j].name] = tmp[j].value;    
+
+                    carouselArr.push(objectCarousel);
+                    objectCarousel = {};
+                    break;
+                }
+                object[tmp[0].name] = tmp[0].value;
+                objectCarousel[tmp[j].name] = tmp[j].value;
+            }
+            //carouselArr.push(objectCarousel);
+            object['carouselArr'] = carouselArr;
+        } else if (tmp[6].value === "4") {
+
+            var btnTypeCount = 1;
+            var mButtonContentCount = 1;
+            var mButtonNameCount = 1;
+
+            for (var j = 0; j < tmp.length; j++) {
+
+                if(tmp[j].name == 'btnType') {
+                    tmp[j].name = 'btn'+ (btnTypeCount++) +'Type';
+                }
+                if(tmp[j].name == 'mButtonContent') {
+                    tmp[j].name = 'mButtonContent'+ (mButtonContentCount++);
+    
+                }
+                if(tmp[j].name == 'mButtonName') {
+                    tmp[j].name = 'mButtonName'+ (mButtonNameCount++);
+                }
+
+                object[tmp[j].name] = tmp[j].value;
+            }
+            
+        } else {
+            for (var j = 0; j < tmp.length; j++) {
+                object[tmp[j].name] = tmp[j].value;
+            }
+        }
+
+        
+        
+        array[i] = JSON.stringify(object);//JSON.stringify(tmp);//tmp.substring(1, tmp.length-2);
+    }
+    //JSON.stringify($("form[name=appInsertForm]").serializeObject());
+    array[array.length] = JSON.stringify($("form[name=appAddForm]").serializeObject());//JSON.stringify($("form[name=appInsertForm]"));
+
+    console.log(array);
+
+    
+    $.ajax({
+        url: '/learning/scenarioAddChildDialog',
+        dataType: 'json',
+        type: 'POST',
+        data: {'data' : array},
+        success: function(data) {
+            alert(language.Added);
+            /*
+            var inputUttrHtml = '';
+            for(var i = 0; i < data.list.length; i++) {
+                inputUttrHtml += '<input type="hidden" name="dlgId" value="' + data.list[i] + '"/>';
+            }
+            var largeGroup = $('#appInsertForm').find('#largeGroup')[0].value
+            var middleGroup;
+             $('#appInsertForm').find('[name=middleGroup]').each(function() {
+                if($(this).attr('disabled') == undefined) {
+                    middleGroup = $(this).val();
+                    return false;
+                }
+            })
+            $('.newMidBtn').click();
+            $('.cancelMidBtn').click();
+
+            inputUttrHtml += '<input type="hidden" name="luisId" value="' + largeGroup + '"/>';
+            inputUttrHtml += '<input type="hidden" name="luisIntent" value="' + middleGroup + '"/>';
+
+            var createDlgClone = $('.dialogView').children().clone();
+            $('#dlgViewDiv').html('');
+            $('#dlgViewDiv').append(createDlgClone);
+            $('#dlgViewDiv').append(inputUttrHtml);
+            $('.createDlgModalClose').click();
+            */
+        }
+    });
+
+
+}
+
 
 var botChatNum = 1; 
 //dlg 
@@ -1849,6 +2070,7 @@ function getGroupSelectBox() {
             }
             $("#largeGroup").html(groupHtml);   
             $("#iptLargeGroup").html(groupHtml);
+            $("#addLargeGroup").html(groupHtml);
 
             groupHtml = "";
             for(var i = 0; i < groupM.length; i++ ) {   //  중그룹
@@ -1856,6 +2078,7 @@ function getGroupSelectBox() {
             }
             $("#middleGroup").html(groupHtml);  // 중그룹 목록 생성
             $("#iptMiddleGroup").html(groupHtml);   // 중그룹 목록 수정
+            $("#addMiddleGroup").html(groupHtml);   // 중그룹 목록 추가
             
         }
     });
@@ -1969,10 +2192,13 @@ function selectScenarioInfo(strDlgId) {     //  DLG_ID 별 시나리오 정보
         success: function(data) {
             if(data.rows){  //alert('data.rows');
                 var scenarioInfo = data.rows;
-                alert("selectScenarioInfo() - "+scenarioInfo[0].SCENARIO_NM+" | DLG_ID:"+scenarioInfo[0].DLG_ID+" | DLG_DEPTH:"+scenarioInfo[0].DLG_DEPTH+" | PARENT_DLG_ID:"+scenarioInfo[0].PARENT_DLG_ID);
+                //alert("selectScenarioInfo() - "+scenarioInfo[0].SCENARIO_NM+" | DLG_ID:"+scenarioInfo[0].DLG_ID+" | DLG_DEPTH:"+scenarioInfo[0].DLG_DEPTH+" | PARENT_DLG_ID:"+scenarioInfo[0].PARENT_DLG_ID);
 
-                $('form[name="appAddForm"]').find('input[name="scenarioName"]').val(scenarioInfo[0].SCENARIO_NM);
-
+                $('form[name="appAddForm"]').find('input[name="scenarioName"]').val(scenarioInfo[0].SCENARIO_NM);   // 시나리오 명
+                $('form[name="dialogLayoutAdd"]').find('input[name="scenario_nm"]').val(scenarioInfo[0].SCENARIO_NM);   // 시나리오 명(hidden)
+                $('form[name="dialogLayoutAdd"]').find('input[name="parentDlgId"]').val(scenarioInfo[0].DLG_ID);    // DLG_ID
+                $('form[name="dialogLayoutAdd"]').find('input[name="parentDlgDepth"]').val(scenarioInfo[0].DLG_DEPTH);    // DLG_DEPTH
+                
             }else{
                 alert('selectScenarioInfo fail');
             }

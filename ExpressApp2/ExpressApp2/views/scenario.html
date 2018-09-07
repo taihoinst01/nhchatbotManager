@@ -659,7 +659,7 @@
                     </div>
                     <div class="btn_wrap">
                         <button type="button" class="btn btn_01" onclick="editDialog();"><%= __('EDIT') %></button>
-                        <button type="button" class="btn btn_01" data-toggle="modal" data-target="#myModalAdd" onclick="openModalBoxAdd();"><%= __('Add_dialog') %></button>
+                        <button type="button" class="btn btn_01 createDlgModalClose" data-toggle="modal" data-target="#myModalAdd" onclick="openModalBoxAdd();"><%= __('Add_dialog') %></button>
                         <button type="button" class="btn btn-default createDlgModalClose" data-dismiss="modal"><%= __('CANCEL') %></button>
                     </div>
                 </div>
@@ -668,7 +668,7 @@
     </div>
     <!-- // 대화상자 수정 -->
 
-    <!-- 대화상자 추가 -->
+    <!-- (자식) 대화상자 추가 -->
     <div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg02">
                 <div class="modal-content">
@@ -689,7 +689,7 @@
                                     </div>
                                     <div class="scenario-form-group col-md-6" style="padding:0">
                                         <label><%= __('Large_group') %><span class="nec_ico">*</span></label>
-                                        <select class="form-control" id="largeGroup" name="largeGroup">
+                                        <select class="form-control" id="addLargeGroup" name="largeGroup">
                                             <option value="">선택</option>
                                         </select>
                                     </div>
@@ -699,7 +699,7 @@
                                         </label>
                                         <button type="button" class="btn btn-block btn-default btn-xs fr newMidBtn"><%= __('NEW') %></button>
                                         <button type="button" class="btn btn-default btn-xs fr cancelMidBtn" style="display: none;"><%= __('CANCEL') %></button>
-                                        <select class="form-control" id="middleGroup" name="middleGroup">
+                                        <select class="form-control" id="addMiddleGroup" name="middleGroup">
                                             <option value="">선택</option>
                                         </select>
                                         <input type="text" name="middleGroup" class="form-control" style="display: none;" disabled>
@@ -711,10 +711,17 @@
                                     </div>
                                 </form>
                                 <div id="commonLayout" class="dialog_s">
-                                    <div class="insertForm">
+                                    <div class="addChildForm">
                                         <div class="scenario-form-group">
-                                            <form name="dialogLayout" id="dialogLayout">
-    
+                                            <form name="dialogLayoutAdd" id="dialogLayoutAdd">
+
+                                                <input type="hidden" name="scenario_nm" id="" value="">
+                                                <input type="hidden" name="parentDlgId" id="" value="">
+                                                <input type="hidden" name="parentDlgDepth" id="" value="">
+                                                <input type="hidden" name="groupL" id="" value="">
+                                                <input type="hidden" name="groupM" id="" value="">
+                                                <input type="hidden" name="dlg_description" id="" value="">
+
                                                 <label><%= __('DIALOG_BOX_TYPE') %></label>
                                                 <select class="form-control" name="dlgType">
                                                     <option value="2"><%= __('TEXT_TYPE') %></option>
@@ -731,7 +738,7 @@
                                                         <option value="play"><%= __('CARD_DIVISION_PLAY') %></option>
                                                     </select>
                                                 </div>
-                                                <div class="inputArea"></div>
+                                                <div class="inputArea" id="addChildInputArea"></div>
                                             </form>
                                         </div>
                                     </div>
@@ -850,7 +857,7 @@
                             <span class="nec_ico">*</span> <%= __('IS_REQUIRED') %>
                         </div>
                         <div class="btn_wrap">
-                            <button type="button" class="btn btn_01" onclick="createDialog();"><%= __('CREAT') %></button>
+                            <button type="button" class="btn btn_01" onclick="addChildDialog();"><%= __('CREAT') %></button>
                             <button type="button" class="btn btn-default createDlgModalClose" data-dismiss="modal"><%= __('CANCEL') %></button>
                         </div>
                     </div>
