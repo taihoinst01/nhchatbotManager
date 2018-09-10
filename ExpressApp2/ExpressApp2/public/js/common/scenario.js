@@ -106,7 +106,7 @@ function openModalBox(target) {
 }
 
 function openModalBoxEdit(strDlgId, strDlgType) {
-    //alert('openModalBoxEdit() strDlgId:'+strDlgId+' | strDlgType:'+strDlgType);
+    alert('openModalBoxEdit() strDlgId:'+strDlgId+' | strDlgType:'+strDlgType);
     
     //  시나리오명
     $("#iptScenarioName").val($('#spanScenarioNm').text());     
@@ -122,6 +122,7 @@ function openModalBoxEdit(strDlgId, strDlgType) {
     $("#iptOriginDlgType").val(strDlgType);
 
     $(".previewBtnArea > button").remove();
+    
     //inputAreaAdd();
     $.ajax({
         url: '/learning/getScenarioDlg',
@@ -132,9 +133,7 @@ function openModalBoxEdit(strDlgId, strDlgType) {
         success: function(data) {
             console.log(data.rows);
             if(data.rows){
-                
-                var dlgInfo = data.rows;    //alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE);                
-                
+                var dlgInfo = data.rows;    //alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE);
                 //  대그룹,중그룹 출력.. (dlgInfo.GROUPL, dlgInfo.GROUPM)
                 $("#iptLargeGroup").val(dlgInfo.GROUPL).prop("selected", true);
                 $("#iptMiddleGroup").val(dlgInfo.GROUPM).prop("selected", true);
@@ -167,9 +166,13 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                     "</div>";
             
                 $(".editArea > div").add(htmlInputArea).appendTo(".editArea");
-
+                
                 if (strDlgType == "3" || strDlgType == "4") {
-                    $('.dlg_edit_sub_title').removeClass("dpN");
+                    if (strDlgType == "3"){
+                        $('.dlg_edit_sub_title').removeClass("dpN");
+                    }else{
+                        $('.dlg_edit_sub_title').addClass("dpN");
+                    }                    
                     $('.dlg_edit_img').removeClass('dpN');
                 } else {
                     $('.dlg_edit_sub_title').addClass("dpN");
@@ -1052,7 +1055,8 @@ function addChildDialog(){   //  (자식) 대화상자 추가
         });
         if(exit) return;
     }
-      
+
+    $('form[name=dialogLayoutAdd] input[name=scenario_nm]').val($('form[name=appAddForm] input[name=scenarioName]').val());     // 시나리오명  
     $('form[name=dialogLayoutAdd] input[name=groupL]').val($('form[name=appAddForm] select[name=largeGroup]').val());     // 대그룹
     $('form[name=dialogLayoutAdd] input[name=groupM]').val($('form[name=appAddForm] select[name=middleGroup]').val());    // 중그룹
     $('form[name=dialogLayoutAdd] input[name=dlg_description]').val($('form[name=appAddForm] textarea[name=description]').val());    // 설명
@@ -1067,7 +1071,7 @@ function addChildDialog(){   //  (자식) 대화상자 추가
             var btnTypeCount = 1;
             var cButtonContentCount = 1;
             var cButtonNameCount = 1;
-            for (var j = 1; j < tmp.length; j++) {
+            for (var j = 0; j < tmp.length; j++) {
                 if(tmp[j].name == 'btnType') {
                     tmp[j].name = 'btn'+ (btnTypeCount++) +'Type';
                     if(btnTypeCount == 5) {
@@ -2149,7 +2153,7 @@ function selectScenarioInfo(strDlgId) {     //  DLG_ID 별 시나리오 정보
         success: function(data) {
             if(data.rows){  //alert('data.rows');
                 var scenarioInfo = data.rows;
-                //alert("selectScenarioInfo() - "+scenarioInfo[0].SCENARIO_NM+" | DLG_ID:"+scenarioInfo[0].DLG_ID+" | DLG_DEPTH:"+scenarioInfo[0].DLG_DEPTH+" | PARENT_DLG_ID:"+scenarioInfo[0].PARENT_DLG_ID);
+                alert("selectScenarioInfo() - "+scenarioInfo[0].SCENARIO_NM+" | DLG_ID:"+scenarioInfo[0].DLG_ID+" | DLG_DEPTH:"+scenarioInfo[0].DLG_DEPTH+" | PARENT_DLG_ID:"+scenarioInfo[0].PARENT_DLG_ID);
 
                 $('form[name="appAddForm"]').find('input[name="scenarioName"]').val(scenarioInfo[0].SCENARIO_NM);   // 시나리오 명
                 $('form[name="dialogLayoutAdd"]').find('input[name="scenario_nm"]').val(scenarioInfo[0].SCENARIO_NM);   // 시나리오 명(hidden)

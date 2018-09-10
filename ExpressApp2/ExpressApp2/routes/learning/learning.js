@@ -3917,7 +3917,7 @@ router.post('/scenarioAddChildDialog', function (req, res) {
                         .input('dlgId', sql.Int, dlgId[0].DLG_ID)
                         .input('dialogTitle', sql.NVarChar, array[i]["dialogTitle"])
                         .input('dialogText', sql.NVarChar, array[i]["dialogText"])
-                        .input('mediaImgUrl', sql.NVarChar, array[i]["mediaImgUrl"])
+                        .input('mediaImgUrl', sql.NVarChar, array[i]["imgUrl"])
                         .input('btn1Type', sql.NVarChar, array[i]["btn1Type"])
                         .input('buttonName1', sql.NVarChar, array[i]["cButtonName1"])
                         .input('buttonContent1', sql.NVarChar, array[i]["cButtonContent1"])
@@ -4139,7 +4139,11 @@ router.post('/getScenarioDlg', function (req, res) {
                 ' TDC.BTN_3_TYPE, TDC.BTN_3_TITLE, TDC.BTN_3_CONTEXT, TDC.BTN_4_TYPE, TDC.BTN_4_TITLE, TDC.BTN_4_CONTEXT ' + 
                 ' FROM TBL_DLG AS TD, TBL_DLG_CARD AS TDC ' + 
                 ' WHERE TD.DLG_ID=\'' + strDlgId + '\' AND TD.DLG_ID = TDC.DLG_ID ';
-            var selectDlgMedia = 'SELECT ISNULL(MAX(DLG_ID)+1,1) AS DLG_ID FROM TBL_DLG';
+            var selectDlgMedia = 'SELECT TD.DLG_ID, TD.DLG_NAME, TD.DLG_DESCRIPTION, TD.GROUPL, TD.GROUPM, TDM.CARD_TITLE, TDM.CARD_TEXT, TDM.MEDIA_URL, ' + 
+                ' TDM.BTN_1_TYPE, TDM.BTN_1_TITLE, TDM.BTN_1_CONTEXT, TDM.BTN_2_TYPE, TDM.BTN_2_TITLE, TDM.BTN_2_CONTEXT, ' + 
+                ' TDM.BTN_3_TYPE, TDM.BTN_3_TITLE, TDM.BTN_3_CONTEXT, TDM.BTN_4_TYPE, TDM.BTN_4_TITLE, TDM.BTN_4_CONTEXT ' + 
+                ' FROM TBL_DLG AS TD, TBL_DLG_MEDIA AS TDM ' + 
+                ' WHERE TD.DLG_ID=\'' + strDlgId + '\' AND TD.DLG_ID = TDM.DLG_ID ';
 
             if(strDlgType == '2') {
                 console.log('* selectDlgText : ' +  selectDlgText);
@@ -4158,7 +4162,13 @@ router.post('/getScenarioDlg', function (req, res) {
                 }
                 res.send({ "rows": rows});
             } else if (strDlgType == '4') {
-
+                console.log('* selectDlgMedia : ' +  selectDlgMedia);
+                let result1 = await pool.request().query(selectDlgMedia);
+                let rows = result1.recordset[0];
+                for (var key in rows) {
+                    console.log("key : " + key + " value : " + rows[key]);
+                }
+                res.send({ "rows": rows});
             } else {
             
             }
