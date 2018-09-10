@@ -1086,7 +1086,7 @@ function addChildDialog(){   //  (자식) 대화상자 추가
                         cButtonNameCount = 1;
                     }
                 }
-                
+                /*
                 if (typeof objectCarousel[tmp[j].name] !== "undefined" ) {
                     carouselArr.push(objectCarousel);
                     objectCarousel = {};
@@ -1094,7 +1094,7 @@ function addChildDialog(){   //  (자식) 대화상자 추가
                     cButtonContentCount = 1;
                     cButtonNameCount = 1;
                 } 
-
+                
                 if(j === tmp.length-1){
                     object[tmp[0].name] = tmp[0].value;
                     objectCarousel[tmp[j].name] = tmp[j].value;    
@@ -1104,27 +1104,33 @@ function addChildDialog(){   //  (자식) 대화상자 추가
                     break;
                 }
                 object[tmp[0].name] = tmp[0].value;
-                objectCarousel[tmp[j].name] = tmp[j].value;
+                */
+                if(j === tmp.length-1){
+                    object[tmp[j].name] = tmp[j].value;
+                    break;
+                }
+                object[tmp[j].name] = tmp[j].value;
+                //objectCarousel[tmp[j].name] = tmp[j].value;
             }
             //carouselArr.push(objectCarousel);
             object['carouselArr'] = carouselArr;
         } else if (tmp[6].value === "4") {
 
             var btnTypeCount = 1;
-            var mButtonContentCount = 1;
-            var mButtonNameCount = 1;
+            var cButtonContentCount = 1;
+            var cButtonNameCount = 1;
 
             for (var j = 0; j < tmp.length; j++) {
 
                 if(tmp[j].name == 'btnType') {
                     tmp[j].name = 'btn'+ (btnTypeCount++) +'Type';
                 }
-                if(tmp[j].name == 'mButtonContent') {
-                    tmp[j].name = 'mButtonContent'+ (mButtonContentCount++);
+                if(tmp[j].name == 'cButtonContent') {
+                    tmp[j].name = 'cButtonContent'+ (cButtonContentCount++);
     
                 }
-                if(tmp[j].name == 'mButtonName') {
-                    tmp[j].name = 'mButtonName'+ (mButtonNameCount++);
+                if(tmp[j].name == 'cButtonName') {
+                    tmp[j].name = 'cButtonName'+ (cButtonNameCount++);
                 }
 
                 object[tmp[j].name] = tmp[j].value;
@@ -1912,56 +1918,7 @@ $(document).on('click', '.addMediaBtn',function(e){
     }
 
 });
-
-//���̾�α׻��� - ī���߰�
-//$(document).on('click', '.addCarouselBtn', function(e){
-//    //var $newInsertForm = $insertForm.clone();
-//    //var $newDlgForm = $dlgForm.clone();
-//    //var $newCarouselForm = $carouselForm.clone();
-    
-//    if($(this).parents('.insertForm').find('.carouselLayout').length == 10) {
-//        alert(language.Up_to_10_cards_can_be_added);
-//    } else {
-
-//        var idx =  $(".addCarouselBtn:visible").index(this);
-//        var jdx = $('select[name=dlgType]').index(( $(".addCarouselBtn:visible").eq(idx).parents('form[name=dialogLayout]').find('select[name=dlgType]') ));
-//        //$('.addCarouselBtn').eq(0).parent().parent().remove();
-//        //$(this).parents('.insertForm').after( $newInsertForm);  
-//        //<div id="textLayout" style="display: block;">  </div>
-//        //var caraousHtml = '<div class="carouselLayout" style="display: block;">' + $carouselForm.html() + '</div>';
-//        var dlgFormHtml = '<div class="textLayout" style="display: block;">' + dlgForm + '</div>';
-//        $(this).parent().before('<div class="clear-both"></div>').before(dlgFormHtml).before(carouselForm);
-//        //$(this).parents('form[name=dialogLayout] .deleteInsertFormDiv').before('<div class="clear-both"></div>').after(dlgFormHtml).append(carouselForm);
-//        //$(this).parents('.insertForm').next().find('.clear-both').after($newDlgForm);
-//        var claerLen = $(this).parents('form[name=dialogLayout]').children('.clear-both').length-1;
-//        $(this).parents('form[name=dialogLayout]').children('.clear-both').eq(claerLen).next().css('display', 'block');
-//        $(this).parents('form[name=dialogLayout]').children('.clear-both').eq(claerLen).next().next().css('display', 'block');
-//        //$(this).parent().parent().remove();
-//        //$(this).parent().css('display', 'none');
-//        $(this).parents('form[name=dialogLayout]').find('.addCarouselBtn:last').closest('div').css('display', 'inline-block');
-    
-//        var inputUttrHtml = '<li class="wc-carousel-item">';
-//        inputUttrHtml += '<div class="wc-card hero">';
-//        inputUttrHtml += '<div class="wc-container imgContainer" >';
-//        inputUttrHtml += '<img src="https://bot.hyundai.com/assets/images/movieImg/teasure/02_teaser.jpg">';
-//        inputUttrHtml += '</div>';
-//        inputUttrHtml += '<h1>CARD_TITLE</h1>';
-//        inputUttrHtml += '<p class="carousel">CARD_TEXT</p>';
-//        inputUttrHtml += '<ul class="wc-card-buttons" style="padding-left:0px;"><li><button>BTN_1_TITLE</button></li></ul>';
-//        inputUttrHtml += '</div>';
-//        inputUttrHtml += '</li>';
-    
-//        var kdx = $('.insertForm').index($(this).parents('.insertForm'));
-    
-//        $('.dialogView').eq( jdx ).find('#slideDiv' + kdx).children().append(inputUttrHtml);
-        
-//        if ($('.dialogView').eq( jdx ).find('#slideDiv' + kdx).children().children().length > 2) {
-//            $('#nextBtn'+ jdx).show();
-//        }
-//    }
-//});
-
-//��ƼƼ �߰�
+ 
 function insertEntity(){
 
     if ($('#entityDefine').val().trim() === "") {
