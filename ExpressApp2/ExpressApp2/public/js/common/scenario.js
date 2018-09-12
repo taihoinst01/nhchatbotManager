@@ -1055,7 +1055,7 @@ function addChildDialog(){   //  (자식) 대화상자 추가
         });
         if(exit) return;
     }
-
+    var scenario_nm = $('form[name=appAddForm] input[name=scenarioName]').val();
     $('form[name=dialogLayoutAdd] input[name=scenario_nm]').val($('form[name=appAddForm] input[name=scenarioName]').val());     // 시나리오명  
     $('form[name=dialogLayoutAdd] input[name=groupL]').val($('form[name=appAddForm] select[name=largeGroup]').val());     // 대그룹
     $('form[name=dialogLayoutAdd] input[name=groupM]').val($('form[name=appAddForm] select[name=middleGroup]').val());    // 중그룹
@@ -1163,6 +1163,8 @@ function addChildDialog(){   //  (자식) 대화상자 추가
         data: {'data' : array},
         success: function(data) {
             alert(language.Added);
+            $(".createDlgModalClose").click();  //  창닫기
+            getScenarioDialogs(scenario_nm);    //  시나리오 목록 갱신
             /*
             var inputUttrHtml = '';
             for(var i = 0; i < data.list.length; i++) {
