@@ -341,9 +341,6 @@ function openModalBoxAdd() {
             "<div class='inputBtnArea'></div>" +
         "</div>"
     ).appendTo("#addChildInputArea");
-
-
-
 }
 
 
@@ -604,42 +601,7 @@ function writeBtnTitle(e, btnNum) {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-//���̾�α� ����
-/*
-function insertDialog(){
-
-    $.ajax({
-        url: '/learning/insertDialog',
-        dataType: 'json',
-        type: 'POST',
-        data: $('#appInsertForm').serializeObject(),
-        success: function(data) {
-            if(data.status == 200){
-                var inputUttrHtml = '';
-                inputUttrHtml += '<tr> <td> <div class="check-radio-tweak-wrapper" type="checkbox">';
-                inputUttrHtml += '<input name="dlgChk" class="tweak-input"  onclick="" type="checkbox"/> </div> </td>';
-                inputUttrHtml += '<td class="txt_left" ><input type="hidden" name="' + data.DLG_ID + '" value="' + data.DLG_ID + '" />' + data.CARD_TEXT + '</td></tr>';
-                $('#dlgViewDiv').prepend(inputUttrHtml);                    
-                $('.createDlgModalClose').click();
-            }
-        }
-    });
-}
-*/
-//���â �Է°��� ���� save ��ư Ȱ��ȭ ó��
+//
 function entityValidation(){
     
     var defineText = $('#entityDefine').val().trim();
@@ -692,30 +654,6 @@ function createDialog(){
     var array = [];
     var exit = false;
 
-    /*
-    if($('select[name=luisId]').val().trim() === "") {
-        alert(language.Please_reset_the_group);
-        exit = true;
-    
-        return false;
-    }
-    if(exit) return;
-    var luisIntent;
-    $('#appInsertForm').find('[name=luisIntent]').each(function() {
-        if($(this).attr('disabled') == undefined) {
-            luisIntent = $(this).val();
-            return false;
-        }
-    })
-    if(luisIntent.trim() === "") {
-        alert(language.Please_reset_the_group);
-        exit = true;
-        return false;
-    }
-    if(exit) return;
-    */
-    
-    
     //$('.insertForm input[name=dialogText]').each(function(index) {
     $('#iptDlgText').each(function(index) {
         if ($(this).val().trim() === "") {
@@ -736,26 +674,6 @@ function createDialog(){
     });
 
     if(exit) return;
-
-
-    /*
-    if ($('#description').val().trim() === "" ) {
-        alert(language.Description_must_be_entered);
-        return false;
-    }
-    
-    $('.insertForm input[name=dialogTitle]').each(function(index) {
-        if ($(this).val().trim() === "") {
-            alert(language.You_must_enter_a_Dialog_Title);
-            exit = true;
-            return false;
-        }
-    });
-
-    if(exit) return;   
-    
-    
-    */
 
     for(var i = 0 ; i < idx ; i++) {
         var tmp = $("form[name=dialogLayout]").eq(i).serializeArray();
@@ -939,15 +857,6 @@ function editDialog(){  //  대화상자 수정
                     cButtonNameCount = 1;
                 }
             }
-            /*
-            if (typeof objectCarousel[tmp[j].name] !== "undefined" ) {
-                carouselArr.push(objectCarousel);
-                objectCarousel = {};
-                btnTypeCount = 1;
-                cButtonContentCount = 1;
-                cButtonNameCount = 1;
-            } 
-            */
             if(j === tmp.length-1){
                 object[tmp[j].name] = tmp[j].value;
                 break;
@@ -981,14 +890,6 @@ function editDialog(){  //  대화상자 수정
     }
 
     array = JSON.stringify(object); //JSON.stringify(tmp);//tmp.substring(1, tmp.length-2);
-    
-    //console.log(carouselArr);
-    //console.log('carouselArr[0].length:'+carouselArr[0].length);
-    //array[array.length] = JSON.stringify($("form[name=appInsertForm]").serializeObject());//JSON.stringify($("form[name=appInsertForm]"));
-    //array['carouselArr'] = JSON.stringify($("form[name=appEditForm]").serializeObject()); //JSON.stringify($("form[name=appInsertForm]"));
-    //array.push(JSON.stringify($("form[name=appEditForm]").serializeObject()));
-    //carouselArr = JSON.stringify($("form[name=appEditForm]").serializeObject());
-    
     console.log("editDialog - END");
     console.log(array);
 
@@ -1090,25 +991,6 @@ function addChildDialog(){   //  (자식) 대화상자 추가
                         cButtonNameCount = 1;
                     }
                 }
-                /*
-                if (typeof objectCarousel[tmp[j].name] !== "undefined" ) {
-                    carouselArr.push(objectCarousel);
-                    objectCarousel = {};
-                    btnTypeCount = 1;
-                    cButtonContentCount = 1;
-                    cButtonNameCount = 1;
-                } 
-                
-                if(j === tmp.length-1){
-                    object[tmp[0].name] = tmp[0].value;
-                    objectCarousel[tmp[j].name] = tmp[j].value;    
-
-                    carouselArr.push(objectCarousel);
-                    objectCarousel = {};
-                    break;
-                }
-                object[tmp[0].name] = tmp[0].value;
-                */
                 if(j === tmp.length-1){
                     object[tmp[j].name] = tmp[j].value;
                     break;
@@ -1163,33 +1045,10 @@ function addChildDialog(){   //  (자식) 대화상자 추가
         data: {'data' : array},
         success: function(data) {
             alert(language.Added);
-            $(".createDlgModalClose").click();  //  창닫기
-            getScenarioDialogs(scenario_nm);    //  시나리오 목록 갱신
-            /*
-            var inputUttrHtml = '';
-            for(var i = 0; i < data.list.length; i++) {
-                inputUttrHtml += '<input type="hidden" name="dlgId" value="' + data.list[i] + '"/>';
-            }
-            var largeGroup = $('#appInsertForm').find('#largeGroup')[0].value
-            var middleGroup;
-             $('#appInsertForm').find('[name=middleGroup]').each(function() {
-                if($(this).attr('disabled') == undefined) {
-                    middleGroup = $(this).val();
-                    return false;
-                }
-            })
-            $('.newMidBtn').click();
-            $('.cancelMidBtn').click();
-
-            inputUttrHtml += '<input type="hidden" name="luisId" value="' + largeGroup + '"/>';
-            inputUttrHtml += '<input type="hidden" name="luisIntent" value="' + middleGroup + '"/>';
-
-            var createDlgClone = $('.dialogView').children().clone();
-            $('#dlgViewDiv').html('');
-            $('#dlgViewDiv').append(createDlgClone);
-            $('#dlgViewDiv').append(inputUttrHtml);
-            $('.createDlgModalClose').click();
-            */
+            $(".createDlgModalClose").click();  //  창닫기            
+            selectScenarioList();   //  시나리오 목록 갱신
+            getScenarioDialogs(scenario_nm);    //  다이얼로그 목록 갱신
+            
         }
     });
 
