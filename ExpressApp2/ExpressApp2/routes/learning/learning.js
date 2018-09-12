@@ -4131,6 +4131,8 @@ router.post('/getScenarioDlg', function (req, res) {
     (async () => {
         try {
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            //var selectScenario = 'SELECT SCENARIO_SEQ, SCENARIO_NM, SCENARIO_GROUP, DLG_ID, DLG_DEPTH, DLG_ORDER_BY, PARENT_DLG_ID FROM TBL_SCENARIO_DLG WHERE PARENT_DLG_ID=\'' + strDlgId +'\'';
+            var selectScenario = 'SELECT COUNT(SCENARIO_SEQ) as CNT FROM TBL_SCENARIO_DLG WHERE PARENT_DLG_ID=\'' + strDlgId +'\'';
             var selectDlgText = 'SELECT TD.DLG_ID, TD.DLG_NAME, TD.DLG_DESCRIPTION, TD.GROUPL, TD.GROUPM, TDT.CARD_TITLE, TDT.CARD_TEXT   ' +
                 ' FROM TBL_DLG AS TD, TBL_DLG_TEXT AS TDT ' + 
                 ' WHERE TD.DLG_ID=\'' + strDlgId + '\' AND TD.DLG_ID = TDT.DLG_ID ';
@@ -4145,6 +4147,14 @@ router.post('/getScenarioDlg', function (req, res) {
                 ' FROM TBL_DLG AS TD, TBL_DLG_MEDIA AS TDM ' + 
                 ' WHERE TD.DLG_ID=\'' + strDlgId + '\' AND TD.DLG_ID = TDM.DLG_ID ';
 
+            let result0 = await pool.request().query(selectScenario);
+            let rowsScenario = result0.recordset[0];
+            let rows = result0.recordset;
+            var childCnt = 0;
+            if (rows[0].CNT != 0) {
+                childCnt = rows[0].CNT;
+            }
+            
             if(strDlgType == '2') {
                 console.log('* selectDlgText : ' +  selectDlgText);
                 let result1 = await pool.request().query(selectDlgText);
@@ -4152,7 +4162,7 @@ router.post('/getScenarioDlg', function (req, res) {
                 for (var key in rows) {
                     console.log("key : " + key + " value : " + rows[key]);
                 }
-                res.send({ "rows": rows});
+                res.send({ "rows": rows, "childCnt":childCnt });
             } else if (strDlgType == '3') {
                 console.log('* selectDlgCard : ' +  selectDlgCard);
                 let result1 = await pool.request().query(selectDlgCard);
@@ -4160,7 +4170,7 @@ router.post('/getScenarioDlg', function (req, res) {
                 for (var key in rows) {
                     console.log("key : " + key + " value : " + rows[key]);
                 }
-                res.send({ "rows": rows});
+                res.send({ "rows": rows, "childCnt":childCnt });
             } else if (strDlgType == '4') {
                 console.log('* selectDlgMedia : ' +  selectDlgMedia);
                 let result1 = await pool.request().query(selectDlgMedia);
@@ -4168,7 +4178,7 @@ router.post('/getScenarioDlg', function (req, res) {
                 for (var key in rows) {
                     console.log("key : " + key + " value : " + rows[key]);
                 }
-                res.send({ "rows": rows});
+                res.send({ "rows": rows, "childCnt":childCnt });
             } else {
             
             }

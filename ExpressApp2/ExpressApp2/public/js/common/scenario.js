@@ -132,6 +132,7 @@ function openModalBoxEdit(strDlgId, strDlgType) {
         isloading: true,
         success: function(data) {
             console.log(data.rows);
+            console.log(data.childCnt); //  child Dialog Cnt
             if(data.rows){
                 var dlgInfo = data.rows;    //alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE);
                 //  대그룹,중그룹 출력.. (dlgInfo.GROUPL, dlgInfo.GROUPM)
