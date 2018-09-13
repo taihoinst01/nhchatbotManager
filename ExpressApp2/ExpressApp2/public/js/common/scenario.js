@@ -148,7 +148,7 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                         // 텍스트
                         "<div class='scenario-form-group dlg_edit_title'>" +
                             "<label>" + language.DIALOG_BOX_TITLE + "<span class='nec_ico'>*</span></label>" +
-                            "<input type='text' name='dialogTitle' id='iptDialogTitle' value='"+dlgInfo.CARD_TITLE+"' class='form-control' onkeyup='writeDialogTitle(this);' spellcheck='false' autocomplete='off'>" +
+                            "<input type='text' name='dialogTitle' id='iptDialogTitle' value='"+dlgInfo.CARD_TITLE+"' class='form-control' onkeyup='syncDialogTitle(this);' spellcheck='false' autocomplete='off'>" +
                         "</div>" +
                         "<div class='scenario-form-group dlg_edit_sub_title dpN'>" +
                             "<label>" + language.DIALOG_BOX_SUBTITLE + "<span class='nec_ico'>*</span></label>" +
@@ -156,13 +156,14 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                         "</div>" +
                         "<div class='scenario-form-group dlg_edit_text'>" +
                             "<label>" + language.DIALOG_BOX_CONTENTS + "<span class='nec_ico'>*</span></label>" +
-                            "<input type='text' name='dialogText' id='iptDialogText' value='"+dlgInfo.CARD_TEXT+"' class='form-control' onkeyup='writeDialog(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+                            "<input type='text' name='dialogText' id='iptDialogText' value='"+dlgInfo.CARD_TEXT+"' class='form-control' onkeyup='syncDialog(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
                         "</div>" +
                         "<div class='scenario-form-group dlg_edit_img dpN'>" +
                             "<label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label><button class='dlg_edit_img_change'>적용</button>" +
                             "<div>sample URL : /images/ico_car.png </div>" +
                             "<input type='text' name='imgUrl' id='iptImgUrl' value='" + dlgInfo.IMG_URL +"' class='form-control' onkeyup='writeCarouselImg(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
                         "</div>" +
+
                         "<div class='editBtnArea'></div>" +
                     "</div>";
             
@@ -171,13 +172,16 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                 if (strDlgType == "3" || strDlgType == "4") {
                     if (strDlgType == "3"){
                         $('.dlg_edit_sub_title').removeClass("dpN");
+                        $('.previewSubTitle').removeClass("dpN");
                     }else{
                         $('.dlg_edit_sub_title').addClass("dpN");
+                        $('.previewSubTitle').addClass("dpN");
                     }                    
                     $('.dlg_edit_img').removeClass('dpN');
                 } else {
                     $('.dlg_edit_sub_title').addClass("dpN");
                     $('.dlg_edit_img').addClass('dpN');
+                    $('.previewSubTitle').addClass("dpN");
                 }
 
                 // 미리보기 적용..
@@ -281,6 +285,14 @@ function openModalBoxEdit(strDlgId, strDlgType) {
             }else{
                 alert('fail');
             }
+            
+            //alert('data.childCnt:'+data.childCnt);
+            if(data.childCnt == '0'){
+                $("#btnDelDialog").show();
+            }else{
+                $("#btnDelDialog").hide();
+            }
+
         }
     });
 }
@@ -342,6 +354,16 @@ function openModalBoxAdd() {
             "<div class='inputBtnArea'></div>" +
         "</div>"
     ).appendTo("#addChildInputArea");
+
+    // 미리보기 적용..
+    var lan_title = language.Please_enter_a_title;
+    var lan_subTitle = language.Please_enter_a_sub_title;
+    var lan_content = language.Please_enter_your_content;
+    $(".previewTitle").text(lan_title);
+    $(".previewSubTitle").text(lan_subTitle);
+    $(".previewText").text(lan_content);
+    $(".previewBtnArea").html('');  //  Btn 영역 초기화..
+
 }
 
 
@@ -540,6 +562,24 @@ $(document).on('click', '.dlg_input_img_change', function (e) {
         $('.previewImg').attr('src', imgURL);
     }
 });
+
+// 대화상자 미리보기 제목 SYNC
+function syncDialogTitle(e){
+    /*var dlgType = $("#iptOriginDlgType").val();
+    if(dlgType == 3){
+        $(".previewTitle").text(e.value);
+    }else{
+        $(".previewTitle").text(e.value);
+    }*/
+    $(".previewTitle").text(e.value);
+}
+
+// 대화상자 미리보기 내용 SYNC
+function syncDialog(e) {
+    $(".previewText").text(e.value);
+}
+
+
 
 // 대화상자 미리보기 타이틀 입력
 function writeDialogTitle(e) {
@@ -913,6 +953,26 @@ function editDialog(){  //  대화상자 수정
     
 }
 
+function deleteDialog(){
+    var iptDlgId = $("#iptDlgId").val();
+    var scenarioNm = $("#iptScenarioNm").val();    
+    alert('deleteDialog() iptDlgId:'+iptDlgId);
+    $.ajax({
+        url: '/learning/scenarioDeleteDialog',
+        dataType: 'json',
+        type: 'POST',
+        data: {'dlgId' : iptDlgId},
+        success: function(data) {
+            if(data['status'] == '200'){
+                alert(language.Deleted);
+                //  modal pop close..
+                $('.createDlgModalClose').click();
+                //  dialogs list refresh..
+                getScenarioDialogs(scenarioNm);
+            }
+        } 
+    });
+}
 
 function addChildDialog(){   //  (자식) 대화상자 추가
     //alert("addChildDialog() (자식)");
@@ -2015,13 +2075,11 @@ function selectScenarioInfo(strDlgId) {     //  DLG_ID 별 시나리오 정보
         success: function(data) {
             if(data.rows){  //alert('data.rows');
                 var scenarioInfo = data.rows;
-                alert("selectScenarioInfo() - "+scenarioInfo[0].SCENARIO_NM+" | DLG_ID:"+scenarioInfo[0].DLG_ID+" | DLG_DEPTH:"+scenarioInfo[0].DLG_DEPTH+" | PARENT_DLG_ID:"+scenarioInfo[0].PARENT_DLG_ID);
-
+                //alert("selectScenarioInfo() - "+scenarioInfo[0].SCENARIO_NM+" | DLG_ID:"+scenarioInfo[0].DLG_ID+" | DLG_DEPTH:"+scenarioInfo[0].DLG_DEPTH+" | PARENT_DLG_ID:"+scenarioInfo[0].PARENT_DLG_ID);
                 $('form[name="appAddForm"]').find('input[name="scenarioName"]').val(scenarioInfo[0].SCENARIO_NM);   // 시나리오 명
                 $('form[name="dialogLayoutAdd"]').find('input[name="scenario_nm"]').val(scenarioInfo[0].SCENARIO_NM);   // 시나리오 명(hidden)
                 $('form[name="dialogLayoutAdd"]').find('input[name="parentDlgId"]').val(scenarioInfo[0].DLG_ID);    // DLG_ID
                 $('form[name="dialogLayoutAdd"]').find('input[name="parentDlgDepth"]').val(scenarioInfo[0].DLG_DEPTH);    // DLG_DEPTH
-                
             }else{
                 alert('selectScenarioInfo fail');
             }
@@ -2031,9 +2089,7 @@ function selectScenarioInfo(strDlgId) {     //  DLG_ID 별 시나리오 정보
 
 function getScenarioDialogs(strScenarioName){
     //alert('getScenarioDialogs():'+strScenarioName);
-    
     $("#divScenarioDialogs").html('');
-
     $.ajax({
         url: '/learning/getScenarioDialogs',
         dataType: 'json',

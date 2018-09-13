@@ -4078,6 +4078,30 @@ router.post('/scenarioEditDialog', function (req, res) {
 
 });
 
+router.post('/scenarioDeleteDialog', function (req, res) {
+    //console.log('/scenarioDeleteDialog - START');    
+    //var data = req.body['data'];
+    var array = [];
+    var dlgId = req.body['dlgId'];
+    //console.log('/scenarioDeleteDialog - data.dlgId:'+data.dlgId);    
+    (async () => {
+        try {
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            var updateDlg = "UPDATE TBL_DLG SET USE_YN='N' WHERE DLG_ID='"+dlgId+"'";
+            console.log('* updateDlg : ' +  updateDlg);
+            let result1 = await pool.request().query(updateDlg);   
+        }catch (err) {
+            console.log(err);
+            res.send({ status: 500, message: 'scenarioDeleteDialog Error' });
+        } finally {
+            sql.close();
+            res.send({status:200 , message:'Delete Success'});
+        }
+    })()
+    sql.on('error', err => {
+    })
+});
+
 router.post('/getScenarioDialogs', function (req, res) {
 
 	var strScenarioName = req.body.strScenarioName;

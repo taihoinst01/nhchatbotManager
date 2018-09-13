@@ -279,5 +279,6 @@
 	"CARD_DIVISION_IMG": "이미지",
 	"CARD_DIVISION_PLAY": "영상",
 	"Edited": "수정되었습니다.",
-	"ADD_DIALOG_BOX": "ADD_DIALOG_BOX"
+	"Deleted": "삭제되었습니다.",
+	"ADD_DIALOG_BOX": "(자식) 다이얼로그 추가"
 }
