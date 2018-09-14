@@ -280,5 +280,6 @@
 	"CARD_DIVISION_PLAY": "영상",
 	"Edited": "수정되었습니다.",
 	"Deleted": "삭제되었습니다.",
-	"ADD_DIALOG_BOX": "(자식) 다이얼로그 추가"
+	"ADD_DIALOG_BOX": "(자식) 다이얼로그 추가",
+	"USE_YN": "사용여부"
 }

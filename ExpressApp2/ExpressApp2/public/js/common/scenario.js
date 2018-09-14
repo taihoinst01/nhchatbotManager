@@ -143,6 +143,13 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                 $("#iptDescription").val(dlgInfo.DLG_DESCRIPTION);
                 
                 $(".editArea > div").remove();
+                var checkedY = "";
+                var checkedN = "";
+                if(dlgInfo.USE_YN == 'Y'){
+                    checkedY = "checked";                        
+                }else{
+                    checkedN = "checked";
+                }
                 var htmlInputArea = "";
                 htmlInputArea = "<div class='textLayout'>" +
                         // 텍스트
@@ -162,6 +169,11 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                             "<label>" + language.IMAGE_URL + "<span class='nec_ico'>*</span></label><button class='dlg_edit_img_change'>적용</button>" +
                             "<div>sample URL : /images/ico_car.png </div>" +
                             "<input type='text' name='imgUrl' id='iptImgUrl' value='" + dlgInfo.IMG_URL +"' class='form-control' onkeyup='writeCarouselImg(this);' placeholder='" + language.Please_enter + "' spellcheck='false' autocomplete='off'>" +
+                        "</div>" +
+                        "<div class='scenario-form-group use_yn'>" +
+                            "<label>" + language.USE_YN + "</label> <BR/>" +
+                            "<input type='radio' name='useYn' id='iptUseY' value='Y' " + checkedY + "> Y | " +
+                            "<input type='radio' name='useYn' id='iptUseN' value='N' " + checkedN + "> N " +
                         "</div>" +
 
                         "<div class='editBtnArea'></div>" +

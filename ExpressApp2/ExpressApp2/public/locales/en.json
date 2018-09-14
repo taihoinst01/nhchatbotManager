@@ -277,5 +277,6 @@
   "CARD_DIVISION_PLAY": "division play card",
   "Edited": "Edit completed.",
   "Deleted": "Delete completed.",
-  "ADD_DIALOG_BOX": "ADD DIALOG BOX"
+  "ADD_DIALOG_BOX": "ADD DIALOG BOX",
+  "USE_YN": "USE STATUS"
 }
