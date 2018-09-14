@@ -106,8 +106,7 @@ function openModalBox(target) {
 }
 
 function openModalBoxEdit(strDlgId, strDlgType) {
-    alert('openModalBoxEdit() strDlgId:'+strDlgId+' | strDlgType:'+strDlgType);
-    
+    //alert('openModalBoxEdit() strDlgId:'+strDlgId+' | strDlgType:'+strDlgType); 
     //  시나리오명
     $("#iptScenarioName").val($('#spanScenarioNm').text());     
     //  다이얼로그 ID
@@ -120,7 +119,6 @@ function openModalBoxEdit(strDlgId, strDlgType) {
     $("#dlgType").val(strDlgType).prop("selected", true);
     //  대화상자 타입 (origin)
     $("#iptOriginDlgType").val(strDlgType);
-
     $(".previewBtnArea > button").remove();
     
     //inputAreaAdd();
@@ -138,10 +136,8 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                 //  대그룹,중그룹 출력.. (dlgInfo.GROUPL, dlgInfo.GROUPM)
                 $("#iptLargeGroup").val(dlgInfo.GROUPL).prop("selected", true);
                 $("#iptMiddleGroup").val(dlgInfo.GROUPM).prop("selected", true);
-                
                 //  설명
                 $("#iptDescription").val(dlgInfo.DLG_DESCRIPTION);
-                
                 $(".editArea > div").remove();
                 var checkedY = "";
                 var checkedN = "";
@@ -968,7 +964,7 @@ function editDialog(){  //  대화상자 수정
 function deleteDialog(){
     var iptDlgId = $("#iptDlgId").val();
     var scenarioNm = $("#iptScenarioNm").val();    
-    alert('deleteDialog() iptDlgId:'+iptDlgId);
+    //alert('deleteDialog() iptDlgId:'+iptDlgId);
     $.ajax({
         url: '/learning/scenarioDeleteDialog',
         dataType: 'json',
