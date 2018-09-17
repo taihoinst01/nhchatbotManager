@@ -4088,9 +4088,16 @@ router.post('/scenarioDeleteDialog', function (req, res) {
     (async () => {
         try {
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+
+            //  TBL_DLG USE_YN
             var updateDlg = "UPDATE TBL_DLG SET USE_YN='N' WHERE DLG_ID='"+dlgId+"'";
             console.log('* updateDlg : ' +  updateDlg);
             let result1 = await pool.request().query(updateDlg);   
+            //  TBL_SCENARIO_DLG USE_YN
+            var updateScenario = "UPDATE TBL_SCENARIO_DLG SET USE_YN='N' WHERE DLG_ID='"+dlgId+"'";
+            console.log('* updateScenario : ' +  updateScenario);
+            let result2 = await pool.request().query(updateScenario);
+
         }catch (err) {
             console.log(err);
             res.send({ status: 500, message: 'scenarioDeleteDialog Error' });
@@ -4120,16 +4127,10 @@ router.post('/getScenarioDialogs', function (req, res) {
                 .execute('sp_scenario_select').then(function(recordset) {
                 //.query(query, function(err, recordset){
                     if (recordset) {
-                        //console.log(err);
-                        console.log(recordset);
                         console.log(recordset.recordsets[0]);
-                        //console.log(returnValue);
                         sql.close();
                     }
-                    //console.log(err);
-                    console.log(recordset);
                     console.log(recordset.recordsets[0]);
-                    //res.send(recordset.recordsets[0]);
                     res.send({ list: recordset.recordsets[0] });
                     sql.close();
                 });
@@ -4146,6 +4147,27 @@ router.post('/getScenarioDialogs', function (req, res) {
     })
 });
 
+router.post('/delScenarioDialogs', function (req, res) {
+	var strScenarioName = req.body.strScenarioName;
+    console.log("- delScenarioDialogs() - strScenarioName : " + strScenarioName);
+    (async () => {
+        try {
+            let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
+            var queryText = "UPDATE TBL_SCENARIO_DLG SET USE_YN='N' WHERE SCENARIO_NM = '"+strScenarioName+"'";
+            console.log('* queryText : ' +  queryText);
+            let result1 = await pool.request().query(queryText);   
+        }catch (err) {
+            console.log(err);
+            res.send({ status: 500, message: 'delScenarioDialogs Error' });
+        } finally {
+            sql.close();
+            res.send({status:200 , message:'Delete Success'});
+        } 
+    })()
+
+    sql.on('error', err => {
+    })
+});
 
 
 router.post('/getScenarioDlg', function (req, res) {
@@ -4241,7 +4263,7 @@ router.post('/selectScenarioList', function (req, res) {
             var queryText = "";
 
             queryText = "SELECT SCENARIO_NM, COUNT(SCENARIO_SEQ) AS SCENARIO_COUNT FROM TBL_SCENARIO_DLG "
-            queryText += "WHERE SCENARIO_NM is not null GROUP BY SCENARIO_NM";
+            queryText += "WHERE SCENARIO_NM is not null AND USE_YN='Y' GROUP BY SCENARIO_NM";
 
             let result = await pool.request().query(queryText);
             let rows = result.recordset;

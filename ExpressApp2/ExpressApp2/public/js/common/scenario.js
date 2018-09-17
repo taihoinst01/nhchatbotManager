@@ -2044,8 +2044,6 @@ function createApiRelation() {
     });
 }
 
-
-
 function selectScenarioList() {     //  시나리오 목록
     //alert('selectScenarioList()');
     $.ajax({
@@ -2061,7 +2059,7 @@ function selectScenarioList() {     //  시나리오 목록
                 var j = 1;
                 for(var i=0; i<scenarioList.length; i++){
                     j = i + 1;
-                    strScenarioList += '<TR><TD>'+j+'</TD><TD><A href="#" onclick="getScenarioDialogs(\''+scenarioList[i].SCENARIO_NM+'\')">'+scenarioList[i].SCENARIO_NM+'</A></TD><TD>'+scenarioList[i].SCENARIO_COUNT+'</TD></TR>';
+                    strScenarioList += '<TR><TD>'+j+'</TD><TD><A href="#" onclick="getScenarioDialogs(\''+scenarioList[i].SCENARIO_NM+'\')">'+scenarioList[i].SCENARIO_NM+'</A></TD><TD>'+scenarioList[i].SCENARIO_COUNT+'</TD><TD><A href="#" onclick="delScenarioDialogs(\''+scenarioList[i].SCENARIO_NM+'\')">x</A></TD></TR>';
                     //alert('SCENARIO_NM : '+scenarioList[i].SCENARIO_NM);
                 }
                 $('#utterTableBody').html(strScenarioList);
@@ -2213,9 +2211,7 @@ function getScenarioDialogs(strScenarioName){
                             '</div>'
                         ).appendTo('#divScenarioDialogs');
                     }
-
                 }
-                
                 $('#spanScenarioNm').html(strScenarioName);
                 $('.dialogView').draggable();
             }else{
@@ -2224,23 +2220,29 @@ function getScenarioDialogs(strScenarioName){
             
         }
     });
-    //var canvas = document.getElementById('divScenarioDialogs');
-    //var context = canvas.getContext("2d");
     
-    //context.moveTo(10, 10);
-    //context.lineTo(20, 50);
-    //context.stroke();
+}
+
+function delScenarioDialogs(strScenarioName){
+    //alert('delScenarioDialogs():'+strScenarioName);
+    $.ajax({
+        url: '/learning/delScenarioDialogs',
+        dataType: 'json',
+        data: {'strScenarioName': strScenarioName},
+        type: 'POST',
+        isloading: true,
+        success: function(data) {
+            if(data['status'] == '200'){
+                alert(language.Deleted);
+                //  modal pop close..
+                $('.createDlgModalClose').click();
+                //  dialogs list refresh..
+                selectScenarioList();
+            }
+        } 
+    });
 }
 
 
 
-//** 모달창 끝 */
 
-
-//insertHtml += '<button class="scroll previous" id="prevBtn" style="display: none;" onclick="prevBtn(botChatNum)">';
-//insertHtml += '<img src="https://bot.hyundai.com/assets/images/02_contents_carousel_btn_left_401x.png">';
-//insertHtml += '</button>';
-
-
-
-//inputUttrHtml += '<button class="scroll next" id="nextBtn' + (botChatNum) + '" onclick="nextBtn(' + botChatNum + ')"><img src="https://bot.hyundai.com/assets/images/02_contents_carousel_btn_right_401x.png"></button>';
