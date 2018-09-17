@@ -4089,10 +4089,10 @@ router.post('/scenarioDeleteDialog', function (req, res) {
         try {
             let pool = await dbConnect.getAppConnection(sql, req.session.appName, req.session.dbValue);
 
-            //  TBL_DLG USE_YN
+            /*//  TBL_DLG USE_YN
             var updateDlg = "UPDATE TBL_DLG SET USE_YN='N' WHERE DLG_ID='"+dlgId+"'";
             console.log('* updateDlg : ' +  updateDlg);
-            let result1 = await pool.request().query(updateDlg);   
+            let result1 = await pool.request().query(updateDlg);   */
             //  TBL_SCENARIO_DLG USE_YN
             var updateScenario = "UPDATE TBL_SCENARIO_DLG SET USE_YN='N' WHERE DLG_ID='"+dlgId+"'";
             console.log('* updateScenario : ' +  updateScenario);
