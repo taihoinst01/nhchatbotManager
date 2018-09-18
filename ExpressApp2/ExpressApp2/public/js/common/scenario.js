@@ -1097,15 +1097,11 @@ function addChildDialog(){   //  (자식) 대화상자 추가
             }
         }
 
-        
-        
         array[i] = JSON.stringify(object);//JSON.stringify(tmp);//tmp.substring(1, tmp.length-2);
     }
     //JSON.stringify($("form[name=appInsertForm]").serializeObject());
     array[array.length] = JSON.stringify($("form[name=appAddForm]").serializeObject());//JSON.stringify($("form[name=appInsertForm]"));
-
     console.log(array);
-
     
     $.ajax({
         url: '/learning/scenarioAddChildDialog',
@@ -1121,9 +1117,7 @@ function addChildDialog(){   //  (자식) 대화상자 추가
         }
     });
 
-
 }
-
 
 var botChatNum = 1; 
 //dlg 
@@ -1266,36 +1260,26 @@ function selectDlgListAjax(entity) {
 }
 
 
-
-
-
 // 
 function nextBtn(botChatNum, e) {
-
     var width = parseInt($(e).parent().parent().css('width'));
     $("#slideDiv" + botChatNum).animate({scrollLeft : (parseInt($("#slideDiv" + botChatNum).scrollLeft()) + width)}, 500, function(){
-
         if($("#slideDiv" + botChatNum).scrollLeft() == 
                 ($("#slideDiv" + botChatNum).find(".wc-carousel-item").length - 2) * (width / 2)) {
             $("#nextBtn" + botChatNum).hide();
         }
-        
     });
-
     $("#prevBtn" + botChatNum).show();
 }
 
 // 
 function prevBtn(botChatNum, e) {
-
     var width = parseInt($(e).parent().parent().css('width'));
     $("#slideDiv" + botChatNum).animate({scrollLeft : ($("#slideDiv" + botChatNum).scrollLeft() - width)}, 500, function() {
-        
         if($("#slideDiv" + botChatNum).scrollLeft() == 0) {
             $("#prevBtn" + botChatNum).hide();
         }
     });
-    
     $("#nextBtn" + botChatNum).show();
 }
 
@@ -1314,18 +1298,15 @@ function utterInput(queryText) {
         dataType: 'json',                  //������ ����
         type: 'POST',                      //���� Ÿ��
         data: {'iptUtterance': queryTextArr},      //�����͸� json ����, ��ü�������� ����
-
         success: function(result) {          //�������� �� �Լ� ���� ������ ��� �� ����
             var entities = result['entities'];
             for (var k=0; k< queryTextArr.length; k++) {
-
-                
                 if(entities[k] != null) {
                     entities[k] = entities[k].split(",");
                 }else{
                     entities[k] = [];
                 }
-    
+
                 if ( result['result'] == true ) {
                     var utter = utterHighlight(result.commonEntities[k],result['iptUtterance'][k]);
                     var selBox = result['selBox'];
@@ -1384,15 +1365,10 @@ function utterInput(queryText) {
                         checkboxClass: 'icheckbox_flat-green',
                         radioClass   : 'iradio_flat-green'
                     })
-                    
-
                 }
             }
         } //function��
-
     }); // ------      ajax ��-----------------
-
-    
 }
 
 $(document).on('ifChecked','input[name=tableAllChk]', function() {  
@@ -1442,9 +1418,6 @@ function selectGroup(selectId,str1,str2) {
     });
 }
 
-
-
-
 function selectInent(intent) {
     //intent���� entity �����ϸ� entity select box disable���ŵǰ� �����ؾ���
     $('#entityList').removeAttr("disabled");
@@ -1466,7 +1439,6 @@ function initMordal(objId, objName) {
 
     $('#'+ objId + ' option:eq(0)').remove();
     $('#'+ objId ).prepend('<option selected="selected" disabled="disabled">' + objName + '</option>');
-
 }
 
 function searchDialog() {
@@ -1642,11 +1614,9 @@ function searchDialog() {
 // Search Dialogue �˾�â 
 // ���̾�α� üũ�ڽ� ���� üũ
 $(document).on('ifChecked', 'input[name=searchDlgChk]', function(event) {
-    
     $('input[name=searchDlgChk]').not($(this)).each(function(){
         $(this).parent().iCheck('uncheck')
     });
-        
 })
 
 function selectDialog() {
@@ -1710,10 +1680,6 @@ $(document).on('click', '.carouseBtn',function(e){
                 '</tr>'
                 $(this).parent().prev().prev().prev().find('.cardCopyTbl tbody').append(inputTrHtml);
 
-
-
-
-
     } else {
         alert(language.ALERT_BUUTON_CNT);
     }
@@ -1722,14 +1688,12 @@ $(document).on('click', '.carouseBtn',function(e){
 
 //���̾�α׻������ - ���̾�α׻���
 $(document).on('click', '.deleteInsertForm',function(e){
-
     insertFormLength = $('.insertForm').length;
     if(insertFormLength == 1) {
         alert(language.You_must_have_one_dialog_by_default);
     } else {
         var idx = $(".deleteInsertForm").index(this);
         if(idx == 0) {
-
             $(this).parents('.insertForm').next().remove();
         }
         $(".dialogView").eq(idx).remove();
@@ -1793,7 +1757,6 @@ $(document).on('click', '.deleteCard',function(e){
 
 //���̾�α׻������ - ��ư����
 $(document).on('click', '.btn_delete',function(e){
-
     var trLength = $(this).parents('tbody').children().length;
     if(trLength == 1) {
         $(this).parents('.btnInsertDiv').html('');
@@ -1943,7 +1906,6 @@ $(document).on('click', '.newMidBtn, .cancelMidBtn', function() {
         $iptLuisIntent.attr('disabled', 'disabled');
     }
 })
-
 
 
 function getGroupSelectBox() {
