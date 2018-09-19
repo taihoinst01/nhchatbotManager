@@ -2957,8 +2957,8 @@ router.post('/updateDialog', function (req, res) {
                 '(@dlgId,@dialogTitle,@dialogText,@imgUrl,@btn1Type,@buttonName1,@buttonContent1,@btn2Type,@buttonName2,@buttonContent2,@btn3Type,@buttonName3,@buttonContent3,@btn4Type,@buttonName4,@buttonContent4,@cardOrderNo,\'Y\')';
             var insertTblDlgMedia = 'INSERT INTO TBL_DLG_MEDIA(DLG_ID,CARD_TITLE,CARD_TEXT,MEDIA_URL,BTN_1_TYPE,BTN_1_TITLE,BTN_1_CONTEXT,BTN_2_TYPE,BTN_2_TITLE,BTN_2_CONTEXT,BTN_3_TYPE,BTN_3_TITLE,BTN_3_CONTEXT,BTN_4_TYPE,BTN_4_TITLE,BTN_4_CONTEXT,CARD_VALUE,USE_YN) VALUES ' +
                 '(@dlgId,@dialogTitle,@dialogText,@imgUrl,@btn1Type,@buttonName1,@buttonContent1,@btn2Type,@buttonName2,@buttonContent2,@btn3Type,@buttonName3,@buttonContent3,@btn4Type,@buttonName4,@buttonContent4,@cardValue,\'Y\')';
-            var insertTblRelation = "INSERT INTO TBL_DLG_RELATION_LUIS(LUIS_ID,LUIS_INTENT,LUIS_ENTITIES,DLG_ID,DLG_API_DEFINE,USE_YN) "
-                + "VALUES( @luisId, @luisIntent, @entity, @dlgId, 'D', 'Y' ) ";
+            var insertTblRelation = "INSERT INTO TBL_DLG_RELATION_LUIS (LUIS_ID,LUIS_INTENT,LUIS_ENTITIES,DLG_ID,DLG_API_DEFINE,USE_YN) "
+                + "VALUES ( @luisId, @luisIntent, @entity, @dlgId, 'D', 'Y' ) ";
 
             var luisId = array[array.length - 1]["largeGroup"];
             var luisIntent = array[array.length - 1]["middleGroup"];
@@ -3844,11 +3844,16 @@ router.post('/scenarioEditDialog', function (req, res) {
               
             } else if (array['dlgType'] == '4') {
                 console.log('* updateDlgMedia : ' +  updateDlgMedia);
-                //let result1 = await pool.request().query(updateDlgMedia);
-            } 
+                let result1 = await pool.request().query(updateDlgMedia);
+            }
 
             console.log('* updateDlg : ' +  updateDlg);
             let result2 = await pool.request().query(updateDlg);
+
+            if(array['useYn'] == 'N'){  //  미사용 시나리오 처리..
+                var updateScenario = "UPDATE TBL_SCENARIO_DLG SET USE_YN='N' WHERE DLG_ID='"+array['dlgId']+"'";
+                let result3 = await pool.request().query(updateScenario);
+            }
 
             /*  임의 주석 (dlgType 값 변경시..)
             //  'dlgType' and 'originDlgType' are not the same..
@@ -3878,8 +3883,6 @@ router.post('/scenarioEditDialog', function (req, res) {
 
     sql.on('error', err => {
     })
-
-
 
 });
 

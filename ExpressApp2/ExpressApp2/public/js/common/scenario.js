@@ -952,9 +952,10 @@ function editDialog(){  //  대화상자 수정
                 alert(language.Edited);
                 //  modal pop close..
                 $('.createDlgModalClose').click();
+                //  
+                selectScenarioList();
                 //  dialogs list refresh..
                 getScenarioDialogs(scenarioNm);
-
             }
         } 
     });
@@ -975,6 +976,8 @@ function deleteDialog(){
                 alert(language.Deleted);
                 //  modal pop close..
                 $('.createDlgModalClose').click();
+                //  
+                selectScenarioList();
                 //  dialogs list refresh..
                 getScenarioDialogs(scenarioNm);
             }
