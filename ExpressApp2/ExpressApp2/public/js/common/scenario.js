@@ -131,6 +131,7 @@ function openModalBoxEdit(strDlgId, strDlgType) {
         success: function(data) {
             console.log(data.rows);
             console.log(data.childCnt); //  child Dialog Cnt
+            var _btnCnt = 0;
             if(data.rows){
                 var dlgInfo = data.rows;    //alert('dlgInfo - CARD_TITLE:' + dlgInfo.CARD_TITLE);
                 //  대그룹,중그룹 출력.. (dlgInfo.GROUPL, dlgInfo.GROUPM)
@@ -186,6 +187,7 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                         $('.previewSubTitle').addClass("dpN");
                     }                    
                     $('.dlg_edit_img').removeClass('dpN');
+                    //alert('btn');
                 } else {
                     $('.dlg_edit_sub_title').addClass("dpN");
                     $('.dlg_edit_img').addClass('dpN');
@@ -198,7 +200,7 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                 $(".previewText").text(dlgInfo.CARD_TEXT);
 
                 // btn 갯수 파악 및 생성
-                var _btnCnt = 0;
+                
                 if (dlgInfo.BTN_4_TITLE != null) {
                     _btnCnt = 4;
                 } else if (dlgInfo.BTN_3_TITLE != null) {
@@ -301,11 +303,42 @@ function openModalBoxEdit(strDlgId, strDlgType) {
                 $("#btnDelDialog").hide();
             }
 
+            if(data.childRows){     //  자식 다이얼로그 있는 경우.. 
+                console.log(data.childRows);
+                var childDlg = data.childRows;
+                var htmlBtn =  "";
+                var btnChK = "";
+                var j = 0;
+                $(".btnDialogs").remove();  //  버튼다이얼로그 영역 제거..
+
+                for(var i=0; i<_btnCnt; i++){
+                //for(var i=0; i<childDlg.length; i++){
+                    btnChK = "Y";
+                    j = i + 1;
+                    //console.log('* DLG_ID:'+childDlg[i].DLG_ID+ ' PARENT_DLG_BTN:'+childDlg[i].PARENT_DLG_BTN);
+                    for(var k=0; k<childDlg.length; k++){
+                        console.log("* childDlg[k].PARENT_DLG_BTN:"+childDlg[k].PARENT_DLG_BTN+"||j:"+j);
+                        if(childDlg[k].PARENT_DLG_BTN == j){
+                            btnChK = "N";
+                            console.log("* btnChk=N || childDlg[k].PARENT_DLG_BTN:"+childDlg[k].PARENT_DLG_BTN+"||j:"+j);
+                        }
+                    }
+                    console.log("* btnChk="+btnChK);
+                    if(btnChK == "Y"){
+                        htmlBtn += '<button type="button" class="btn btn_01 createDlgModalClose btnDialogs" data-toggle="modal" data-target="#myModalAdd" onclick="openModalBoxAdd('+j+');">BTN' + j + ' Dialog ADD</button>';
+                    }else{
+                        htmlBtn += '<button type="button" class="btn btn-default createDlgModalClose btnDialogs" disabled>BTN' + j + ' Dialog ADD</button>';
+                    }
+                    
+                }
+                $("#btn_wrap_edit").append(htmlBtn);
+            }
         }
     });
 }
 
-function openModalBoxAdd() {
+function openModalBoxAdd(btnNo) {
+
     var strDlgId = $("#iptDlgId").val();
     //alert('openModalBoxAdd() strDlgId:'+strDlgId);
     
@@ -371,6 +404,11 @@ function openModalBoxAdd() {
     $(".previewSubTitle").text(lan_subTitle);
     $(".previewText").text(lan_content);
     $(".previewBtnArea").html('');  //  Btn 영역 초기화..
+
+    if(btnNo != null){
+        alert('*btnNo:'+btnNo);
+        $('form[name=dialogLayoutAdd] input[name=parentDlgBtn]').val(btnNo);
+    }
 
 }
 

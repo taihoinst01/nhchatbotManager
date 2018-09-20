@@ -3645,8 +3645,8 @@ router.post('/scenarioAddChildDialog', function (req, res) {
             var insertTblDlgMedia = 'INSERT INTO TBL_DLG_MEDIA(DLG_ID,CARD_TITLE,CARD_TEXT,MEDIA_URL,BTN_1_TYPE,BTN_1_TITLE,BTN_1_CONTEXT,BTN_2_TYPE,BTN_2_TITLE,BTN_2_CONTEXT,BTN_3_TYPE,BTN_3_TITLE,BTN_3_CONTEXT,BTN_4_TYPE,BTN_4_TITLE,BTN_4_CONTEXT,CARD_VALUE,USE_YN) VALUES ' +
                 '(@dlgId,@dialogTitle,@dialogText,@mediaImgUrl,@btn1Type,@buttonName1,@buttonContent1,@btn2Type,@buttonName2,@buttonContent2,@btn3Type,@buttonName3,@buttonContent3,@btn4Type,@buttonName4,@buttonContent4,@cardValue,\'Y\')';
             // insertTblScenario
-            var insertTblScenario = 'INSERT INTO TBL_SCENARIO_DLG (SCENARIO_NM, SCENARIO_GROUP, DLG_ID, DLG_DEPTH, DLG_ORDER_BY, PARENT_DLG_ID) VALUES ' + 
-                '(@scenarioName, \'\', @dlgId, @dlgDepth, @dlgOrderBy, @parentDlgId)';
+            var insertTblScenario = 'INSERT INTO TBL_SCENARIO_DLG (SCENARIO_NM, SCENARIO_GROUP, DLG_ID, DLG_DEPTH, DLG_ORDER_BY, PARENT_DLG_ID, PARENT_DLG_BTN) VALUES ' + 
+                '(@scenarioName, \'\', @dlgId, @dlgDepth, @dlgOrderBy, @parentDlgId, @parentDlgBtn)';
 
             var largeGroup = array[array.length - 1]["largeGroup"];
             var middleGroup = array[array.length - 1]["middleGroup"];
@@ -3749,6 +3749,7 @@ router.post('/scenarioAddChildDialog', function (req, res) {
                     .input('dlgDepth', sql.Int, (parseInt(array[i]["parentDlgDepth"])+1) )
                     .input('dlgOrderBy', sql.Int, 0)
                     .input('parentDlgId', sql.Int, array[i]["parentDlgId"])
+                    .input('parentDlgBtn', sql.Int, array[i]["parentDlgBtn"])
                     .query(insertTblScenario);
 
                 tblDlgId.push(dlgId[0].DLG_ID);
@@ -4000,6 +4001,8 @@ router.post('/getScenarioDlg', function (req, res) {
                 ' TDM.BTN_3_TYPE, TDM.BTN_3_TITLE, TDM.BTN_3_CONTEXT, TDM.BTN_4_TYPE, TDM.BTN_4_TITLE, TDM.BTN_4_CONTEXT ' + 
                 ' FROM TBL_DLG AS TD, TBL_DLG_MEDIA AS TDM ' + 
                 ' WHERE TD.DLG_ID=\'' + strDlgId + '\' AND TD.DLG_ID = TDM.DLG_ID ';
+            var selectScenarioChild = 'SELECT * FROM TBL_SCENARIO_DLG WHERE PARENT_DLG_ID=\'' + strDlgId +'\' ORDER BY PARENT_DLG_BTN ASC';
+            //var selectScenarioChild = 'SELECT * FROM TBL_SCENARIO_DLG WHERE PARENT_DLG_ID=\'' + strDlgId +'\' AND PARENT_DLG_BTN is not NULL';
 
             let result0 = await pool.request().query(selectScenario);
             let rowsScenario = result0.recordset[0];
@@ -4009,30 +4012,33 @@ router.post('/getScenarioDlg', function (req, res) {
                 childCnt = rows[0].CNT;
             }
             
+            let result1 = await pool.request().query(selectScenarioChild);
+            let childRows = result1.recordset;
+
             if(strDlgType == '2') {
                 console.log('* selectDlgText : ' +  selectDlgText);
-                let result1 = await pool.request().query(selectDlgText);
-                let rows = result1.recordset[0];
+                let result2 = await pool.request().query(selectDlgText);
+                let rows = result2.recordset[0];
                 for (var key in rows) {
                     console.log("key : " + key + " value : " + rows[key]);
                 }
-                res.send({ "rows": rows, "childCnt":childCnt });
+                res.send({ "rows": rows, "childCnt":childCnt, "childRows":childRows });
             } else if (strDlgType == '3') {
                 console.log('* selectDlgCard : ' +  selectDlgCard);
-                let result1 = await pool.request().query(selectDlgCard);
-                let rows = result1.recordset[0];
+                let result2 = await pool.request().query(selectDlgCard);
+                let rows = result2.recordset[0];
                 for (var key in rows) {
                     console.log("key : " + key + " value : " + rows[key]);
                 }
-                res.send({ "rows": rows, "childCnt":childCnt });
+                res.send({ "rows": rows, "childCnt":childCnt, "childRows":childRows });
             } else if (strDlgType == '4') {
                 console.log('* selectDlgMedia : ' +  selectDlgMedia);
-                let result1 = await pool.request().query(selectDlgMedia);
-                let rows = result1.recordset[0];
+                let result2 = await pool.request().query(selectDlgMedia);
+                let rows = result2.recordset[0];
                 for (var key in rows) {
                     console.log("key : " + key + " value : " + rows[key]);
                 }
-                res.send({ "rows": rows, "childCnt":childCnt });
+                res.send({ "rows": rows, "childCnt":childCnt, "childRows":childRows });
             } else {
             
             }

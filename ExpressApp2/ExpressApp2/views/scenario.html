@@ -658,7 +658,7 @@
                     <div class="nec02">
                         <span class="nec_ico">*</span> <%= __('IS_REQUIRED') %>
                     </div>
-                    <div class="btn_wrap">
+                    <div class="btn_wrap" id="btn_wrap_edit">
                         <button type="button" class="btn btn_01" onclick="editDialog();"><%= __('EDIT') %></button>
                         <button type="button" class="btn btn_01" id="btnDelDialog" onclick="deleteDialog();" style="display:none;"><%= __('DELETE_DIALOG') %></button>
                         <button type="button" class="btn btn_01 createDlgModalClose" data-toggle="modal" data-target="#myModalAdd" onclick="openModalBoxAdd();"><%= __('Add_dialog') %></button>
@@ -719,11 +719,12 @@
 
                                                 <input type="hidden" name="scenario_nm" id="" value="">
                                                 <input type="hidden" name="parentDlgId" id="" value="">
+                                                <input type="hidden" name="parentDlgBtn" id="" value="">
                                                 <input type="hidden" name="parentDlgDepth" id="" value="">
                                                 <input type="hidden" name="groupL" id="" value="">
                                                 <input type="hidden" name="groupM" id="" value="">
                                                 <input type="hidden" name="dlg_description" id="" value="">
-
+                                                
                                                 <label><%= __('DIALOG_BOX_TYPE') %></label>
                                                 <select class="form-control" name="dlgType">
                                                     <option value="2"><%= __('TEXT_TYPE') %></option>
@@ -858,7 +859,7 @@
                         <div class="nec02">
                             <span class="nec_ico">*</span> <%= __('IS_REQUIRED') %>
                         </div>
-                        <div class="btn_wrap">
+                        <div class="btn_wrap" id="btn_wrap_child">
                             <button type="button" class="btn btn_01" onclick="addChildDialog();"><%= __('CREAT') %></button>
                             <button type="button" class="btn btn-default createDlgModalClose" data-dismiss="modal"><%= __('CANCEL') %></button>
                         </div>
