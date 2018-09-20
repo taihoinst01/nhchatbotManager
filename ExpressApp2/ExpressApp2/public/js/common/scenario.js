@@ -406,7 +406,7 @@ function openModalBoxAdd(btnNo) {
     $(".previewBtnArea").html('');  //  Btn 영역 초기화..
 
     if(btnNo != null){
-        alert('*btnNo:'+btnNo);
+        //alert('*btnNo:'+btnNo);
         $('form[name=dialogLayoutAdd] input[name=parentDlgBtn]').val(btnNo);
     }
 
